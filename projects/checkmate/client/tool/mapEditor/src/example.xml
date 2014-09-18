@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<width>3200</width>
+	<height>1000</height>
+	<background>asset/map/1.swf</background>
+	<block>
+		<grid>20</grid>
+		<value></value>
+	</block>
+	<alpha>
+		<grid>20</grid>
+		<value>
+			<![CDATA[
+			
+			
+				0101
+				0110
+			]]>
+		</value><!-- Base64 -->
+	</alpha>
+	<start>
+		<x>200</x>
+		<y>200</y>
+	</start>
+	<elements>
+		<element>
+			<property name="id" value="10" />
+			<property name="x" value="int(0-NaN)" />
+			<property name="y" value="int(0-NaN)" />
+			<property name="name" value="String('怪物01')" />
+			<property name="avatar" value="asset/avatar/monster.swf" />
+			<property name="patrolRedius" value="int(0-NaN)" />
+			<!--
+				战斗			attack(serverID)
+				获取资源		callGear(serverID)
+				跳转			blinkMap(mapID)
+				点亮			active(id)
+			-->
+			<property name="touchCall" value="active(10)|active(11)|callGear(888)|attack(888)|blink(map2.xml)" />
+		</element>
+	</elements>
+</map>

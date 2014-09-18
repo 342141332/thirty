@@ -1,0 +1,12 @@
+<languageVersion : 1.0;>
+
+kernel PixelColourShader
+<   namespace : "puggsoy";
+    vendor : "Puggsoy";
+    version : 1;
+>
+{
+    input image4 src;
+    output pixel4 dst;
+
+}

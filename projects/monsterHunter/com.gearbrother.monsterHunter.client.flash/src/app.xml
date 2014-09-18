@@ -1,0 +1,35 @@
+<app>
+	<id>heroland</id>
+	<main>main.swf</main>
+	<version>DEMO_01</version>
+	<locale>zh-cn</locale>
+	<api>http://web.beta.com/index.php</api>
+	<pathPrefix>file:///D|/src/com.gearbrother.heroland.flash/static</pathPrefix>
+	<socket>192.168.17.33:8080</socket>
+	<libs>
+	    <lib name="font" src="conf/zh_cn/font.swf" w="3240" l="false"/>
+	    <lib name="lang" src="conf/zh_cn/zh-cn.lang" w="3240" l="false"/>
+	    <!-- 
+	    <lib name="main_map" src="asset/map/map.swf" w="3240" l="false"/>
+	    <lib name="loader.asset" src="asset/widgets/loading3.swf" w="931" l="false"/>
+	    <lib name="test1" src="http://down1.ps123.net/2011/chs_hanyi.rar" w="931" l="false"/>
+	    <lib name="loader.asset.mini" src="asset/ui/common/loader_asset_mini.swf" w="931" l="false"/>
+	    <lib name="loader.data" src="asset/ui/common/loader_data.swf" w="931" l="false"/>
+	    <lib name="ui" src="asset/ui/common/ui.swf" w="3274" l="false"/>
+	    <lib name="short" src="asset/ui/common/short.swf" w="3274" l="false"/>
+	    <lib name="uiCommon" src="asset/ui/common/common.swf" w="3274" l="false"/>
+	    <lib name="uiCommonTip" src="asset/ui/common/tip.swf" w="16688" l="false"/>
+	    <lib name="uiCommonWidget" src="asset/ui/common/widget.swf" w="16688" l="false"/>
+	    <lib name="uiMain" src="asset/ui/ui_main.swf" w="10741" l="false"/>
+	    <lib name="uiDialogue" src="asset/ui/uidialogue.swf" w="824554" l="false"/>
+	    <lib name="uiChat" src="asset/ui/chat_window2.swf" w="26301" l="false"/>
+	    <lib name="uiFriend" src="asset/ui/friend.swf" w="832" l="false"/>
+	    <lib name="uiTask" src="asset/ui/ui_task.swf" w="13761" l="false"/>
+	    <lib name="uiOpenCard" src="asset/ui/open_card.swf" w="13761" l="false"/>
+	    <lib name="database" src="conf/config2.cp" w="13761" l="false"/>
+	    
+	    <lib name="uiRegister" src="asset/ui/register.swf" w="40451" l="false"/>
+	    <lib name="homeland" src="/asset/ui/ui_home.swf" w="13761" l="false"/>
+	     -->
+	</libs>
+</app>

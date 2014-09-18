@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="com.gearbrother.explorer.server.core">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="spring-core-3.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/spring-framework-3.2.3.RELEASE-dist/spring-framework-3.2.3.RELEASE/libs/spring-core-3.2.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-context-3.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/spring-framework-3.2.3.RELEASE-dist/spring-framework-3.2.3.RELEASE/libs/spring-context-3.2.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-web-3.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/spring-framework-3.2.3.RELEASE-dist/spring-framework-3.2.3.RELEASE/libs/spring-web-3.2.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-beans-3.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/spring-framework-3.2.3.RELEASE-dist/spring-framework-3.2.3.RELEASE/libs/spring-beans-3.2.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spring-expression-3.2.3.RELEASE.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/spring-framework-3.2.3.RELEASE-dist/spring-framework-3.2.3.RELEASE/libs/spring-expression-3.2.3.RELEASE.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mina-core-2.0.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/apache-mina-2.0.7/dist/mina-core-2.0.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mina-integration-beans-2.0.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/apache-mina-2.0.7/dist/mina-integration-beans-2.0.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jcl-over-slf4j-1.7.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/slf4j-1.7.5/slf4j-1.7.5/jcl-over-slf4j-1.7.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.7.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/slf4j-1.7.5/slf4j-1.7.5/slf4j-api-1.7.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="logback-core-1.0.13.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/logback-1.0.13/logback-1.0.13/logback-core-1.0.13.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="logback-classic-1.0.13.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/logback-1.0.13/logback-1.0.13/logback-classic-1.0.13.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="couchbase-client-1.1.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/couchbase-client-1.1.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mina-core-2.0.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/apache-mina-2.0.7-bin/apache-mina-2.0.7/dist/mina-core-2.0.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mina-integration-beans-2.0.7.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/apache-mina-2.0.7-bin/apache-mina-2.0.7/dist/mina-integration-beans-2.0.7.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="spymemcached-2.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/spymemcached-2.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="httpcore-4.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/httpcore-4.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/commons-codec-1.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="httpcore-nio-4.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/httpcore-nio-4.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="netty-3.5.5.Final.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/netty-3.5.5.Final.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jettison-1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/Couchbase-Java-Client-1.1.7/Couchbase-Java-Client-1.1.7/jettison-1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="gson-2.2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/google-gson-2.2.4/gson-2.2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-databind-2.3.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/jackson-databind-2.3.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-core-2.3.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/jackson-core-2.3.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-annotations-2.3.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/FRAMEWORK/jackson-annotations-2.3.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="java-output-path" value="/com.gearbrother.explorer.server.core/build/classes"/>
+        <property name="context-root" value="/"/>
+    </wb-module>
+</project-modules>

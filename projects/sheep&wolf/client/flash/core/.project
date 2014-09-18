@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>com.gearbrother.sheep&amp;wolf.client.flash.core</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>com.adobe.flexbuilder.project.flexbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>bin-release</name>
+			<type>2</type>
+			<location>D:/Users/lifeng/workspace/gearbrother2/com.gearbrother.sheep&amp;wolf.server.java.core/WebContent</location>
+		</link>
+		<link>
+			<name>bin-release1</name>
+			<type>2</type>
+			<location>D:/Users/lifeng/workspace/gearbrother2/com.gearbrother.sheep&amp;wolf.server.java.core/WebContent</location>
+		</link>
+	</linkedResources>
+</projectDescription>

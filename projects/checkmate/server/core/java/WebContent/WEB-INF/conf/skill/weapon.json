@@ -1,0 +1,21 @@
+[
+	{
+		"id": "attack",
+		"name": "攻击",
+		"num": -1,
+		"category": "weapon",
+		"icon": "static/asset/icon/wq-z-9.jpg",
+		"levels": [
+			{
+				"exp": 0,
+				"preUseCause": 0,
+				"cooldown": 1200,
+				"requireLevel": 1,
+				"requireCosts": {
+				},
+				"remoteMethod": "attack",
+				"remoteMethodParams": {"damage": 2}
+			}
+		]
+	}
+]

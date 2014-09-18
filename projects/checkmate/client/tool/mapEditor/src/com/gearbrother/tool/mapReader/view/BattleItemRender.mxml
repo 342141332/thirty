@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:MXItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				  xmlns:s="library://ns.adobe.com/flex/spark" 
+				  xmlns:mx="library://ns.adobe.com/flex/mx" width="100" height="100">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.gearbrother.glash.common.oper.ext.GAliasFile;
+			import com.gearbrother.glash.common.oper.ext.GBmdDefinition;
+			import com.gearbrother.glash.common.oper.ext.GDefinition;
+			import com.gearbrother.glash.display.GMovieBitmap;
+			import com.gearbrother.mushroomWar.model.BattleItemTemplateModel;
+			import com.gearbrother.mushroomWar.model.BattleModel;
+			
+			import mx.core.UIComponent;
+			override public function set data(value:Object):void {
+				super.data = value;
+
+				removeAllElements();
+				var templateModel:BattleItemTemplateModel = value[0];
+				var model:BattleModel = value[1];
+				var comp:UIComponent = new UIComponent();
+				comp.x = width >> 1;
+				comp.y = height >> 1;
+				addElement(comp);
+				var movie:GMovieBitmap = new GMovieBitmap();
+				movie.definition = new GBmdDefinition(new GDefinition(new GAliasFile(templateModel.cartoon), "Value"));
+				comp.addChild(movie);
+				/* var shape:Shape = new Shape();
+				shape.graphics.beginFill(0x0000ff, .3);
+				shape.graphics.drawRect(
+					-1 * model.cellPixel * templateModel.width >> 1
+					, -1 * model.cellPixel * templateModel.height >> 1
+					, model.cellPixel * templateModel.width
+					, model.cellPixel * templateModel.height);
+				shape.graphics.endFill();
+				comp.addChild(shape); */
+			}
+		]]>
+	</fx:Script>
+</s:MXItemRenderer>

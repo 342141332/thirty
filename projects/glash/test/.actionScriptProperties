@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties analytics="false" mainApplicationPath="GAlgorithmBinaryHeapCase.as" projectUUID="719e3555-4c53-404b-9d46-a3b907271606" version="10">
+  <compiler additionalCompilerArguments="-locale en_US" autoRSLOrdering="false" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="0.0.0" useApolloConfig="false" useDebugRSLSwfs="true" verifyDigests="true" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="1">
+      <libraryPathEntry kind="4" path="">
+        <excludedEntries>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_charts.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="1" linkType="1" path="${PROJECT_FRAMEWORKS}/locale/{locale}"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/qtp.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/charts.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/rpc.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/framework.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/datavisualization.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
+        </excludedEntries>
+      </libraryPathEntry>
+      <libraryPathEntry kind="3" linkType="1" path="/as3corelib/bin/as3corelib.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="/as3-commons/bin/as3-commons.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="${console}/bin/Console.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="asset/ui"/>
+      <libraryPathEntry kind="3" linkType="1" path="/com.gearbrother.glash/bin-debug/com.gearbrother.glash.swc" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="1" linkType="1" path="libs"/>
+    </libraryPath>
+    <sourceAttachmentPath/>
+  </compiler>
+  <applications>
+    <application path="GGamePaperCase.as"/>
+    <application path="GDisplayMovieBmpCase.as"/>
+    <application path="GDisplayMovieBmpSimpleCase.as"/>
+    <application path="GGameWalker.as"/>
+    <application path="GDisplayLayoutCase.as"/>
+    <application path="GDisplayControlTextFontCase.as"/>
+    <application path="GFomatPakDecoderCase.as"/>
+    <application path="GAlgorithmQuadTreeCase.as"/>
+    <application path="Focus.as"/>
+    <application path="GAvmRenderCase.as"/>
+    <application path="GSystemSoundManagerCase.as"/>
+    <application path="GParticleCase.as"/>
+    <application path="GGamePaperSimpleScrollCase.as"/>
+    <application path="GCommonLanguageCase.as"/>
+    <application path="GDisplayMovieSpriteSimpleCase.as"/>
+    <application path="GDisplayLayerTipCase.as"/>
+    <application path="GDisplayControlSet.as"/>
+    <application path="GDisplayFontEmbedCase.as"/>
+    <application path="GDisplayFontBoomCase.as"/>
+    <application path="GGame2dot5DMapCase.as"/>
+    <application path="GAvmContextMenuCase.as"/>
+    <application path="GDisplayMovieBmpDetailCase.as"/>
+    <application path="GAlgorithmBinaryHeapCase.as"/>
+    <application path="GDebugCase.as"/>
+    <application path="GDisplayLayerProcessingCase.as"/>
+    <application path="GDisplayControlTextCase.as"/>
+    <application path="GDisplayLayoutCase2.as"/>
+    <application path="GDisplayLayerWindowCase.as"/>
+    <application path="GDisplayTransitionCase.as"/>
+    <application path="GDisplayEffectCase.as"/>
+    <application path="GDisplayValidatePerformanceCase.as"/>
+    <application path="GDisplayControlLoaderCase.as"/>
+    <application path="GGamePaperFogCase.as"/>
+    <application path="TextLineMetricsExample.as"/>
+    <application path="GPluginTween.as"/>
+    <application path="GAlgorithmQuadTreeCollisionCase.as"/>
+    <application path="GAvmEventSequenceCase.as"/>
+    <application path="GDisplayRepeater.as"/>
+    <application path="GGame2DMapCase.as"/>
+    <application path="GCommonPoolCase.as"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+  <flashCatalyst validateFlashCatalystCompatibility="false"/>
+</actionScriptProperties>

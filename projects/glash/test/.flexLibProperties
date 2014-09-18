@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="br.com.stimuli.loading.loadingtypes.CompressedItem"/>
+    <classEntry path="br.com.stimuli.loading.loadingtypes.PropertiesItem"/>
+    <classEntry path="com.greensock.plugins.DynamicPropsPlugin"/>
+    <classEntry path="com.greensock.plugins.MotionBlurPlugin"/>
+    <classEntry path="com.greensock.plugins.Physics2DPlugin"/>
+    <classEntry path="com.greensock.plugins.PhysicsPropsPlugin"/>
+    <classEntry path="com.greensock.plugins.TransformAroundCenterPlugin"/>
+    <classEntry path="com.greensock.plugins.TransformAroundPointPlugin"/>
+    <classEntry path="com.riaidea.text.RichTextField"/>
+    <classEntry path="com.riaidea.text.RichTextFieldEvent"/>
+    <classEntry path="com.riaidea.text.SpriteRenderer"/>
+    <classEntry path="com.riaidea.text.TextRenderer"/>
+    <classEntry path="com.riaidea.text.plugins.IRTFPlugin"/>
+    <classEntry path="com.riaidea.text.plugins.ReplaceSpritePlugin"/>
+    <classEntry path="com.riaidea.text.plugins.ShortcutPlugin"/>
+    <classEntry path="formatter.Base64"/>
+    <classEntry path="org.gearbrother.glash.manager.IResourceManager"/>
+    <classEntry path="org.gearbrother.glash.oper.display.cache.AccurateDisplayObjectCacheOper"/>
+    <classEntry path="org.gearbrother.glash.vision.display.IObserver"/>
+    <classEntry path="org.gearbrother.glash.vision.display.movieClip.timeline.ITimelinable"/>
+    <classEntry path="org.gearbrother.glash.vision.display.movieClip.timeline.GBitmapTimeline"/>
+    <classEntry path="org.gearbrother.glash.vision.display.movieClip.timeline.GLabelTimeline"/>
+    <classEntry path="org.gearbrother.glash.vision.mode.ModeManager"/>
+    <classEntry path="org.gearbrother.glash.vision.paper.layer.FilterPaperLayer"/>
+    <classEntry path="org.gearbrother.glash.oper.display.cache.InnerableDisplayObjectCacheOper"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

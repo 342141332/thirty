@@ -1,0 +1,14 @@
+<screenconfig name="苏州城"
+			  sound="SuZhou.mp3">
+	<mapData>
+		<wCount>100</wCount>
+		<hCount>26</hCount>
+		<yStart>15</yStart>
+		<data>78da6360,800246bc,431e55,808138c0,4809c069,15cc26,caf2513b,46ed18ba,76d00100,e54f03,7c000000</data>
+	</mapData>
+	<portalList>
+		<portal x="2413"
+				y="497"
+				tips="副本传送门"/>
+	</portalList>
+</screenconfig>

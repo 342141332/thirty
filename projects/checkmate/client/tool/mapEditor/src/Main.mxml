@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   initialize="_handleAppEvent(event);"
+					   applicationComplete="_handleAppEvent(event)"
+					   close="_handleAppEvent(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.images.JPGEncoder;
+			import com.gearbrother.glash.common.oper.GQueue;
+			import com.gearbrother.glash.common.oper.ext.GAliasFile;
+			import com.gearbrother.glash.common.oper.ext.GHandleOper;
+			import com.gearbrother.glash.common.utils.GHandler;
+			import com.gearbrother.glash.display.flixel.GPaper;
+			import com.gearbrother.glash.display.manager.GPaintManager;
+			import com.gearbrother.glash.display.mouseMode.GMouseMode;
+			import com.gearbrother.glash.manager.LocalStorage;
+			import com.gearbrother.glash.manager.RootManager;
+			import com.gearbrother.glash.util.lang.GStringUtils;
+			import com.gearbrother.glash.util.lang.UUID;
+			import com.gearbrother.mushroomWar.model.BattleItemModel;
+			import com.gearbrother.mushroomWar.model.BattleItemTemplateModel;
+			import com.gearbrother.mushroomWar.model.BattleModel;
+			import com.gearbrother.mushroomWar.model.BoundsModel;
+			import com.gearbrother.mushroomWar.model.IBattleItemModel;
+			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleProtocol;
+			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BoundsProtocol;
+			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PointBeanProtocol;
+			import com.gearbrother.mushroomWar.view.layer.scene.battle.BattleSceneLayerDebug;
+			import com.gearbrother.mushroomWar.view.layer.scene.battle.BattleSceneLayerOverland;
+			import com.gearbrother.mushroomWar.view.layer.scene.battle.BattleSceneLayerTerrian;
+			import com.gearbrother.tool.mapReader.mode.CleanMode;
+			import com.gearbrother.tool.mapReader.mode.PinMode;
+			import com.gearbrother.tool.mapReader.view.BattleItemRender;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			
+			import org.as3commons.lang.ObjectUtils;
+			
+			import spark.layouts.VerticalLayout;
+
+			private var _projectCache:LocalStorage;
+
+			private var comp:UIComponent;
+
+			private var _paper:GPaper;
+
+			private var _selectedProject:BattleModel;
+
+			private var _terrianLayer:BattleSceneLayerTerrian;
+
+			private var _debugLayer:BattleSceneLayerDebug;
+			
+			[Bindable]
+			public var ioToolbarData:ArrayCollection;
+			
+			[Bindable]
+			public var itemToolbarData:ArrayCollection;
+			
+			[Bindable]
+			public var itemRender:ClassFactory;
+			
+			public function set selectedProject(newValue:BattleModel):void {
+				if (_paper)
+					_paper.remove();
+				if (canvas.numChildren == 0) {
+					comp = new UIComponent();
+					canvas.addChild(comp);
+				} else {
+					comp = canvas.getChildAt(0) as UIComponent;
+				}
+				_selectedProject = newValue;
+				var newPaper:GPaper = new GPaper();
+				newPaper.enableTick = true;
+				newPaper.doubleClickEnabled = true;
+				newPaper.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
+				comp.addChild(_paper = newPaper);
+				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.col * _selectedProject.cellPixel;
+				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.row * _selectedProject.cellPixel;
+				_terrianLayer = _paper.addChild(new BattleSceneLayerTerrian(_selectedProject, _paper.camera)) as BattleSceneLayerTerrian;
+				_paper.addChild(new BattleSceneLayerOverland("floor", _selectedProject, _paper.camera));
+				_paper.addChild(new BattleSceneLayerOverland("over", _selectedProject, _paper.camera));
+				_debugLayer = _paper.addChild(new BattleSceneLayerDebug(_selectedProject, _paper.camera)) as BattleSceneLayerDebug;
+				row.value = newValue.row;
+				col.value = newValue.col;
+				itemToolbarData.removeAll();
+				var templates:Array = [];
+				var template1:BattleItemTemplateModel = new BattleItemTemplateModel();
+				template1.cartoon = "static/asset/item/house_1.swf";
+				templates.push(template1);
+				for each (var templateModel:BattleItemTemplateModel in templates) {
+					itemToolbarData.addItem([templateModel, _selectedProject]);
+				}
+				saveBtn.enabled = true;
+			}
+
+			private var _mouseMode:GMouseMode;
+
+			public function set mouseMode(newValue:GMouseMode):void {
+				if (_mouseMode)
+					_mouseMode.remove();
+				_mouseMode = newValue;
+			}
+
+			public function acceptFile(file:File):Boolean {
+				return file.isDirectory || file.extension == "json";
+			}
+
+			private function _handleAppEvent(event:Event):void {
+				var cache:Object;
+				if (event.type == FlexEvent.APPLICATION_COMPLETE) {
+					ioToolbarData = new ArrayCollection();
+					ioToolbarData.addItem(
+						{
+							"label": "remove",
+							"click": function():void {
+								mouseMode = new CleanMode(function(target:DisplayObject):void {
+									if (target.hasOwnProperty("bindData")) {
+										var model2:IBattleItemModel = target["bindData"];
+										if (model2) {
+											model2.battle = null;
+											_selectedProject.setPropertyChanged(BattleProtocol.ITEMS);
+										}
+									}
+								}, _paper);
+							}
+						}
+					);
+					itemToolbarData = new ArrayCollection();
+					
+					RootManager.register(this);
+					GPaintManager.instance.stage = stage;
+					_projectCache = new LocalStorage("templateDir");
+					cache = _projectCache.getValue();
+					if (cache && cache["mainTree"]) {
+						file = new File(cache["mainTree"]);
+						fileTree.openPaths = [file.parent.nativePath];
+						fileTree.selectedPath = file.nativePath;
+						fileTree.validateNow();
+						var index:int = fileTree.getItemIndex(fileTree.selectedPath);
+						fileTree.scrollToIndex(index);
+					}
+					if (cache && cache["assetFolder"]) {
+						GAliasFile.pathPrefix = assetFolderBtn.label = cache["assetFolder"];
+						/* var itemFolder:File = new File(GAliasFile.pathPrefix + "/static/asset/item");
+						var underFiles:Array = itemFolder.getDirectoryListing();
+						for each (var underFile:File in underFiles) {
+							var confFile:File = new File(itemFolder.url + "/" + underFile.name.substring(0, underFile.name.length - underFile.extension.length - 1) + ".json");
+							if (!underFile.isDirectory && underFile.extension.toLowerCase() == "swf" && confFile.exists && !confFile.isDirectory) {
+								var stream:FileStream = new FileStream();
+								stream.open(confFile, FileMode.READ);
+								var conf:Object = JSON.parse(stream.readUTFBytes(stream.bytesAvailable));
+								BattleModel.itemConfig[confFile.name.substr(0, confFile.name.length - confFile.extension.length - 1)] = conf;
+								stream.close();
+							}
+						} */
+						itemRender = new ClassFactory(BattleItemRender);
+						fileTree.dispatchEvent(new ListEvent(ListEvent.CHANGE));
+					} else {
+						var file:File = new File();
+						file.browseForDirectory("Select Asset Folder");
+						file.addEventListener(Event.SELECT, _handleFolderSelect);
+					}
+				} else if (event.type == Event.CLOSE) {
+					cache = {};
+					if (fileTree.selectedItem)
+						cache["mainTree"] = (fileTree.selectedItem as File).nativePath;
+					if (assetFolderBtn.label)
+						cache["assetFolder"] = assetFolderBtn.label;
+					_projectCache.setValue(cache);
+				}
+			}
+
+			protected function _handleTreeEvent(event:ListEvent):void {
+				switch (event.type) {
+					case ListEvent.CHANGE:
+						if (fileTree.selectedItem) {
+							var file:File = fileTree.selectedItem as File;
+							if (file.isDirectory || file.isPackage)
+								return;
+							var stream:FileStream = new FileStream();
+							stream.open(file, FileMode.READ);
+							var fileContent:String = new String(stream.readMultiByte(stream.bytesAvailable, "utf-8"));
+							stream.close();
+							var battle:BattleModel = new BattleModel();
+							battle.decode(JSON.parse(fileContent));
+							selectedProject = battle;
+						}
+						break;
+				}
+			}
+
+			protected function _handleToolbarEvent(event:Event):void {
+				if (event.target == itemList) {
+					var d:BattleItemTemplateModel = (event as ListEvent).itemRenderer.data[0];
+					mouseMode = new PinMode(
+						function(model:BattleModel, row:int, col:int):void {
+							var itemModel:BattleItemModel = new BattleItemModel();
+							itemModel.uuid = UUID.getUUID();
+							itemModel.x = col;
+							itemModel.y = row;
+							itemModel.width = 1;
+							itemModel.height = 1;
+							itemModel.cartoon = d.cartoon;
+							itemModel.layer = "floor";
+							itemModel.battle = _selectedProject;
+							model.setPropertyChanged(BattleProtocol.ITEMS);
+						}
+						, _paper
+						, _selectedProject.cellPixel
+						, _selectedProject);
+				} else if (event.target is ButtonBar) {
+					var bar:ButtonBar = event.target as ButtonBar;
+					if (bar.selectedItem) {
+						var click:Function = bar.selectedItem.click;
+						click.call(this);
+					}
+				}
+			}
+			
+			protected function _handleBtnClick(event:Event):void {
+				switch (event.target) {
+					case saveBtn:
+						_selectedProject.row = row.value;
+						_selectedProject.col = col.value;
+						//remove item which out of bounds
+						for (var itemUuid:String in _selectedProject.items) {
+							var itemModel:IBattleItemModel = _selectedProject.items[itemUuid];
+							if (itemModel.x > _selectedProject.col)
+								delete _selectedProject.items[itemUuid];
+							else if (itemModel.y > _selectedProject.row)
+								delete _selectedProject.items[itemUuid];
+							//format collision item's xy to int
+//							if (itemModel.isCollisionable) {
+//								itemModel.x = int(itemModel.x);
+//								itemModel.y = int(itemModel.y);
+//							}
+						}
+						var projectFile:File = fileTree.selectedItem as File;
+						var openStream:FileStream = new FileStream();
+						openStream.open(projectFile, FileMode.READ);
+
+						var oldBytes:ByteArray = new ByteArray();
+						openStream.readBytes(oldBytes, 0, projectFile.size);
+						openStream.close();
+
+						var bakFile:File = new File(projectFile.parent.url + "/" + projectFile.name + ".bak");
+						openStream.open(bakFile, FileMode.WRITE);
+						openStream.writeBytes(oldBytes);
+						openStream.close();
+
+						openStream.open(projectFile, FileMode.WRITE);
+						var bytes:ByteArray = new ByteArray();
+						bytes.writeMultiByte(_selectedProject.encode(), "utf-8");
+						openStream.writeBytes(bytes);
+						openStream.close();
+						break;
+					case row:
+					case col:
+						_selectedProject.row = row.value;
+						_selectedProject.col = col.value;
+						comp.width = _paper.width = _paper.camera.bound.width = _selectedProject.col * _selectedProject.cellPixel;
+						comp.height = _paper.height = _paper.camera.bound.height = _selectedProject.row * _selectedProject.cellPixel;
+						_paper.camera.screenRect.width = _paper.camera.bound.width;
+						_paper.camera.screenRect.height = _paper.camera.bound.height;
+						_paper.camera.setChanged();
+						break;
+					case assetFolderBtn:
+						var file:File = new File();
+						file.browseForDirectory("Select Asset Folder");
+						file.addEventListener(Event.SELECT, _handleFolderSelect);
+						break;
+					/* case backgroundBtn:
+						file = new File();
+						var imagesFilter:FileFilter = new FileFilter("*.jpg", "*.jpg");
+						file.browseForOpenMultiple("Select Image", [imagesFilter]);
+						file.addEventListener(FileListEvent.SELECT_MULTIPLE, _handleFileSelect);
+						break; */
+				}
+			}
+
+			private var _selectedItem:BattleItemModel;
+			public function get selectedItem():BattleItemModel {
+				return _selectedItem;
+			}
+			public function set selectedItem(newValue:BattleItemModel):void {
+				_selectedItem = newValue;
+				if (_selectedItem) {
+					uuid.text = _selectedItem.instanceId;
+					layer.selectedItem = _selectedItem.layer;
+					collisionable.selectedItem = _selectedItem.isCollisionable;
+					sheepPassable.selectedItem = _selectedItem.isSheepPassable;
+					wolfPassable.selectedItem = _selectedItem.isWolfPassable;
+				} else {
+					
+				}
+			}
+			
+			private function _handleFormEvent(event:Event):void {
+				_selectedItem.instanceId = uuid.text;
+				_selectedItem.layer = layer.selectedItem;
+				_selectedItem.isCollisionable = collisionable.selectedItem;
+				_selectedItem.isSheepPassable = sheepPassable.selectedItem;
+				_selectedItem.isWolfPassable = wolfPassable.selectedItem;
+			}
+			
+			private function _handleMouseEvent(event:MouseEvent):void {
+				if (event.target.hasOwnProperty("bindData") && event.target.bindData is IBattleItemModel) {
+					var item:BattleItemModel = event.target.bindData as BattleItemModel;
+					selectedItem = item;
+				}
+			}
+
+			private function _handleFolderSelect(event:Event):void {
+				var target:File = event.target as File;
+				target.removeEventListener(event.type, _handleFolderSelect);
+				GAliasFile.pathPrefix = assetFolderBtn.label = target.url;
+			}
+
+			private function _handleFileSelect(event:FileListEvent):void {
+				var queue:GQueue = new GQueue();
+				var childFiles:Array = event.files;
+				function _handleLoaded(event:Event):void {
+					var target:LoaderInfo = event.target as LoaderInfo;
+					target.removeEventListener(Event.COMPLETE, _handleLoaded);
+					var bitmap:Bitmap = target.content as Bitmap;
+					var minBmd:BitmapData = new BitmapData(bitmap.width / 10, bitmap.height / 10, false);
+					minBmd.draw(bitmap, new Matrix(.1, 0, 0, .1));
+					var minFile:File = new File(new File(target.url).parent.url + "/" + new File(target.url).name.substr(0, new File(target.url).name.length - 4) + "-min.jpg");
+					var minStream:FileStream = new FileStream();
+					minStream.open(minFile, FileMode.WRITE);
+					minStream.writeBytes(new JPGEncoder(80).encode(minBmd));
+					minStream.close();
+					minBmd.dispose();
+					for (var _x:int = 0; _x < bitmap.bitmapData.width; _x += 250) {
+						for (var _y:int = 0; _y < bitmap.bitmapData.height; _y += 250) {
+							var piece:BitmapData = new BitmapData(250, 250, false, 0xFF000000);
+							piece.copyPixels(bitmap.bitmapData, new Rectangle(_x, _y, 250, 250), new Point());
+							var pieceFile:File = new File(new File(target.url).parent.url + "/" + new File(target.url).name.substr(0, new File(target.url).name.length - 4) + "-" + (_y / 250) + "-" + (_x / 250) + ".jpg");
+							var pieceFileStream:FileStream = new FileStream();
+							pieceFileStream.open(pieceFile, FileMode.WRITE);
+							pieceFileStream.writeBytes(new JPGEncoder(80).encode(piece));
+							pieceFileStream.close();
+							piece.dispose();
+						}
+					}
+				}
+				function _loadFile2(file:File):void {
+					var loader:Loader = new Loader();
+					loader.load(new URLRequest(file.url));
+					loader.contentLoaderInfo.addEventListener(Event.COMPLETE, _handleLoaded);
+				}
+				for each (var childFile:File in childFiles) {
+					if (childFile.extension.toLowerCase() == "jpg" && !GStringUtils.contains(childFile.name, "-")) {
+						new GHandleOper(new GHandler(_loadFile2, [childFile])).commit(queue);
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	<s:layout>
+		<s:VerticalLayout paddingTop="7"
+						  paddingRight="7"
+						  paddingBottom="7"
+						  paddingLeft="7"/>
+	</s:layout>
+	<mx:HDividedBox width="100%"
+					height="100%">
+		<mx:VBox width="300"
+				 height="100%">
+			<mx:FileSystemTree width="100%"
+							   height="100%"
+							   id="fileTree"
+							   change="_handleTreeEvent(event)"
+							   filterFunction="acceptFile"/>
+		</mx:VBox>
+		<mx:Box id="canvas"
+				width="100%"
+				height="100%"/>
+		<mx:VDividedBox width="200"
+						height="100%">
+			<mx:TileList
+						id="itemList"
+						width="100%"
+						height="100%"
+						dataProvider="{itemToolbarData}"
+						selectable="true"
+						itemRenderer="{itemRender}"
+						itemClick="_handleToolbarEvent(event)">
+			</mx:TileList>
+			<mx:VBox width="100%" height="100%">
+				<s:Form id="form" width="100%" height="100%">
+					<s:layout>
+						<s:FormLayout gap="-10"/>
+					</s:layout>
+					<s:FormHeading label="Mailing Information (Custom spacing)"/>
+					<s:FormItem label="id" width="100%" backgroundColor="0x00ff00">
+						<s:TextInput id="uuid" editable="false" width="100%" change="_handleFormEvent(event);"/>
+					</s:FormItem>
+					<s:FormItem label="layer">
+						<s:DropDownList id="layer" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:String>floor</fx:String>
+										<fx:String>over</fx:String>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="collisionable">
+						<s:DropDownList id="collisionable" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:Boolean>true</fx:Boolean>
+										<fx:Boolean>false</fx:Boolean>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="sheepPassable">
+						<s:DropDownList id="sheepPassable" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:Boolean>true</fx:Boolean>
+										<fx:Boolean>false</fx:Boolean>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="wolfPassable">
+						<s:DropDownList id="wolfPassable" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:Boolean>true</fx:Boolean>
+										<fx:Boolean>false</fx:Boolean>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="touchAutoCall">
+						<s:DropDownList id="touchAutoCall" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:Object>
+											null
+										</fx:Object>
+										<fx:String>blink</fx:String>
+										<fx:String>buyHouse</fx:String>
+										<fx:String>pickUp</fx:String>
+										<fx:String>dropDown</fx:String>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="touchAutoCallParams">
+						<s:TextInput id="touchAutoCallParams" width="100%" change="_handleFormEvent(event);"/>
+					</s:FormItem>
+					<s:FormItem label="touchManualCall">
+						<s:DropDownList id="touchManualCall" selectedIndex="0" change="_handleFormEvent(event);">
+							<s:dataProvider>
+								<s:ArrayList>
+									<fx:Array>
+										<fx:Object>
+											null
+										</fx:Object>
+										<fx:String>blink</fx:String>
+										<fx:String>buyHouse</fx:String>
+										<fx:String>pickUp</fx:String>
+										<fx:String>dropDown</fx:String>
+									</fx:Array>
+								</s:ArrayList>
+							</s:dataProvider>
+						</s:DropDownList>
+					</s:FormItem>
+					<s:FormItem label="touchManualCallParams">
+						<s:TextInput id="touchManualCallParams" width="100%" change="_handleFormEvent(event);"/>
+					</s:FormItem>
+				</s:Form>
+			</mx:VBox>
+		</mx:VDividedBox>
+	</mx:HDividedBox>
+	<s:HGroup width="100%">
+		<s:Button id="saveBtn"
+				  label="save"
+				  click="_handleBtnClick(event)"/>
+		<s:Button id="showPos"/>
+		<s:HGroup verticalAlign="middle">
+			<s:Label fontSize="14"
+					 fontWeight="normal"
+					 text="col"/>
+			<s:NumericStepper id="col"
+							  width="50"
+							  change="_handleBtnClick(event)"
+							  maximum="999"
+							  minimum="0"/>
+			<s:Label fontSize="14"
+					 fontWeight="normal"
+					 text="row"/>
+			<s:NumericStepper id="row"
+							  width="50"
+							  change="_handleBtnClick(event)"
+							  maximum="999"
+							  minimum="0"/>
+		</s:HGroup>
+		<!-- block -->
+		<s:HGroup gap="0">
+			<s:ToggleButton id="terrainBtn" label="terrian" change="_terrianLayer.visible = terrainBtn.selected" selected="true"/>
+			<s:ToggleButton id="collisionBtn" label="collision" change="_debugLayer.visible = collisionBtn.selected" selected="true"/>
+		</s:HGroup>
+		<!-- io -->
+		<s:ButtonBar change="_handleToolbarEvent(event)" dataProvider="{ioToolbarData}" />
+	</s:HGroup>
+	<s:Button width="100%"
+			  id="assetFolderBtn"
+			  click="_handleBtnClick(event)"/>
+</s:WindowedApplication>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd" default-autowire="byType">
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean class="org.apache.mina.integration.beans.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
+		init-method="bind" destroy-method="unbind" scope="singleton">
+		<property name="defaultLocalAddress" value=":8437" />
+		<property name="reuseAddress" value="true" />
+		<property name="handler">
+			<bean class="com.gearbrother.sheepwolf.ioHandler.FlashSecuritySocketIoHandler" />
+		</property>
+	</bean>
+
+    <bean factory-bean="serviceSocketAccepter" factory-method="getSessionConfig" >
+        <property name="tcpNoDelay" value="true"/>
+    </bean>
+
+	<bean id="serviceSocketAccepter" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
+		init-method="bind" destroy-method="unbind" scope="singleton">
+		<property name="defaultLocalAddress" value=":8438" />
+		<property name="reuseAddress" value="true" />
+		<property name="filterChainBuilder">
+			<bean class="org.apache.mina.core.filterchain.DefaultIoFilterChainBuilder">
+				<property name="filters">
+					<map>
+						<entry key="codecFilter">
+							<bean class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+								<constructor-arg>
+									<bean class="com.gearbrother.sheepwolf.rpc.ioHandler.codec.RpcDecoder" />
+								</constructor-arg>
+								<constructor-arg>
+									<bean class="com.gearbrother.sheepwolf.rpc.ioHandler.codec.RpcEncoder" />
+								</constructor-arg>
+							</bean>
+						</entry>
+						<entry key="executor">
+							<bean class="org.apache.mina.filter.executor.ExecutorFilter">
+								<constructor-arg>
+									<bean class="org.apache.mina.filter.executor.UnorderedThreadPoolExecutor">
+										<property name="maximumPoolSize" value="10" />
+										<property name="corePoolSize" value="3" />
+									</bean>
+								</constructor-arg>
+							</bean>
+						</entry>
+						<entry key="loggingFilter">
+							<bean class="org.apache.mina.filter.logging.LoggingFilter" />
+						</entry>
+					</map>
+				</property>
+			</bean>
+		</property>
+		<property name="handler">
+			<bean class="com.gearbrother.sheepwolf.rpc.ioHandler.RpcIoHandler" />
+		</property>
+	</bean>
+</beans>

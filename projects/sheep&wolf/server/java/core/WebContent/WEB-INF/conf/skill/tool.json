@@ -1,0 +1,42 @@
+[
+	{
+		"id": "0",
+		"name": "隐形药水",
+		"num": 1,
+		"category": "tool",
+		"icon": "static/asset/icon/wq-z-7.jpg",
+		"levels": [
+			{
+				"exp": 0,
+				"preUseCause": 0,
+				"cooldown": 1200,
+				"requireLevel": 1,
+				"requireCosts": {
+				},
+				"remoteMethod": "_invisible",
+				"remoteMethodParams": {"expiredPeriod": "3000"},
+				"catoon": "asset/skill/3.swf"
+			}
+		]
+	},
+	{
+		"id": "1",
+		"name": "加速药水",
+		"num": 1,
+		"category": "tool",
+		"icon": "static/asset/icon/wq-z-1.jpg",
+		"levels": [
+			{
+				"exp": 0,
+				"preUseCause": 0,
+				"cooldown": 1200,
+				"requireLevel": 1,
+				"requireCosts": {
+				},
+				"remoteMethod": "_changeSpeed",
+				"remoteMethodParams": {"rate": 2, "expiredPeriod": 3000},
+				"catoon": "asset/skill/3.swf"
+			}
+		]
+	}
+]

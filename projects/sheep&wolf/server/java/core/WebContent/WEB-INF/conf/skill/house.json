@@ -1,0 +1,21 @@
+[
+	{
+		"id": "house_0",
+		"name": "建草房",
+		"num": 1,
+		"category": "tool",
+		"icon": "static/asset/item/house_0.png",
+		"levels": [
+			{
+				"exp": 0,
+				"preUseCause": 0,
+				"cooldown": 1200,
+				"requireLevel": 1,
+				"requireCosts": {
+				},
+				"remoteMethod": "buildHouse",
+				"remoteMethodParams": {"moveSpeed": 300, "cartoon": "knife_0.swf", "bounds": [30, 30], "damage": 1, "slow": 10}
+			}
+		]
+	}
+]

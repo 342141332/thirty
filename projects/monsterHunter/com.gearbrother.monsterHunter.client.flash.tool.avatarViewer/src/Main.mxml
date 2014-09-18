@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+					   xmlns:s="library://ns.adobe.com/flex/spark"
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   applicationComplete="handleApplicationEvent(event)"
+					   close="handleApplicationEvent(event)"
+					   nativeDragDrop="onDragIn(event)"
+					   backgroundColor="0xeeeeee">
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import com.gearbrother.glash.GMain;
+			import com.gearbrother.glash.common.resource.type.GBmdDefinition;
+			import com.gearbrother.glash.common.resource.type.GFile;
+			import com.gearbrother.glash.display.GMovieBitmap;
+			import com.gearbrother.glash.manager.LocalStorage;
+			import com.gearbrother.glash.util.core.GListener;
+			
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			
+			import org.as3commons.logging.api.LOGGER_FACTORY;
+			import org.as3commons.logging.setup.LevelTargetSetup;
+			import org.as3commons.logging.setup.LogSetupLevel;
+			import org.as3commons.logging.setup.target.TraceTarget;
+			import org.as3commons.logging.setup.target.mergeTargets;
+
+			private var _avatarTreeModel:LocalStorage;
+
+			private var _skillTreeModel:LocalStorage;
+
+			private function handleApplicationEvent(event:Event):void {
+				switch (event.type) {
+					case FlexEvent.APPLICATION_COMPLETE:
+						stage.nativeWindow.maximize();
+						stage.addChild(new GMain);
+						LOGGER_FACTORY.setup = new LevelTargetSetup(mergeTargets(new TraceTarget("{date} {time} [{logLevel}] [{name}] {message}"), new FlexTextAreaTarget("{time} {message}", logger)), LogSetupLevel.DEBUG);
+
+						_avatarTreeModel = new LocalStorage("avatarTreeModel");
+						_skillTreeModel = new LocalStorage("skillTreeModel");
+						if (_avatarTreeModel.getValue()) {
+							var avatarTreeInfo:Object = _avatarTreeModel.getValue();
+							avatarTree.selectedPath = avatarTreeInfo["selectedPath"];
+							avatarTree.openPaths = avatarTreeInfo["openPaths"];
+						}
+						if (_skillTreeModel.getValue()) {
+							var skillTreeInfo:Object = _skillTreeModel.getValue();
+							skillTree.selectedPath = skillTreeInfo["selectedPath"];
+							skillTree.openPaths = skillTreeInfo["openPaths"];
+						}
+						break;
+					case Event.CLOSE:
+						_avatarTreeModel.setValue({"openPaths": avatarTree.openPaths, "selectedPath": avatarTree.selectedPath});
+						_skillTreeModel.setValue({"openPaths": skillTree.openPaths, "selectedPath": skillTree.selectedPath});
+						break;
+				}
+			}
+
+			public function onDragIn(event:NativeDragEvent):void {
+				//				trace(ObjectUtil.toString(event.clipboard));
+				NativeDragManager.dropAction = NativeDragActions.COPY;
+				//				if (event.clipboard.hasFormat(ClipboardFormats.TEXT_FORMAT)) {
+				NativeDragManager.acceptDragDrop(this); //'this' is the receiving component 
+				//				}
+			}
+
+			public function onDrop(event:NativeDragEvent):void {
+				var targets:Array = event.clipboard.getData(ClipboardFormats.FILE_LIST_FORMAT, ClipboardTransferMode.ORIGINAL_PREFERRED) as Array;
+				var file:File = targets[0];
+			}
+
+			private var _listeners:Array = [];
+			private function _handleMouseEvent(event:Event):void {
+				var file:File = (event.currentTarget as FileSystemTree).selectedItem as File;
+				if (file && file.extension && file.extension.toLocaleLowerCase() == "swf") {
+					if (event.currentTarget == avatarTree) {
+						while (_listeners.length > 0) {
+							var listener:GListener =  _listeners.shift();
+							listener.remove();
+						}
+						restCanvas.removeAllChildren();
+						var restComp:MovieComponent = new MovieComponent(new GBmdDefinition(new GFile(file.url), "Rest"));
+						restCanvas.addChild(restComp);
+						_listeners.unshift(GListener.addListener(restComp, Event.COMPLETE, function(event:Event):void {
+							(restCanvas.parent as Panel).title = "休息动画 [内存:" + (restComp.movie.bmdsInfo.memory / 1000 / 1000).toFixed(2) + "M, 帧频:" + restComp.movie.bmdsInfo.framerate + "]";
+						}));
+						moveCanvas.removeAllChildren();
+						var moveComp:MovieComponent = new MovieComponent(new GBmdDefinition(new GFile(file.url), "Move"));
+						moveCanvas.addChild(moveComp);
+						_listeners.unshift(GListener.addListener(moveComp, Event.COMPLETE, function(event:Event):void {
+							(moveCanvas.parent as Panel).title = "移动动画 [内存:" + (moveComp.movie.bmdsInfo.memory / 1000 / 1000).toFixed(2) + "M, 帧频:" + moveComp.movie.bmdsInfo.framerate + "]";
+						}));
+						pysicalActionCanvas.removeAllChildren();
+						var pysicalComp:MovieComponent = new MovieComponent(new GBmdDefinition(new GFile(file.url), "Attack"));
+						pysicalActionCanvas.addChild(pysicalComp);
+						_listeners.unshift(GListener.addListener(pysicalComp, Event.COMPLETE, function(event:Event):void {
+							(pysicalActionCanvas.parent as Panel).title = "物理释放动画 [内存:" + (pysicalComp.movie.bmdsInfo.memory / 1000 / 1000).toFixed(2) + "M, 帧频:" + pysicalComp.movie.bmdsInfo.framerate + "]";
+						}));
+						magicActionCavans.removeAllChildren();
+						var magicComp:MovieComponent = new MovieComponent(new GBmdDefinition(new GFile(file.url), "CfAttack"));
+						magicActionCavans.addChild(magicComp);
+						_listeners.unshift(GListener.addListener(magicComp, Event.COMPLETE, function(event:Event):void {
+							(magicActionCavans.parent as Panel).title = "魔法释放动画 [内存:" + (magicComp.movie.bmdsInfo.memory / 1000 / 1000).toFixed(2) + "M, 帧频:" + magicComp.movie.bmdsInfo.framerate + "]";
+						}));
+					} else if (event.currentTarget == skillTree) {
+					}
+				}
+			}
+		]]>
+	</fx:Script>
+	<mx:VDividedBox width="100%"
+					height="100%">
+		<mx:HDividedBox width="100%"
+						height="100%">
+			<mx:Panel width="270"
+					  height="100%"
+					  title="人物素材"
+					  color="0x777777">
+				<mx:FileSystemTree width="100%"
+								   height="100%"
+								   id="avatarTree"
+								   selectable="true"
+								   change="_handleMouseEvent(event)"/>
+			</mx:Panel>
+			<mx:Panel width="270"
+					  height="100%"
+					  title="技能素材"
+					  color="0x777777">
+				<mx:FileSystemTree width="100%"
+								   height="100%"
+								   id="skillTree"
+								   selectable="true"
+								   click="_handleMouseEvent(event)"/>
+			</mx:Panel>
+			<mx:VDividedBox width="100%"
+							height="100%">
+				<mx:VDividedBox width="100%"
+								height="100%">
+					<mx:HDividedBox width="100%"
+									height="50%">
+						<mx:Panel width="50%"
+								  height="100%"
+								  title="休息动画"
+								  color="0x777777">
+							<mx:Canvas width="100%"
+									   height="100%"
+									   id="restCanvas"
+									   backgroundColor="0xcccccc"/>
+						</mx:Panel>
+						<mx:Panel width="50%"
+								  height="100%"
+								  title="移动动画"
+								  color="0x777777">
+							<mx:Canvas width="100%"
+									   height="100%"
+									   id="moveCanvas"
+									   backgroundColor="0xcccccc"/>
+						</mx:Panel>
+					</mx:HDividedBox>
+					<mx:HDividedBox width="100%"
+									height="50%">
+						<mx:Panel width="50%"
+								  height="100%"
+								  title="物理释放动画"
+								  color="0x777777">
+							<mx:Canvas width="100%"
+									   height="100%"
+									   id="pysicalActionCanvas"
+									   backgroundColor="0xcccccc"/>
+						</mx:Panel>
+						<mx:Panel width="50%"
+								  height="100%"
+								  title="魔法释放动画"
+								  color="0x777777">
+							<mx:Canvas width="100%"
+									   height="100%"
+									   id="magicActionCavans"
+									   backgroundColor="0xcccccc"/>
+						</mx:Panel>
+					</mx:HDividedBox>
+				</mx:VDividedBox>
+			</mx:VDividedBox>
+		</mx:HDividedBox>
+		<mx:TextArea id="logger"
+					 width="100%"
+					 height="0"/>
+	</mx:VDividedBox>
+</s:WindowedApplication>
