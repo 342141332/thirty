@@ -31,7 +31,6 @@ package com.gearbrother.tool.mapReader.mode {
 
 			_dataCall = dataCall;
 			_paper = target;
-			_gridSize = factor;
 			_data = data;
 		}
 
@@ -51,7 +50,7 @@ package com.gearbrother.tool.mapReader.mode {
 			var row:int = _paper.mouseY / _gridSize;
 			var col:int = _paper.mouseX / _gridSize;
 			if (!_mouseOverPoint.equals(new Point(col, row))) {
-				_dataCall(_data, row, col);
+				_dataCall(_data, _paper.mouseY, _paper.mouseX);
 				_mouseOverPoint = new Point(col, row);
 				_data.dispatchEvent(new Event(Event.CHANGE));
 			}

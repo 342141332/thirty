@@ -71,7 +71,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			if (model is BattleItemBuildingModel) {
 				var progressSkin:Shape = new Shape();
 				progressSkin.graphics.beginFill(0x00cc00, 1);
-				progressSkin.graphics.drawRect(0, 0, model.width * model.battle.cellPixel, 2);
+				progressSkin.graphics.drawRect(0, 0, 50, 2);
 				progressSkin.graphics.endFill();
 				addChild(hp = new GProgress(progressSkin));
 				hp.mouseEnabled = hp.mouseChildren = false;
@@ -128,7 +128,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				}
 			}
 			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.OWNER_ID)) && model is BattleItemBuildingModel) {
-				if (model.ownerId == GameModel.instance.loginedUser.uuid)
+				if (GameModel.instance.loginedUser && GameModel.instance.loginedUser.uuid == model.ownerId)
 					ownerFilter.apply(this);
 				else
 					ownerFilter.unapply(this);

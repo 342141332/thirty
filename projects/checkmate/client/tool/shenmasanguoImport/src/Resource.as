@@ -1,6 +1,7 @@
 package
 {
 	import br.com.stimuli.loading.BulkLoader;
+	import br.com.stimuli.loading.loadingtypes.BinaryItem;
 	import br.com.stimuli.loading.loadingtypes.ImageItem;
 	import br.com.stimuli.loading.loadingtypes.LoadingItem;
 	
@@ -25,18 +26,26 @@ package
 	 * @create 	2014-9-17 下午2:42:51
 	 *
 	 */
-	public class Config {
+	public class Resource {
+		public static function writeFile(file:File, bytes:ByteArray):void {
+			file.parent.createDirectory();
+			var stream:FileStream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			stream.writeBytes(bytes);
+			stream.close();
+		}
+		
 		public static const ALL:Object = {};
 		
-		public static const dispatcher:EventDispatcher = new EventDispatcher();
+		public static const loader:BulkLoader = new BulkLoader("22");
 		
-		static public const loader:BulkLoader = new BulkLoader("22");
+		public static var decode:Object;
 		
-		static public var decode:Object;
+		public static var localRoot:String;
 		
-		public var parent:Config;
+		public var parent:Resource;
 		
-		public var children:Vector.<Config>;
+		public var children:Vector.<Resource>;
 		
 		public var remoteUrl:String;
 		
@@ -48,7 +57,7 @@ package
 		
 		public var content:*;
 		
-		public function Config(path:String, version:String, parent:Config = null) {
+		public function Resource(path:String, version:String, parent:Resource = null) {
 			ALL[path] = this;
 			orginalPath = path;
 			var dotAt:int = path.lastIndexOf(".");
@@ -68,7 +77,7 @@ package
 		
 		private function _handleLoaderEvent(event:Event):void {
 			var item:LoadingItem = event.target as LoadingItem;
-			var file:File = new File("D:/neo/mine/shenmasanguo/" + this.orginalPath);
+			var file:File = new File(localRoot + this.orginalPath);
 			file.parent.createDirectory();
 			var stream:FileStream = new FileStream();
 			stream.open(file, FileMode.WRITE);
@@ -77,7 +86,7 @@ package
 				var d:* = decode.divdi4(bytes);
 				bytes.uncompress();
 				var utf:String = bytes.readUTFBytes(bytes.bytesAvailable);
-				children = new Vector.<Config>();
+				children = new Vector.<Resource>();
 				if (utf.charAt(0) == "<") {
 					var content:XML = new XML(utf);
 					this.content = content;
@@ -85,12 +94,12 @@ package
 					for each (var fileXml:XML in content.file) {
 						childrenPath = fileXml.@url;
 						var version:String = fileXml.@v;
-						children.push(new Config(childrenPath, version, this));
+						children.push(new Resource(childrenPath, version, this));
 					}
 					for each (fileXml in content.s) {
 						var childrenPath:String = fileXml.valueOf();
 						version = fileXml.@v;
-						children.push(new Config(childrenPath, version, this));
+						children.push(new Resource(childrenPath, version, this));
 					}
 				} else {
 					var obj:Object = JSON.parse(utf);
@@ -99,18 +108,18 @@ package
 					if (path.indexOf("hero_v") > -1) {
 						for each (var heroFile:String in obj) {
 							var spliterAt:int = heroFile.indexOf("|");
-							children.push(new Config("config/hero/" + heroFile.slice(0, spliterAt), heroFile.slice(spliterAt + 1, heroFile.length), this));
+							children.push(new Resource("config/hero/" + heroFile.slice(0, spliterAt), heroFile.slice(spliterAt + 1, heroFile.length), this));
 						}
 					}
 				}
 			} else if (StringUtil.endsWith(this.path, ".swf")) {
 				stream.writeBytes((item as ImageItem).loader.contentLoaderInfo.bytes);
 			} else {
-				trace("f");
+				stream.writeBytes((item as BinaryItem).loader.data);
 			}
 			stream.close();
 			
-			for each (var config:Config in ALL) {
+			for each (var config:Resource in ALL) {
 				if (!config.item.status)
 					return;
 			}

@@ -54,7 +54,7 @@ package com.gearbrother.mushroomWar.view.common {
 		
 		private var _limitTimeInFrame:int;
 		
-		public function AvatarFile(frame:int, definition:GDefinition, offsetX:int = 27, offsetY:int = 50) {
+		public function AvatarFile(frame:int, definition:GDefinition, offsetX:int = -27, offsetY:int = -50) {
 			super(definition);
 			
 			_frame = frame;
@@ -117,7 +117,7 @@ package com.gearbrother.mushroomWar.view.common {
 			m.translate(-rect.x, -rect.y);
 			bitmapData.draw(item, m);
 			frame.bmd = bitmapData;
-			frame.regPoint = new Point(rect.x - _offsetX, rect.y - _offsetY);
+			frame.regPoint = new Point(rect.x + _offsetX, rect.y + _offsetY);
 			/*if (item is MovieClip)
 			frame.label = (item as MovieClip).cu*/
 			return frame;

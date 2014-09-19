@@ -7,8 +7,12 @@ package com.gearbrother.mushroomWar.model {
 	 * @create 	2014-7-28 下午5:51:10
 	 *
 	 */
-	public interface IBattleItemModel extends IQuadTreeable {
+	public interface IBattleItemModel {
 		function get instanceId():String;
+		
+		function get x():Number;
+		
+		function get y():Number;
 
 		function get cartoon():String;
 
@@ -23,7 +27,7 @@ package com.gearbrother.mushroomWar.model {
 		function get maxHp():int;
 
 		function get ownerId():String;
-		
+
 		function get currentAction():Object;
 
 		function encode():Object;

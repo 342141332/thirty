@@ -15,22 +15,10 @@ package com.gearbrother.mushroomWar.model {
 		}
 		public function set battle(newValue:BattleModel):void {
 			if (_battle) {
-				for (var r:int = y; r < y + height; r++) {
-					for (var c:int = x; c < x + width; c++) {
-						_battle.setCollision(r, c, null);
-					}
-				}
 				delete _battle.items[instanceId];
 			}
 			this._battle = newValue;
 			if (_battle) {
-				if (isCollisionable) {
-					for (r = y; r < y + height; r++) {
-						for (c = x; c < x + width; c++) {
-							_battle.setCollision(r, c, this);
-						}
-					}
-				}
 				_battle.items[instanceId] = this;
 			}
 		}
@@ -41,6 +29,13 @@ package com.gearbrother.mushroomWar.model {
 
 		public function encode():Object {
 			return null;
+		}
+		
+		public function decode(obj:Object):BattleItemBuildingModel {
+			for (var k:String in obj) {
+				this[k] = obj[k];
+			}
+			return this;
 		}
 	}
 }

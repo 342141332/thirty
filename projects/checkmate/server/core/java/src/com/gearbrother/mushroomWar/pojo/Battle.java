@@ -30,18 +30,14 @@ public class Battle extends RpcBean {
 	public String confId;
 	
 	@RpcBeanProperty(desc = "row")
-	public int row;
+	public int height;
 
 	@RpcBeanProperty(desc = "col")
-	public int col;
-
-	@RpcBeanProperty(desc = "")
-	public int cellPixel;
+	public int width;
 
 	@RpcBeanProperty(desc = "")
 	public Map<String, BattleRoomSeat> users;
 
-	
 	private Map<Double, Map<Double, BattleItem>> collisionItems;
 	public void setCollision(double r, double c, BattleItem newValue) {
 		if (!collisionItems.containsKey(r)) {
@@ -97,9 +93,8 @@ public class Battle extends RpcBean {
 		this();
 
 		this.json = json;
-		this.row = json.get("row").asInt();
-		this.col = json.get("col").asInt();
-		this.cellPixel = json.get("cellPixel").asInt();
+		this.height = json.get("row").asInt();
+		this.width = json.get("col").asInt();
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
 			new BattleItemBuilding(itemsNode.get(i)).setBattle(this);

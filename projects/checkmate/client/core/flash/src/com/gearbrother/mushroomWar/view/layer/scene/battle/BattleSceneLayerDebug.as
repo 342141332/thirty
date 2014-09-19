@@ -34,7 +34,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				_shape.graphics.beginFill(0x0000ff, .7);
 				for (var uuid:String in model.items) {
 					var item:IBattleItemModel = model.items[uuid];
-					_shape.graphics.drawRect(item.x * model.cellPixel, item.y * model.cellPixel, item.width * model.cellPixel, item.height * model.cellPixel);
+					_shape.graphics.drawRect(item.x - 10, item.y - 10, 20, 20);
 				}
 				_shape.graphics.endFill();
 			}

@@ -147,7 +147,7 @@ public class GenerateRpcClientCode {
 		List<Class<?>> classes = getClasses("com.gearbrother.mushroomWar.rpc.service.bussiness");
 		File as3ServiceFolder;
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
-			as3ServiceFolder = new File("D:\\neo\\mine\\project\\git\\thirty\\client\\core\\flash\\com.gearbrother.mushroomWar.client.core.flash\\src\\com\\gearbrother\\mushroomWar\\rpc\\service\\bussiness\\");
+			as3ServiceFolder = new File("D:/neo/mine/project/git/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/service/bussiness/");
 		else
 			as3ServiceFolder = new File("/Users/lifeng/git/thirty/client/core/flash/com.gearbrother.mushroomWar.client.core.flash/src/com/gearbrother/mushroomWar/rpc/service/bussiness/");
 		emptyFolder(as3ServiceFolder);
@@ -163,7 +163,7 @@ public class GenerateRpcClientCode {
 		classes = getClasses("com.gearbrother.mushroomWar.pojo");
 		File as3ProtocolFolder;
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
-			as3ProtocolFolder = new File("D:\\neo\\mine\\project\\git\\thirty\\client\\core\\flash\\com.gearbrother.mushroomWar.client.core.flash\\src\\com\\gearbrother\\mushroomWar\\rpc\\protocol\\bussiness\\");
+			as3ProtocolFolder = new File("D:/neo/mine/project/git/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness/");
 		else
 			as3ProtocolFolder = new File("/Users/lifeng/git/thirty/client/core/flash/com.gearbrother.mushroomWar.client.core.flash/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
 		emptyFolder(as3ProtocolFolder);
@@ -205,7 +205,7 @@ public class GenerateRpcClientCode {
 		//generate AS3 RpcBean code
 		File javaProtocolFolder;
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
-			javaProtocolFolder = new File("D:\\neo\\mine\\project\\git\\thirty\\server\\core\\java\\com.gearbrother.mushroomWar.server.core.java\\src\\com\\gearbrother\\mushroomWar\\rpc\\protocol\\bussiness\\");
+			javaProtocolFolder = new File("D:/neo/mine/project/git/projects/checkmate/server/core/java/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness/");
 		else
 			javaProtocolFolder = new File("/Users/lifeng/git/thirty/server/core/java/com.gearbrother.mushroomWar.server.core.java/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
 		emptyFolder(javaProtocolFolder);

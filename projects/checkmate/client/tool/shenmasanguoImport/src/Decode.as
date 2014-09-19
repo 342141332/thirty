@@ -24,11 +24,13 @@ package {
 		public var clazz:Class;
 		
 		public function Decode() {
-			BulkLoader.registerNewType(".swf", "swf", BinaryItem);
+			Resource.localRoot = "D:/neo/mine/shenmasanguo/";
+			BulkLoader.SOUND_EXTENSIONS = [];
+			BulkLoader.registerNewType(".mp3", ".mp3", BinaryItem);
 			BulkLoader.registerNewType(".dat", "dat", BinaryItem);
-			Config.loader.start(5);
-			Config.loader.logLevel = BulkLoader.LOG_INFO;
-			Config.loader.addEventListener(ErrorEvent.ERROR, _handleError);
+			Resource.loader.start(5);
+			Resource.loader.logLevel = BulkLoader.LOG_INFO;
+			Resource.loader.addEventListener(ErrorEvent.ERROR, _handleError);
 			var loader:Loader = new Loader();
 			var loaderContext:LoaderContext = new LoaderContext();
 			loaderContext.allowCodeImport = true;
@@ -44,8 +46,8 @@ package {
 			var loader:LoaderInfo = event.target as LoaderInfo;
 			var ar:* = loader.applicationDomain.getDefinition("com.kingnet.common.models.AbstractResourceModel");
 			var clazz:* = new ar(null);
-			Config.decode = ar["method"];
-			new Config("config.dat", "oevocb")
+			Resource.decode = ar["method"];
+			new Resource("config.dat", "oevocb")
 		}
 	}
 }

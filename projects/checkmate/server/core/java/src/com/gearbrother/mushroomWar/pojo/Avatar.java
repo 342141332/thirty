@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 

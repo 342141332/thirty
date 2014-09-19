@@ -80,18 +80,18 @@
 				newPaper.doubleClickEnabled = true;
 				newPaper.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 				comp.addChild(_paper = newPaper);
-				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.col * _selectedProject.cellPixel;
-				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.row * _selectedProject.cellPixel;
+				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.width;
+				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.height;
 				_terrianLayer = _paper.addChild(new BattleSceneLayerTerrian(_selectedProject, _paper.camera)) as BattleSceneLayerTerrian;
 				_paper.addChild(new BattleSceneLayerOverland("floor", _selectedProject, _paper.camera));
 				_paper.addChild(new BattleSceneLayerOverland("over", _selectedProject, _paper.camera));
 				_debugLayer = _paper.addChild(new BattleSceneLayerDebug(_selectedProject, _paper.camera)) as BattleSceneLayerDebug;
-				row.value = newValue.row;
-				col.value = newValue.col;
+				row.value = newValue.height;
+				col.value = newValue.width;
 				itemToolbarData.removeAll();
 				var templates:Array = [];
 				var template1:BattleItemTemplateModel = new BattleItemTemplateModel();
-				template1.cartoon = "static/asset/item/house_1.swf";
+				template1.cartoon = "static/asset/avatar/house_1.swf";
 				templates.push(template1);
 				for each (var templateModel:BattleItemTemplateModel in templates) {
 					itemToolbarData.addItem([templateModel, _selectedProject]);
@@ -187,9 +187,7 @@
 							stream.open(file, FileMode.READ);
 							var fileContent:String = new String(stream.readMultiByte(stream.bytesAvailable, "utf-8"));
 							stream.close();
-							var battle:BattleModel = new BattleModel();
-							battle.decode(JSON.parse(fileContent));
-							selectedProject = battle;
+							selectedProject = new BattleModel().decode(JSON.parse(fileContent));
 						}
 						break;
 				}
@@ -201,11 +199,9 @@
 					mouseMode = new PinMode(
 						function(model:BattleModel, row:int, col:int):void {
 							var itemModel:BattleItemModel = new BattleItemModel();
-							itemModel.uuid = UUID.getUUID();
+							itemModel.instanceId = UUID.getUUID();
 							itemModel.x = col;
 							itemModel.y = row;
-							itemModel.width = 1;
-							itemModel.height = 1;
 							itemModel.cartoon = d.cartoon;
 							itemModel.layer = "floor";
 							itemModel.battle = _selectedProject;
@@ -226,14 +222,14 @@
 			protected function _handleBtnClick(event:Event):void {
 				switch (event.target) {
 					case saveBtn:
-						_selectedProject.row = row.value;
-						_selectedProject.col = col.value;
+						_selectedProject.height = row.value;
+						_selectedProject.width = col.value;
 						//remove item which out of bounds
 						for (var itemUuid:String in _selectedProject.items) {
 							var itemModel:IBattleItemModel = _selectedProject.items[itemUuid];
-							if (itemModel.x > _selectedProject.col)
+							if (itemModel.x > _selectedProject.width)
 								delete _selectedProject.items[itemUuid];
-							else if (itemModel.y > _selectedProject.row)
+							else if (itemModel.y > _selectedProject.height)
 								delete _selectedProject.items[itemUuid];
 							//format collision item's xy to int
 //							if (itemModel.isCollisionable) {
@@ -262,10 +258,10 @@
 						break;
 					case row:
 					case col:
-						_selectedProject.row = row.value;
-						_selectedProject.col = col.value;
-						comp.width = _paper.width = _paper.camera.bound.width = _selectedProject.col * _selectedProject.cellPixel;
-						comp.height = _paper.height = _paper.camera.bound.height = _selectedProject.row * _selectedProject.cellPixel;
+						_selectedProject.height = row.value;
+						_selectedProject.width = col.value;
+						comp.width = _paper.width = _paper.camera.bound.width = _selectedProject.width * _selectedProject.cellPixel;
+						comp.height = _paper.height = _paper.camera.bound.height = _selectedProject.height * _selectedProject.cellPixel;
 						_paper.camera.screenRect.width = _paper.camera.bound.width;
 						_paper.camera.screenRect.height = _paper.camera.bound.height;
 						_paper.camera.setChanged();

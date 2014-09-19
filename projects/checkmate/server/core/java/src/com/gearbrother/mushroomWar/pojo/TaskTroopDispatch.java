@@ -57,7 +57,6 @@ public class TaskTroopDispatch extends TaskInterval {
 						dispatchedTroop.cartoon = "static/asset/avatar/enemy_2.swf";
 						dispatchedTroop.x = sourceBuilding.x;
 						dispatchedTroop.y = sourceBuilding.y;
-						dispatchedTroop.width = dispatchedTroop.height = 1;
 						dispatchedTroop.layer = "over";
 						dispatchedTroop.setBattle(sourceBuilding.getBattle());
 						long costTime = (long) (1000L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));

@@ -1,14 +1,11 @@
 package {
 	import com.gearbrother.glash.GMain;
 	import com.gearbrother.glash.display.GSkinSprite;
-	import com.gearbrother.glash.display.container.GContainer;
 	import com.gearbrother.glash.display.control.GButton;
 	import com.gearbrother.glash.display.control.GButtonLite;
-	import com.gearbrother.glash.display.control.GCheckBox;
 	import com.gearbrother.glash.display.control.GHScrollBar;
 	import com.gearbrother.glash.display.control.GHSlider;
 	import com.gearbrother.glash.display.control.GNumericStepper;
-	import com.gearbrother.glash.display.control.GRadioButton;
 	import com.gearbrother.glash.display.control.GSelectGroup;
 	import com.gearbrother.glash.display.control.GVScrollBar;
 	import com.gearbrother.glash.display.control.GVSlider;
@@ -16,10 +13,7 @@ package {
 	import flash.display.DisplayObject;
 	import flash.display.Loader;
 	import flash.display.LoaderInfo;
-	import flash.display.Sprite;
 	import flash.events.Event;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
 	import flash.net.URLRequest;
 
 	[SWF(width = "800", height = "600", frameRate = "60")]
@@ -44,11 +38,11 @@ package {
 			var labelButton1:GButtonLite = new GButtonLite(skin["button1"]);
 			var labelButton2:GButton = new GButton(skin["button2"]);
 //			labelButton2.toggle = true;
-			var checkButton1:GCheckBox = new GCheckBox(skin["checkButton1"]);
-			var checkButton2:GCheckBox = new GCheckBox(skin["checkButton2"]);
-			var radioButton1:GRadioButton = new GRadioButton(skin["radioButton1"]);
-			var radioButton2:GRadioButton = new GRadioButton(skin["radioButton2"]);
-			var group:GSelectGroup = radioButton1.group = radioButton2.group = new GSelectGroup();
+			var checkButton1:GButton = new GButton(skin["checkButton1"]);
+			var checkButton2:GButton = new GButton(skin["checkButton2"]);
+			var radioButton1:GButton = new GButton(skin["radioButton1"]);
+			var radioButton2:GButton = new GButton(skin["radioButton2"]);
+			var group:GSelectGroup = radioButton1.selectedGroup = radioButton2.selectedGroup = new GSelectGroup();
 			group.addEventListener(Event.CHANGE, _handleEvent);
 			var numericStepper:GNumericStepper = new GNumericStepper(skin["numericStepper"]);
 			var hsilder:GHSlider = new GHSlider(skin["hSilder"]);

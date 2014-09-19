@@ -28,6 +28,8 @@ package com.gearbrother.mushroomWar.model {
 			this._collisions[row][col] = newValue;
 		}
 		
+		public var cellPixel:int = 32;
+		
 		public function BattleModel(prototype:Object = null) {
 			super(prototype);
 			
@@ -42,15 +44,15 @@ package com.gearbrother.mushroomWar.model {
 			expiredPeriod = 5 * 60 * 1000;
 		}
 
-		public function decode(prototype:Object):void {
-			row = prototype.row;
-			col = prototype.col;
-			this.cellPixel = prototype.cellPixel;
+		public function decode(prototype:Object):BattleModel {
 			items = {};
 			for each (var itemObj:Object in prototype.items) {
-				var item:BattleItemModel = new BattleItemModel().decode(itemObj);
+				var item:BattleItemBuildingModel = new BattleItemBuildingModel().decode(itemObj);
 				item.battle = this;
 			}
+			width = prototype.width;
+			height = prototype.height;
+			return this;
 		}
 
 		public function encode():String {
@@ -60,10 +62,7 @@ package com.gearbrother.mushroomWar.model {
 			}
 			return JSON.stringify(
 				{
-					"row": row
-					, "col": col
-					, "cellPixel": cellPixel
-					, "items": itemsObj
+					"items": itemsObj
 				}, null, "\t");
 		}
 	}

@@ -55,52 +55,20 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			}
 		}
 
-		public function addItem(item:IBattleItemModel, throwFrom:PointBeanModel = null):DisplayObject {
+		public function addItem(item:IBattleItemModel):DisplayObject {
 			if (item.layer != id)
 				return null;
 
 			var battleModel:BattleModel = bindData;
 			var itemView:DisplayObject = new BattleItemSceneView(item);
-			var throwToX:int = itemView.x = item.x * battleModel.cellPixel;
-			var throwToY:int = itemView.y = item.y * battleModel.cellPixel;
+			var throwToX:int = itemView.x = item.x;
+			var throwToY:int = itemView.y = item.y;
 			if (!itemViews.hasOwnProperty(item.instanceId)) {
 				itemViews[item.instanceId] = addChild(itemView);
 			} else {
 				throw new Error("duplicate");
  			}
-			if (throwFrom && item is IBattleItemThrowable) {
-				itemView.x = throwFrom.x;
-				itemView.y = throwFrom.y;
-				itemView.scaleX = itemView.scaleY = .1;
-				var duration:Number = throwFrom.distance(throwToX, throwToY) / (item as IBattleItemThrowable).dropSpeed;
-				TweenMax.to(itemView, .1, {"scaleX": 1, "scaleY": 1});
-				TweenMax.to(itemView
-					, duration
-					, {
-						"bezier":[{x: throwFrom.x + throwToX >> 1, y: (throwFrom.y + throwToY >> 1) + (throwToX - throwFrom.x) * .7}, {x: throwToX, y: throwToY}]
-						, "rotation": duration / 0.2 * 360
-						, "ease": Linear.easeNone
-						, "onComplete": _handleOnLand
-						, "onCompleteParams": [itemView]
-					}
-				);
-			}
 			return itemView;
-		}
-		
-		private function _handleOnLand(itemView:BattleItemSceneView):void {
-			TweenLite.to(itemView, .3, {"alpha": .0, "onComplete": removeChild, "onCompleteParams": [itemView]});
-			var battleItemModel:IBattleItemModel = itemView.bindData;
-			var shape:Shape = new Shape();
-			shape.graphics.beginFill(0xff0000);
-			shape.graphics.drawRect(0, 0, battleItemModel.width, battleItemModel.height);
-			shape.graphics.endFill();
-			shape.x = battleItemModel.x;
-			shape.y = battleItemModel.y;
-			shape.alpha = .0;
-			addChild(shape);
-			TweenLite.to(shape, .2, {"alpha": .3});
-			TweenLite.to(shape, .2, {"alpha": .0, "delay": .2, "onComplete": removeChild, "onCompleteParams": [shape]});
 		}
 
 		public function removeItem(item:IBattleItemModel, duration:Number = .0):BattleItemSceneView {

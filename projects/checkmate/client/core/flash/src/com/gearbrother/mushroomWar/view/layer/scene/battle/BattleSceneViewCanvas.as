@@ -63,8 +63,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super();
 
 			data = battle;
-			camera.bound.width = battle.col * battle.cellPixel;
-			camera.bound.height = battle.row * battle.cellPixel;
+			camera.bound.width = battle.width;
+			camera.bound.height = battle.height;
 			
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
 			layers = {};
@@ -76,7 +76,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			pen = new GPen(arrow.graphics);
 			
 			keyboard = new Keyboard2();
-			_quadTree = new GQuadtree(new Rectangle(0, 0, model.col * model.cellPixel, model.row * model.cellPixel));
+			_quadTree = new GQuadtree(new Rectangle(0, 0, model.width, model.height));
 		}
 		
 		override protected function doInit():void {

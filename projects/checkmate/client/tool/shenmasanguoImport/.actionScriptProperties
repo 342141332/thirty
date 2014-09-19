@@ -9,7 +9,6 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/core.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
-      <libraryPathEntry kind="1" linkType="1" path="libs"/>
       <libraryPathEntry kind="3" linkType="1" path="/as3corelib/bin/as3corelib.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/as3-commons/bin/as3-commons.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/com.gearbrother.glash/bin-debug/com.gearbrother.glash.swc" useDefaultLinkType="false"/>

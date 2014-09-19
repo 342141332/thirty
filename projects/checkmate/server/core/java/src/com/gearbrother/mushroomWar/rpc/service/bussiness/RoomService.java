@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
-import com.gearbrother.mushroomWar.pojo.Avatar;
 import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
 import com.gearbrother.mushroomWar.pojo.BattleRoomSeat;

@@ -13,6 +13,7 @@
 			import com.gearbrother.glash.display.GMovieBitmap;
 			import com.gearbrother.mushroomWar.model.BattleItemTemplateModel;
 			import com.gearbrother.mushroomWar.model.BattleModel;
+			import com.gearbrother.mushroomWar.view.common.ui.AvatarView;
 			
 			import mx.core.UIComponent;
 			override public function set data(value:Object):void {
@@ -25,9 +26,9 @@
 				comp.x = width >> 1;
 				comp.y = height >> 1;
 				addElement(comp);
-				var movie:GMovieBitmap = new GMovieBitmap();
-				movie.definition = new GBmdDefinition(new GDefinition(new GAliasFile(templateModel.cartoon), "Value"));
-				comp.addChild(movie);
+				var avatarView:AvatarView = new AvatarView();
+				avatarView.setCartoon(templateModel.cartoon, AvatarView.STATE_STOP_DOWN);
+				comp.addChild(avatarView);
 				/* var shape:Shape = new Shape();
 				shape.graphics.beginFill(0x0000ff, .3);
 				shape.graphics.drawRect(
