@@ -9,6 +9,10 @@ import com.gearbrother.mushroomWar.model.ISession;
  * @create on 2013-12-6
  */
 public class MinaSessionImpl implements ISession {
+	final private IoSession session;
+	
+	final private World world;
+	
 	private User logined;
 
 	@Override
@@ -19,64 +23,42 @@ public class MinaSessionImpl implements ISession {
 	@Override
 	public void setLogined(User value) {
 		if (logined != null) {
-			world.sessions.remove(logined.uuid);
+			setEnteredHall(null);
+			setSeat(null);
+			this.world.loginedSessions.remove(this.logined.uuid);
 		}
 		logined = value;
 		if (logined != null) {
-			world.sessions.put(logined.uuid, this);
+			this.world.loginedSessions.put(this.logined.uuid, this);
 		}
 	}
-	
-	private World world;
-	
-	public World getWorld() {
-		return world;
-	}
-	
-	public void setWorld(World value) {
-		this.world = value;
-		this.world.addSession(this);
+
+	private Hall enteredHall;
+
+	public Hall getEnteredHall() {
+		return enteredHall;
 	}
 
-	private Hall hall;
-
-	@Override
-	public Hall getHall() {
-		return hall;
-	}
-
-	@Override
-	public void setHall(Hall value) {
-		if (this.hall != null) {
-			this.hall.removeSession(this);
-		}
-		this.hall = value;
-		if (this.hall != null) {
-			this.hall.addSession(this);
-		}
+	public void setEnteredHall(Hall value) {
+		this.enteredHall = value;
 	}
 
 	private BattleRoomSeat seat;
 
-	@Override
-	public BattleRoomSeat getRoomSeat() {
+	public BattleRoomSeat getSeat() {
 		return seat;
 	}
 
-	@Override
-	public void setRoomSeat(BattleRoomSeat value) {
-		if (this.seat != null)
-			this.seat.getRoom().removeSession(this);
+	public void setSeat(BattleRoomSeat value) {
 		this.seat = value;
 	}
-
-	private IoSession session;
 
 	public MinaSessionImpl(IoSession session, World world) {
 		super();
 
 		this.session = session;
 		this.world = world;
+		this.world.connectedSessions.add(this);
 	}
 
 	public void send(Object message) {
@@ -85,8 +67,28 @@ public class MinaSessionImpl implements ISession {
 
 	@Override
 	public void close() {
-		world.sessions.remove(logined.uuid);
-		setHall(null);
-		setRoomSeat(null);
+		this.world.connectedSessions.remove(this);
+		if (this.logined != null) {
+			this.world.loginedSessions.remove(this.logined.uuid);
+			if (this.enteredHall != null)
+				this.enteredHall.observer.deleteObserver(this);
+			if (this.seat != null) {
+				for (int i = 0; i < this.seat.room.seats.length; i++) {
+					if (this.seat.room.seats[i] == this.seat) {
+						this.seat.room.seats[i] = null;
+					}
+				}
+				int unemptySeatCount = 0;
+				for (int i = 0; i < this.seat.room.seats.length; i++) {
+					unemptySeatCount += this.seat.room.seats[i] != null ? 1 : 0;
+				}
+				if (unemptySeatCount > 0) {
+					this.seat.room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat));
+				} else {
+					this.seat.room.hall.rooms.remove(this.seat.room.uuid);
+					this.seat.room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat.room));
+				}
+			}
+		}
 	}
 }

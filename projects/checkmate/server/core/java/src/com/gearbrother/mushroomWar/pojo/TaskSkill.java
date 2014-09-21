@@ -41,11 +41,11 @@ public class TaskSkill extends TaskInterval {
 					BattleItem armys = items.get(choosed);
 					armys.setBattle(null);
 					armys.move.updateExecuteTime(0, null);
-					battle.parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_REMOVED_BY_SKILL, armys));
+					battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVED_BY_SKILL, armys));
 				}
 //			}
 //			}
-			battle.parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_SKILL, hero));
+				battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_SKILL, hero));
 		}
 		return now;
 	}

@@ -19,13 +19,6 @@ public class BattleItem extends RpcBean {
 
 	public void setBattle(Battle newValue) {
 		if (_battle != null) {
-			if (isCollisionable) {
-				for (double r = Math.floor(y); r < Math.ceil(y); r++) {
-					for (double c = Math.floor(x); c < Math.ceil(x); c++) {
-						_battle.setCollision(r, c, null);
-					}
-				}
-			}
 			_battle.sortItems.get(getClass()).remove(instanceId);
 			_battle.items.remove(instanceId);
 			_battle = null;
@@ -38,13 +31,6 @@ public class BattleItem extends RpcBean {
 			}
 			_battle.sortItems.get(getClass()).put(instanceId, this);
 			_battle.items.put(instanceId, this);
-			if (isCollisionable) {
-				for (double r = Math.floor(y); r < Math.ceil(y); r++) {
-					for (double c = Math.floor(x); c < Math.ceil(x); c++) {
-						_battle.setCollision(r, c, this);
-					}
-				}
-			}
 		}
 	}
 

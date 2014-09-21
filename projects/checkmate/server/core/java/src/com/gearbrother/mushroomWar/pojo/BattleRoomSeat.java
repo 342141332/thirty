@@ -5,8 +5,10 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 
 @RpcBeanPartTransportable(isPartTransport = true)
 public class BattleRoomSeat extends RpcBean {
-	@RpcBeanProperty(desc = "")
-	public String instanceUuid;
+	final public BattleRoom room;
+	
+	@RpcBeanProperty(desc = "座位索引")
+	public int index;
 
 	@RpcBeanProperty(desc = "准备好了")
 	public boolean isReady;
@@ -22,29 +24,16 @@ public class BattleRoomSeat extends RpcBean {
 	@RpcBeanProperty(desc = "是否是房主")
 	public boolean isHost;
 
-	private BattleRoom room;
-	public BattleRoom getRoom() {
-		return room;
-	}
-	public void setRoom(BattleRoom value) {
-		if (this.room != null) {
-			this.room.seats.remove(this);
-			if (this.room.seats.size() == 0) {
-				this.room.setHall(null);
-			}
-		}
-		this.room = value;
-	}
-
-	public BattleRoomSeat(BattleRoom room) {
+	public BattleRoomSeat(BattleRoom room, int index) {
 		super();
 
 		this.room = room;
+		this.index = index;
 		this.choosedHeroes = new Avatar[3];
 	}
 
-	public BattleRoomSeat(BattleRoom parent, User user) {
-		this(parent);
+	public BattleRoomSeat(BattleRoom room, int index, User user) {
+		this(room, index);
 
 		this.user = user;
 		name = user.name;

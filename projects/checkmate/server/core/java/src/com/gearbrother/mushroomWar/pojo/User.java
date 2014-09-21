@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 
@@ -23,7 +22,7 @@ public class User extends RpcBean {
 
 	@RpcBeanProperty(desc = "拥有银币")
 	public int silver;
-	
+
 	@RpcBeanProperty(desc = "模型")
 	public Map<String, Avatar> heroes;
 
@@ -33,8 +32,6 @@ public class User extends RpcBean {
 	public Timestamp createTime;
 
 	public Timestamp updateTime;
-	
-	public ISession session;
 
 	public User() {
 		heroes = new HashMap<String, Avatar>();

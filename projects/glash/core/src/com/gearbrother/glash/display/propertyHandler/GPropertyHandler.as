@@ -22,7 +22,7 @@ package com.gearbrother.glash.display.propertyHandler {
 			return _value;
 		}
 		public function set value(newValue:*):void {
-			if (_value == undefined || _value != newValue) {
+			if (_value === undefined || _value != newValue) {
 				_value = newValue;
 				revalidate();
 			}

@@ -54,7 +54,7 @@ public class TaskTroopMove extends Task {
 			}
 		}
 		army.setBattle(null);
-		this.targetBuilding.getBattle().parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_REMOVE, army));
-		this.targetBuilding.getBattle().parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_UPDATE, this.targetBuilding));
+		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, army));
+		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, this.targetBuilding));
 	}
 }

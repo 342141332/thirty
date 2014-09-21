@@ -12,10 +12,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.IBattleItemModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattlePropertyEventProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalEndProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalMethodDoProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalSkillUseProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PropertyEventProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.TextAlert;
 	
 	import flash.display.Shape;
@@ -133,8 +133,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		private function _handleGameChannelEvent(event:RpcEvent):void {
 			if (event.response is BattleSignalSkillUseProtocol) {
 				var skillUsing:BattleSignalSkillUseProtocol = event.response as BattleSignalSkillUseProtocol;
-			} else if (event.response is BattlePropertyEventProtocol) {
-				var change:BattlePropertyEventProtocol = event.response as BattlePropertyEventProtocol;
+			} else if (event.response is PropertyEventProtocol) {
+				var change:PropertyEventProtocol = event.response as PropertyEventProtocol;
 				if (change.item is IBattleItemModel) {
 					var battleItem:IBattleItemModel = change.item as IBattleItemModel;
 					switch (change.type) {

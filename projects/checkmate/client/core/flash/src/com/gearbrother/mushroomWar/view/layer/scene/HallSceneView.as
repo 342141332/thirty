@@ -5,11 +5,13 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import com.gearbrother.glash.display.control.GButton;
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.display.layout.impl.BorderLayout;
+	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.HallModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomModel;
+	import com.gearbrother.mushroomWar.model.HallModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.HallProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PropertyEventProtocol;
 	
 	import flash.events.MouseEvent;
 	
@@ -73,8 +75,32 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		}
 		
 		private function _handleGameChannel(event:RpcEvent):void {
-			if (event.response is HallModel) {
-				bindData = event.response;
+			var model:HallModel = bindData;
+			if (event.response is PropertyEventProtocol) {
+				var propertyEvent:PropertyEventProtocol = event.response as PropertyEventProtocol;
+				switch (propertyEvent.type) {
+					case 1:
+						if (propertyEvent.item is BattleRoomModel) {
+							var roomModel:BattleRoomModel = propertyEvent.item as BattleRoomModel;
+							model.rooms[roomModel.uuid] = roomModel;
+							model.setPropertyChanged(HallProtocol.ROOMS);
+						}
+						break;
+					case 2:
+						if (propertyEvent.item is BattleRoomModel) {
+							roomModel = propertyEvent.item as BattleRoomModel;
+							(model.rooms[roomModel.uuid] as GBean).merge(roomModel);
+							model.setPropertyChanged(HallProtocol.ROOMS);
+						}
+						break;
+					case 3:
+						if (propertyEvent.item is BattleRoomModel) {
+							roomModel = propertyEvent.item as BattleRoomModel;
+							delete model.rooms[roomModel.uuid];
+							model.setPropertyChanged(HallProtocol.ROOMS);
+						}
+						break;
+				}
 			}
 		}
 		

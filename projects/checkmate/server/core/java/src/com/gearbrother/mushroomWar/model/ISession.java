@@ -13,13 +13,13 @@ public interface ISession {
 
 	public void setLogined(User value);
 
-	public Hall getHall();
+	public Hall getEnteredHall();
 
-	public void setHall(Hall value);
+	public void setEnteredHall(Hall value);
 
-	public BattleRoomSeat getRoomSeat();
+	public BattleRoomSeat getSeat();
 
-	public void setRoomSeat(BattleRoomSeat member);
+	public void setSeat(BattleRoomSeat value);
 
 	public void send(Object message);
 

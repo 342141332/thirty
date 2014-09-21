@@ -180,8 +180,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					var distance:Number = GPointUtil.distance2(move.startPos.x, move.startPos.y, move.targetPos.x, move.targetPos.y);
 					var offset:Number = Math.sin(Math.PI * progress);
 					var radian:Number = GMathUtil.getRadian2(move.startPos.x, move.startPos.y, move.targetPos.x, move.targetPos.y) + offset * RADIAN[move.offset] * Math.PI / 180;
-					x = (move.startPos.x + Math.cos(radian) * distance * progress) * 32;
-					y = (move.startPos.y + Math.sin(radian) * distance * progress) * 32;
+					x = (move.startPos.x + Math.cos(radian) * distance * progress);
+					y = (move.startPos.y + Math.sin(radian) * distance * progress);
 					/*var pos:Point = Point.interpolate(
 						new Point(move.startPos.x, move.startPos.y), new Point(move.targetPos.x, move.targetPos.y)
 						, 1 - progress
@@ -196,7 +196,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				var offsetX:Number = x - _lastPos[0];
 				var offsetY:Number = y - _lastPos[1];
 				if (offsetX == 0 && offsetY == 0) {
-					_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
+//					_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
 				} else {
 					if (Math.abs(offsetX) > Math.abs(offsetY)) {
 						if (offsetX > 0)

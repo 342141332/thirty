@@ -13,9 +13,10 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomPropertyEventProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalBeginProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PropertyEventProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 	import com.gearbrother.mushroomWar.view.common.ui.RoomSeatUiView;
 	import com.gearbrother.mushroomWar.view.common.ui.SkillUiView;
@@ -150,6 +151,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		}
 		
 		private function _handleGameChannel(event:RpcEvent):void {
+			var model:BattleRoomModel = bindData;
 			if (event.response is BattleSignalBeginProtocol) {
 				remove();
 				var signal:BattleSignalBeginProtocol = event.response as BattleSignalBeginProtocol;
@@ -157,9 +159,33 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				GameMain.instance.scenelayer.addChild(new BattleSceneView(battle));
 			} else if (event.response is BattleRoomModel) {
 				(bindData as BattleRoomModel).merge(event.response as BattleRoomModel);
-			} else if (event.response is BattleRoomPropertyEventProtocol) {
-				var ready:BattleRoomPropertyEventProtocol = event.response as BattleRoomPropertyEventProtocol;
-				((bindData as BattleRoomModel).battle.items[ready.readyUser.instanceUuid] as GBean).merge(ready.readyUser as BattleRoomSeatModel);
+			} else if (event.response is PropertyEventProtocol) {
+				var propertyEvent:PropertyEventProtocol = event.response as PropertyEventProtocol;
+				switch (propertyEvent.type) {
+					case 1:
+						if (propertyEvent.item is BattleRoomSeatModel) {
+							var seatModel:BattleRoomSeatModel = propertyEvent.item as BattleRoomSeatModel;
+							model.seats[seatModel.index] = seatModel;
+							model.setPropertyChanged(BattleRoomProtocol.SEATS);
+						}
+						break;
+					case 2:
+						if (propertyEvent.item is BattleRoomSeatModel) {
+							seatModel = propertyEvent.item as BattleRoomSeatModel;
+							(model.seats[seatModel.index] as GBean).merge(seatModel);
+							model.setPropertyChanged(BattleRoomProtocol.SEATS);
+						} else if (propertyEvent.item is BattleRoomModel) {
+							model.merge(propertyEvent.item as GBean);
+						}
+						break;
+					case 3:
+						if (propertyEvent.item is BattleRoomSeatModel) {
+							seatModel = propertyEvent.item as BattleRoomSeatModel;
+							delete model.seats[seatModel.index];
+							model.setPropertyChanged(BattleRoomProtocol.SEATS);
+						}
+						break;
+				}
 			}
 		}
 		
@@ -174,6 +200,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 						return;
 					}
 				}
+			} else if (event.currentTarget is RoomSeatUiView) {
 				if (seatViews.indexOf(event.currentTarget) > -1) {
 					GameMain.instance.roomService.switchSeat(seatViews.indexOf(event.currentTarget));
 				}

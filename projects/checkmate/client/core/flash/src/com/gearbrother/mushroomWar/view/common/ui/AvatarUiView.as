@@ -170,7 +170,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 			} else {
 				if (avatar)
-					avatar.bindData = null;
+					avatar.setCartoon(null, AvatarView.STATE_STOP_LEFT);
 				if (nameLabel)
 					nameLabel.text = "";
 				for (i = 0; i < equipIcons.length; i++) {

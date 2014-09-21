@@ -14,7 +14,7 @@ abstract public class Task extends RpcBean {
 		return _nextExecuteTime;
 	}
 
-	private Battle queue;
+	protected BattleRoom battleRoom;
 
 	public Task() {
 		this(UUID.randomUUID().toString());
@@ -27,23 +27,23 @@ abstract public class Task extends RpcBean {
 	}
 
 	public void commit(long executeTime) {
-		updateExecuteTime(executeTime, queue);
+		updateExecuteTime(executeTime, battleRoom);
 	}
-	
-	public void updateExecuteTime(long executeTime, Battle queue) {
-		if (_nextExecuteTime != executeTime || this.queue != queue) {
+
+	public void updateExecuteTime(long executeTime, BattleRoom queue) {
+		if (_nextExecuteTime != executeTime || this.battleRoom != queue) {
 			halt();
 			_nextExecuteTime = executeTime;
-			this.queue = queue;
-			if (this.queue != null)
-				this.queue.tasks.add(this);
+			this.battleRoom = queue;
+			if (this.battleRoom != null)
+				this.battleRoom.tasks.add(this);
 		}
 	}
 
 	public void halt() {
-		if (this.queue != null) {
-			this.queue.tasks.remove(this);
-			this.queue = null;
+		if (this.battleRoom != null) {
+			this.battleRoom.tasks.remove(this);
+			this.battleRoom = null;
 		}
 	}
 

@@ -1,6 +1,8 @@
 package com.gearbrother.mushroomWar.pojo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.gearbrother.mushroomWar.model.ISession;
@@ -11,18 +13,21 @@ import com.gearbrother.mushroomWar.model.ISession;
  * @author lifeng
  *
  */
-public class World extends SessionGroup {
+public class World {
 	static public final World instance = new World();
 
-	final public Map<String, ISession> sessions;
-	
-	final public Map<String, Battle> battles;
+	final public List<ISession> connectedSessions;
+
+	final public Map<String, ISession> loginedSessions;
 
 	final public Hall hall;
 
+	final public Map<String, BattleRoom> runningBattles;
+
 	private World() {
-		sessions = new HashMap<String, ISession>();
-		battles = new HashMap<String, Battle>();
+		connectedSessions = new ArrayList<ISession>();
+		loginedSessions = new HashMap<String, ISession>();
 		hall = new Hall();
+		runningBattles = new HashMap<String, BattleRoom>();
 	}
 }

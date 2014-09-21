@@ -37,10 +37,6 @@ package com.gearbrother.mushroomWar.model {
 			for each (var item:IBattleItemModel in items) {
 				item.battle = this;
 			}
-			for each (var seat:BattleRoomSeatModel in users) {
-				if (seat.instanceUuid == GameModel.instance.loginedUser.uuid)
-					loginedBattleUser = seat;
-			}
 			expiredPeriod = 5 * 60 * 1000;
 		}
 

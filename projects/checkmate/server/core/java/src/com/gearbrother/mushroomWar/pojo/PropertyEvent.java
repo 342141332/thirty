@@ -8,7 +8,7 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
  * @create on 2014-5-27
  */
 @RpcBeanPartTransportable
-public class BattlePropertyEvent extends RpcBean {
+public class PropertyEvent extends RpcBean {
 	static public final int TYPE_ADD = 1;
 	static public final int TYPE_UPDATE = 2;
 	static public final int TYPE_REMOVE = 3;
@@ -21,7 +21,7 @@ public class BattlePropertyEvent extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public Object item;
 
-	public BattlePropertyEvent(int type, Object item) {
+	public PropertyEvent(int type, Object item) {
 		this.type = type;
 		this.item = item;
 	}

@@ -48,7 +48,7 @@ public class TaskTroopDispatch extends TaskInterval {
 				int troop = sourceBuilding.troops.containsKey(itemConfId) ? sourceBuilding.troops.get(itemConfId) : 0;
 				int moveNum = Math.min(maxNum, troop);
 				troop = troop - moveNum;
-				logger.debug("{} dispatch troop {}", format.format(new Date(lastIntervalTime)), troop);
+				logger.debug("{} dispatch troop {}", format.format(new Date(lastIntervalTime)), moveNum);
 				if (moveNum > 0) {
 					sourceBuilding.troops.put(itemConfId, troop);
 					for (int i = 0; i < moveNum; i++) {
@@ -60,17 +60,18 @@ public class TaskTroopDispatch extends TaskInterval {
 						dispatchedTroop.layer = "over";
 						dispatchedTroop.setBattle(sourceBuilding.getBattle());
 						long costTime = (long) (1000L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
+						costTime /= 100L;
 						BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
 								, new PointBean(sourceBuilding.x, sourceBuilding.y), new PointBean(targetBuilding.x, targetBuilding.y), 0, 200L, 0L, 0L);
 						action.offset = i;
 						dispatchedTroop.currentAction = action;
 						dispatchedTroop.owner = sourceBuilding.owner;
-						sourceBuilding.getBattle().parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_ADD, dispatchedTroop));
+						battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
 						TaskTroopMove moveTask = new TaskTroopMove(UUID.randomUUID().toString(), lastIntervalTime, sourceBuilding, targetBuilding, itemConfId, moveNum);
 						moveTask.army = dispatchedTroop;
-						moveTask.updateExecuteTime(lastIntervalTime + costTime, this.sourceBuilding._battle);
+						moveTask.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
 						dispatchedTroop.move = moveTask;
-						sourceBuilding.getBattle().parent.board(new BattlePropertyEvent(BattlePropertyEvent.TYPE_UPDATE, sourceBuilding));
+						battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, sourceBuilding));
 					}
 				}
 				if (troop == 0)

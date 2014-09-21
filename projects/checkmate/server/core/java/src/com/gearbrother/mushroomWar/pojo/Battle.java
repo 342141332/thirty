@@ -1,11 +1,8 @@
 package com.gearbrother.mushroomWar.pojo;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,23 +32,6 @@ public class Battle extends RpcBean {
 	@RpcBeanProperty(desc = "col")
 	public int width;
 
-	@RpcBeanProperty(desc = "")
-	public Map<String, BattleRoomSeat> users;
-
-	private Map<Double, Map<Double, BattleItem>> collisionItems;
-	public void setCollision(double r, double c, BattleItem newValue) {
-		if (!collisionItems.containsKey(r)) {
-			collisionItems.put(r, new HashMap<Double, BattleItem>());
-		}
-		collisionItems.get(r).put(c, newValue);
-	}
-	public BattleItem getCollision(double r, double c) {
-		if (collisionItems.containsKey(r))
-			return collisionItems.get(r).get(c);
-		else
-			return null;
-	}
-
 	Map<Class<?>, Map<String, BattleItem>> sortItems;
 	public Map<String, BattleItem> getItems(Class<?> clazz) {
 		return sortItems.get(clazz);
@@ -65,28 +45,12 @@ public class Battle extends RpcBean {
 	
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriod;
-
-	public SortedSet<Task> tasks;
-	
-	public BattleRoom parent;
 	
 	private JsonNode json;
 
 	public Battle() {
-		this.users = new HashMap<String, BattleRoomSeat>();
-		this.collisionItems = new HashMap<Double, Map<Double,BattleItem>>();
 		this.sortItems = new HashMap<Class<?>, Map<String,BattleItem>>();
 		this.items = new HashMap<String, BattleItem>();
-		this.tasks = new TreeSet<Task>(
-				new Comparator<Task>() {
-					
-					@Override
-					public int compare(Task o1, Task o2) {
-						return o1.getNextExecuteTime() > o2.getNextExecuteTime()
-								? 1 : (o1.getNextExecuteTime() < o2.getNextExecuteTime() ? -1 : o1.instanceId.compareTo(o2.instanceId));
-					}
-				}
-			);
 	}
 
 	public Battle(JsonNode json) {
@@ -117,21 +81,5 @@ public class Battle extends RpcBean {
 	
 	public Battle clone() {
 		return new Battle(json);
-	}
-
-	public void execute(long now) {
-		while (tasks.size() > 0) {
-			Task head = tasks.first();
-			if (now >= head.getNextExecuteTime()) {
-				boolean res = tasks.remove(head);
-				if (!res)
-					throw new Error("remove fail");
-//				Task second = queue.size() > 0 ? queue.first() : null;
-//				long time = Math.max(now, second != null ? second.nextExecuteTime : 0);
-				head.execute(now);
-			} else {
-				break;
-			}
-		}
 	}
 }
