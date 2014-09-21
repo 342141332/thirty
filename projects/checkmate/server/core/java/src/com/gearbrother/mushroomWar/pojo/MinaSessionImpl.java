@@ -19,11 +19,11 @@ public class MinaSessionImpl implements ISession {
 	@Override
 	public void setLogined(User value) {
 		if (logined != null) {
-			world.sessions.remove(logined.uuid);
+			this.world.users.remove(this.logined.uuid);
 		}
 		logined = value;
 		if (logined != null) {
-			world.sessions.put(logined.uuid, this);
+			this.world.users.put(this.logined.uuid, this.logined);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class MinaSessionImpl implements ISession {
 	
 	public void setWorld(World value) {
 		this.world = value;
-		this.world.addSession(this);
+		this.world.users.put(this.logined.uuid, this.logined);
 	}
 
 	private Hall hall;
@@ -48,11 +48,11 @@ public class MinaSessionImpl implements ISession {
 	@Override
 	public void setHall(Hall value) {
 		if (this.hall != null) {
-			this.hall.removeSession(this);
+			this.hall.users.remove(this.logined);
 		}
 		this.hall = value;
 		if (this.hall != null) {
-			this.hall.addSession(this);
+			this.hall.users.add(this.logined);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class MinaSessionImpl implements ISession {
 	@Override
 	public void setRoomSeat(BattleRoomSeat value) {
 		if (this.seat != null)
-			this.seat.getRoom().removeSession(this);
+			this.seat.getRoom().seats.remove(this.seat);
 		this.seat = value;
 	}
 
@@ -85,8 +85,8 @@ public class MinaSessionImpl implements ISession {
 
 	@Override
 	public void close() {
-		world.sessions.remove(logined.uuid);
-		setHall(null);
 		setRoomSeat(null);
+		setHall(null);
+		setLogined(null);
 	}
 }

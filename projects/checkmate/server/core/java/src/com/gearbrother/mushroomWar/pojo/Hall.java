@@ -12,13 +12,16 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
  * @create on 2013-12-6
  */
 @RpcBeanPartTransportable
-public class Hall extends SessionGroup {
+public class Hall {
 	@RpcBeanProperty(desc = "大厅唯一ID")
 	public String uuid;
 
 	@RpcBeanProperty(desc = "可选地图id")
 	public Set<String> mapIds;
 
+	@RpcBeanProperty(desc = "大厅中监听者")
+	public Set<User> users;
+	
 	@RpcBeanProperty(desc = "等候的房间")
 	public Map<String, BattleRoom> rooms;
 	

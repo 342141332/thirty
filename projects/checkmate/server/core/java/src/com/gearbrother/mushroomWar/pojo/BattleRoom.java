@@ -1,9 +1,11 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 import com.gearbrother.mushroomWar.util.GMathUtil;
@@ -14,7 +16,7 @@ import com.gearbrother.mushroomWar.util.GMathUtil;
  */
 
 @RpcBeanPartTransportable(isPartTransport = true)
-public class BattleRoom extends SessionGroup {
+public class BattleRoom {
 	@RpcBeanProperty(desc = "唯一id")
 	final public String uuid;
 
@@ -72,7 +74,14 @@ public class BattleRoom extends SessionGroup {
 		}
 		World.instance.battles.put(uuid, battle);
 	}
-	
+
+	public void board(Object message) {
+		for (Iterator<BattleRoomSeat> iterator = seats.iterator(); iterator.hasNext();) {
+			BattleRoomSeat roomSession = (BattleRoomSeat) iterator.next();
+			roomSession.user.session.send(message);
+		}
+	}
+
 	public void close() {
 		hall.rooms.remove(uuid);
 		hall = null;
