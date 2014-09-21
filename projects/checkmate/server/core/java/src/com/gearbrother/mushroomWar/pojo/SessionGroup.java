@@ -6,10 +6,10 @@ import java.util.Set;
 
 import com.gearbrother.mushroomWar.model.ISession;
 
-public class BoardRoom extends RpcBean {
+public class SessionGroup extends RpcBean {
 	final private Set<ISession> _sessions;
-	public Set<ISession> getSessions() {
-		return _sessions;
+	public int getSessionSize() {
+		return _sessions.size();
 	}
 	public boolean addSession(ISession value) {
 		return _sessions.add(value);
@@ -18,7 +18,7 @@ public class BoardRoom extends RpcBean {
 		return _sessions.remove(value);
 	}
 	
-	public BoardRoom() {
+	public SessionGroup() {
 		_sessions = new HashSet<ISession>();
 	}
 

@@ -13,8 +13,6 @@ import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleItemBuilding;
 import com.gearbrother.mushroomWar.pojo.BattlePropertyEvent;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
-import com.gearbrother.mushroomWar.pojo.BattleSignalEnd;
-import com.gearbrother.mushroomWar.pojo.BattleSignalMethodDo;
 import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.TaskSkill;
 import com.gearbrother.mushroomWar.pojo.TaskTroopDispatch;
@@ -57,35 +55,11 @@ public class BattleService {
 		return null;
 	}
 	
-	@RpcServiceMethod(desc = "广播调用方法")
-	public void methodCall(ISession session
-			, @RpcServiceMethodParameter(name = "method") String method
-			, @RpcServiceMethodParameter(name = "argusJson") String argusJson) {
-//		BattleUser battleUser = session.getRoom().get(session.getLogined().uuid);//session.getBattleUsers().get(session.getUser().uuid);
-//		if (battleUser.npcable) {
-		BattleSignalMethodDo methodDo = new BattleSignalMethodDo();
-		methodDo.method = method;
-		methodDo.argusJson = argusJson;
-		session.getRoom().board(methodDo);
-//		}
-	}
-	
-	@RpcServiceMethod(desc = "超时获得比赛结果")
-	public void getResult(ISession session) {
-		BattleRoom battleRoom = (BattleRoom) session.getRoom();
-		Battle battle = battleRoom.battle;
-		long currentTimeMillis = System.currentTimeMillis();
-		if (currentTimeMillis > (battle.startTime + battle.expiredPeriod)) {
-			BattleSignalEnd message = new BattleSignalEnd("时间到，正义的狼狼胜利了~");
-			session.getRoom().board(message);
-		}
-	}
-
 	@RpcServiceMethod(desc = "派遣")
 	public void dispatch(ISession session
 			, @RpcServiceMethodParameter(name = "sourceBuildingInstanceId", desc = "初始建筑") String sourceBuildingInstanceId
 			, @RpcServiceMethodParameter(name = "targetBuildingInstanceId", desc = "目标建筑") String targetBuildingInstanceId) {
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		long current = System.currentTimeMillis();
 		BattleItemBuilding sourceBuilding = (BattleItemBuilding) room.battle.items.get(sourceBuildingInstanceId);
 		if (sourceBuilding.owner != session.getRoomSeat())
@@ -104,7 +78,7 @@ public class BattleService {
 	@RpcServiceMethod(desc = "")
 	public void upgrade(ISession session
 			, @RpcServiceMethodParameter(name = "buildingInstanceUuid") String buildingInstanceId) {
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		BattleItemBuilding building = (BattleItemBuilding) room.battle.items.get(buildingInstanceId);
 		building.cartoon = "static/asset/avatar/house002.swf";
 		building.settledHero = session.getRoomSeat().choosedHeroes[0];

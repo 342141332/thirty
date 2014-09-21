@@ -12,7 +12,7 @@ import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
 import com.gearbrother.mushroomWar.pojo.BattleRoomSeat;
 import com.gearbrother.mushroomWar.pojo.BattleSignalBegin;
-import com.gearbrother.mushroomWar.pojo.BoardRoom;
+import com.gearbrother.mushroomWar.pojo.SessionGroup;
 import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.Hall;
 import com.gearbrother.mushroomWar.pojo.IBagItem;
@@ -51,13 +51,13 @@ public class RoomService {
 	
 	@RpcServiceMethod(desc = "进入大厅")
 	public Hall enterHall(ISession session) {
-		session.setRoom(hall);
+		session.setHall(hall);
 		return hall;
 	}
 	
 	@RpcServiceMethod(desc = "离开大厅")
 	public void outHall(ISession session) {
-		session.setRoom(null);
+		session.setHall(null);
 	}
 	
 	public void updateClientsHall() {
@@ -73,22 +73,21 @@ public class RoomService {
 		}
 	}
 	
-	public void updateClientsRoom(BoardRoom room) {
+	public void updateClientsRoom(SessionGroup room) {
 		room.board(room);
 	}
 	
 	@RpcServiceMethod(desc = "创建房间")
 	public BattleRoom createRoom(ISession session
-			, @RpcServiceMethodParameter(name = "battleConfId") String battleConfId) throws CloneNotSupportedException, RpcException {
+			, @RpcServiceMethodParameter(name = "battleConfId") String battleConfId) {
 		BattleRoom room = new BattleRoom(hall, 4, 4);
 		User logined = session.getLogined();
 		room.name = logined.name;
 		room.battle = gameConfs.battles.get(battleConfId).clone();
-		BattleRoomSeat seat = new BattleRoomSeat(logined);
-		session.setRoomMember(seat);
-		room.seats[0] = seat;
+		BattleRoomSeat seat = new BattleRoomSeat(room, logined);
+		session.setRoomSeat(seat);
+		room.seats.set(0, seat);
 		room.addSession(session);
-		session.setRoom(room);
 		hall.rooms.put(room.uuid, room);
 		updateClientsHall();
 		return room;
@@ -96,14 +95,14 @@ public class RoomService {
 	
 	@RpcServiceMethod(desc = "进入房间")
 	public BattleRoom enterRoom(ISession session
-			, @RpcServiceMethodParameter(name = "roomUuid", desc = "房间ID") String roomUuid) throws RpcException {
+			, @RpcServiceMethodParameter(name = "roomUuid", desc = "房间ID") String roomUuid) {
 		User logined = session.getLogined();
 		BattleRoom room = hall.rooms.get(roomUuid);
 		for (int i = 0; i < room.blueMax + room.redMax; i++) {
-			if (room.seats[i] == null) {
-				BattleRoomSeat member = room.seats[i] = new BattleRoomSeat(logined);
-				session.setRoomMember(member);
-				session.setRoom(room);
+			if (room.seats.get(i) == null) {
+				BattleRoomSeat seat = new BattleRoomSeat(room, logined);
+				room.seats.set(i, seat);
+				session.setRoomSeat(seat);
 				updateClientsRoom(room);
 				break;
 			}
@@ -113,9 +112,9 @@ public class RoomService {
 
 	@RpcServiceMethod(desc = "换位子")
 	public void switchSeat(ISession session
-			, @RpcServiceMethodParameter(name = "seatId") int seatId) throws RpcException {
+			, @RpcServiceMethodParameter(name = "seatId") int seatId) {
 		BattleRoomSeat seat = session.getRoomSeat();
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		if (room.seats[seatId] == null && seat != null) {
 			for (int i = 0; i < room.seats.length; i++) {
 				if (room.seats[i] == seat) {
@@ -151,7 +150,7 @@ public class RoomService {
 	
 	@RpcServiceMethod(desc = "准备")
 	public void ready(ISession session) throws RpcException {
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		BattleRoomSeat member = session.getRoomSeat();
 		member.isReady = true;
 		updateClientsRoom(room);
@@ -159,7 +158,7 @@ public class RoomService {
 
 	@RpcServiceMethod(desc = "取消准备")
 	public void unready(ISession session) throws RpcException {
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		BattleRoomSeat member = session.getRoomSeat();
 		member.isReady = false;
 		updateClientsRoom(room);
@@ -174,7 +173,7 @@ public class RoomService {
 	@RpcServiceMethod(desc = "开启房间(只有房主可以)")
 	public void startRoom(ISession session
 			, @RpcServiceMethodParameter(name = "roomUuid", desc = "房间ID") String roomUuid) {
-		BattleRoom room = (BattleRoom) session.getRoom();
+		BattleRoom room = session.getRoomSeat().getRoom();
 		hall.rooms.remove(room.uuid);
 		hall.removeSession(session);
 		updateClientsHall();

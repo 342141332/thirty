@@ -1,7 +1,7 @@
 package com.gearbrother.mushroomWar.model;
 
 import com.gearbrother.mushroomWar.pojo.BattleRoomSeat;
-import com.gearbrother.mushroomWar.pojo.BoardRoom;
+import com.gearbrother.mushroomWar.pojo.Hall;
 import com.gearbrother.mushroomWar.pojo.User;
 
 /**
@@ -10,16 +10,16 @@ import com.gearbrother.mushroomWar.pojo.User;
  */
 public interface ISession {
 	public User getLogined();
-	
+
 	public void setLogined(User value);
 
-	public BoardRoom getRoom();
+	public Hall getHall();
 
-	public void setRoom(BoardRoom newValue);
-	
+	public void setHall(Hall value);
+
 	public BattleRoomSeat getRoomSeat();
-	
-	public void setRoomMember(BattleRoomSeat member);
+
+	public void setRoomSeat(BattleRoomSeat member);
 
 	public void send(Object message);
 

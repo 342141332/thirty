@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 import com.gearbrother.mushroomWar.util.GMathUtil;
@@ -15,9 +14,9 @@ import com.gearbrother.mushroomWar.util.GMathUtil;
  */
 
 @RpcBeanPartTransportable(isPartTransport = true)
-public class BattleRoom extends BoardRoom {
+public class BattleRoom extends SessionGroup {
 	@RpcBeanProperty(desc = "唯一id")
-	public String uuid;
+	final public String uuid;
 
 	@RpcBeanProperty(desc = "房间名字")
 	public String name;
@@ -26,7 +25,7 @@ public class BattleRoom extends BoardRoom {
 	public Battle battle;
 	
 	@RpcBeanProperty(desc = "")
-	public BattleRoomSeat[] seats;
+	public List<BattleRoomSeat> seats;
 	
 	@RpcBeanProperty(desc = "")
 	public int blueMax;
@@ -34,33 +33,33 @@ public class BattleRoom extends BoardRoom {
 	@RpcBeanProperty(desc = "")
 	public int redMax;
 
-	private Hall parent;
+	private Hall hall;
+	public Hall getHall() {
+		return hall;
+	}
+	public void setHall(Hall value) {
+		if (this.hall != null) {
+			this.hall.rooms.remove(uuid);
+		}
+		this.hall = value;
+		this.hall.rooms.put(uuid, this);
+	}
 
-	public BattleRoom(Hall parent, int blueMax, int redMax) {
+	public BattleRoom(Hall hall, int blueMax, int redMax) {
 		super();
 
 		uuid = UUID.randomUUID().toString();
-		seats = new BattleRoomSeat[blueMax + redMax];
+		setHall(hall);
+		seats = new ArrayList<BattleRoomSeat>(blueMax + redMax);
 		this.blueMax = blueMax;
 		this.redMax = redMax;
-		this.parent = parent;
-		this.parent.rooms.put(uuid, this);
-	}
-	
-	@Override
-	public boolean removeSession(ISession value) {
-		boolean res = super.removeSession(value);
-		if (getSessions().size() == 0) {
-			parent.rooms.remove(this);
-		}
-		return res;
 	}
 
 	public void play() {
 		battle.startTime = System.currentTimeMillis();
 		List<String> buildingIds = new ArrayList<String>(battle.getItems(BattleItemBuilding.class).keySet());
-		for (int i = 0; i < seats.length; i++) {
-			BattleRoomSeat seat = seats[i];
+		for (int i = 0; i < seats.size(); i++) {
+			BattleRoomSeat seat = seats.get(i);
 			if (seat != null) {
 				String random = (String) GMathUtil.random(buildingIds);
 				BattleItemBuilding home = (BattleItemBuilding) battle.items.get(random);
@@ -75,7 +74,7 @@ public class BattleRoom extends BoardRoom {
 	}
 	
 	public void close() {
-		parent.rooms.remove(uuid);
-		parent = null;
+		hall.rooms.remove(uuid);
+		hall = null;
 	}
 }

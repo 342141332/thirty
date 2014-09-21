@@ -1,6 +1,5 @@
 package com.gearbrother.mushroomWar.rpc.ioHandler;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -124,11 +123,6 @@ public class RpcIoHandler extends IoHandlerAdapter implements ApplicationContext
 			Object result = method.invoke(serviceBean, paramValues);
 			if (result != null)
 				response.result = result;
-		} catch (InvocationTargetException e) {
-			response.isFailed = true;
-			//TODO
-			response.result = e.getTargetException().toString();
-			e.printStackTrace();
 		} catch (Exception e) {
 			response.isFailed = true;
 			response.result = e.toString();

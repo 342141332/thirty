@@ -11,7 +11,7 @@ import com.gearbrother.mushroomWar.model.ISession;
  * @author lifeng
  *
  */
-public class World {
+public class World extends SessionGroup {
 	static public final World instance = new World();
 
 	final public Map<String, ISession> sessions;

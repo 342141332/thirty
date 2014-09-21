@@ -12,7 +12,7 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
  * @create on 2013-12-6
  */
 @RpcBeanPartTransportable
-public class Hall extends BoardRoom {
+public class Hall extends SessionGroup {
 	@RpcBeanProperty(desc = "大厅唯一ID")
 	public String uuid;
 
@@ -21,7 +21,7 @@ public class Hall extends BoardRoom {
 
 	@RpcBeanProperty(desc = "等候的房间")
 	public Map<String, BattleRoom> rooms;
-
+	
 	public Hall() {
 		super();
 

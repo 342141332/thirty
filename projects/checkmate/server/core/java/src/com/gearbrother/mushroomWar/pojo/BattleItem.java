@@ -95,17 +95,11 @@ public class BattleItem extends RpcBean {
 	public BattleItem(JsonNode json) {
 		this();
 
-		instanceId = json.get("uuid").asText();
+		instanceId = json.get("instanceId").asText();
 		x = json.get("x").asDouble();
 		y = json.get("y").asDouble();
 		cartoon = json.get("cartoon").asText();
 		layer = json.get("layer").asText();
-		isCollisionable = json.hasNonNull("isCollisionable") ? json.get(
-				"isCollisionable").asBoolean() : false;
-		isSheepPassable = json.hasNonNull("isSheepPassable") ? json.get(
-				"isSheepPassable").asBoolean() : false;
-		isWolfPassable = json.hasNonNull("isWolfPassable") ? json.get(
-				"isWolfPassable").asBoolean() : false;
 	}
 
 	public BattleItem() {

@@ -26,38 +26,51 @@ public class MinaSessionImpl implements ISession {
 			world.sessions.put(logined.uuid, this);
 		}
 	}
-
-	private BoardRoom _room;
-
-	@Override
-	public BoardRoom getRoom() {
-		return _room;
-	}
-
-	@Override
-	public void setRoom(BoardRoom room) {
-		if (_room != null) {
-			_room.removeSession(this);
-		}
-		_room = room;
-		if (_room != null)
-			_room.addSession(this);
-	}
 	
-	private IoSession session;
-
 	private World world;
 	
-	private BattleRoomSeat member;
-	@Override
-	public BattleRoomSeat getRoomSeat() {
-		return member;
+	public World getWorld() {
+		return world;
 	}
 	
-	@Override
-	public void setRoomMember(BattleRoomSeat member) {
-		this.member = member;
+	public void setWorld(World value) {
+		this.world = value;
+		this.world.addSession(this);
 	}
+
+	private Hall hall;
+
+	@Override
+	public Hall getHall() {
+		return hall;
+	}
+
+	@Override
+	public void setHall(Hall value) {
+		if (this.hall != null) {
+			this.hall.removeSession(this);
+		}
+		this.hall = value;
+		if (this.hall != null) {
+			this.hall.addSession(this);
+		}
+	}
+
+	private BattleRoomSeat seat;
+
+	@Override
+	public BattleRoomSeat getRoomSeat() {
+		return seat;
+	}
+
+	@Override
+	public void setRoomSeat(BattleRoomSeat value) {
+		if (this.seat != null)
+			this.seat.getRoom().removeSession(this);
+		this.seat = value;
+	}
+
+	private IoSession session;
 
 	public MinaSessionImpl(IoSession session, World world) {
 		super();
@@ -73,6 +86,7 @@ public class MinaSessionImpl implements ISession {
 	@Override
 	public void close() {
 		world.sessions.remove(logined.uuid);
-		setRoom(null);
+		setHall(null);
+		setRoomSeat(null);
 	}
 }

@@ -41,7 +41,7 @@ public class UserService {
 
 	@RpcServiceMethod(desc = "玩家进入接口，新玩家则注册，老玩家则登陆，返回用户信息")
 	public User login(ISession session
-			, @RpcServiceMethodParameter(name = "userName", desc = "玩家名字") String userName) throws CloneNotSupportedException {
+			, @RpcServiceMethodParameter(name = "userName", desc = "玩家名字") String userName) {
 		User user = newUser(userName);
 		session.setLogined(user);
 		Application application = new Application();
@@ -50,7 +50,7 @@ public class UserService {
 		return user;
 	}
 	
-	public User newUser(String name) throws CloneNotSupportedException {
+	public User newUser(String name) {
 		User user = new User();
 		user.uuid = UUID.randomUUID().toString();
 		user.name = name;
