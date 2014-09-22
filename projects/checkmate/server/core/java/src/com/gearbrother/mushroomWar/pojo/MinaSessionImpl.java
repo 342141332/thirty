@@ -22,15 +22,7 @@ public class MinaSessionImpl implements ISession {
 
 	@Override
 	public void setLogined(User value) {
-		if (logined != null) {
-			setEnteredHall(null);
-			setSeat(null);
-			this.world.loginedSessions.remove(this.logined.uuid);
-		}
 		logined = value;
-		if (logined != null) {
-			this.world.loginedSessions.put(this.logined.uuid, this);
-		}
 	}
 
 	private Hall enteredHall;
@@ -48,6 +40,7 @@ public class MinaSessionImpl implements ISession {
 	public BattleRoomSeat getSeat() {
 		return seat;
 	}
+
 
 	public void setSeat(BattleRoomSeat value) {
 		this.seat = value;
