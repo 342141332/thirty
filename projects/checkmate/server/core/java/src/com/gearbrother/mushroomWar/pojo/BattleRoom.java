@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 import java.util.UUID;
 
@@ -95,5 +97,33 @@ public class BattleRoom extends RpcBean {
 				break;
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		final BattleRoom room = new BattleRoom(World.instance.hall, 4, 4);
+		room.battle = new Battle();
+		BattleItemBuilding buildingA = new BattleItemBuilding();
+		buildingA.x = 0;
+		buildingA.y = 0;
+		long currentTime = System.currentTimeMillis();
+		buildingA.produce = new TaskProduce(currentTime, 300, buildingA, "itemConfId", 2);
+		buildingA.produce.updateExecuteTime(currentTime + 300, room);
+		buildingA.setBattle(room.battle);
+		BattleItemBuilding buildingB = new BattleItemBuilding();
+		buildingB.x = 500;
+		buildingB.y = 0;
+		buildingB.setBattle(room.battle);
+		buildingA.dispatch = new TaskTroopDispatch(currentTime, 500, buildingA, buildingB, 10);
+		buildingA.dispatch.updateExecuteTime(currentTime + 500, room);
+		buildingB.dispatch = new TaskTroopDispatch(currentTime, 500, buildingB, buildingA, 10);
+		buildingB.dispatch.updateExecuteTime(currentTime + 500, room);
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				long now = System.currentTimeMillis();
+				room.execute(now);
+			}
+		}, 0, 50);
 	}
 }

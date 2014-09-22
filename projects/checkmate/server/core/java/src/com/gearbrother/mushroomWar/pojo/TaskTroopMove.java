@@ -42,6 +42,7 @@ public class TaskTroopMove extends Task {
 	public void execute(long executeTime) {
 		int current = this.targetBuilding.troops.containsKey(itemConfId) ? this.targetBuilding.troops.get(itemConfId) : 0;
 		if (army.owner == this.targetBuilding.owner) {
+			logger.debug("move {} > {}", current, current + num);
 			this.targetBuilding.troops.put(itemConfId, current + num);
 		} else {
 			current = current - num;

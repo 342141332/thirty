@@ -1,7 +1,6 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -47,8 +46,8 @@ public class TaskTroopDispatch extends TaskInterval {
 				String itemConfId = sourceBuilding.troops.keySet().iterator().next();
 				int troop = sourceBuilding.troops.containsKey(itemConfId) ? sourceBuilding.troops.get(itemConfId) : 0;
 				int moveNum = Math.min(maxNum, troop);
+				logger.debug("dispatch {} > {}", troop, troop - moveNum);
 				troop = troop - moveNum;
-				logger.debug("{} dispatch troop {}", format.format(new Date(lastIntervalTime)), moveNum);
 				if (moveNum > 0) {
 					sourceBuilding.troops.put(itemConfId, troop);
 					for (int i = 0; i < moveNum; i++) {
@@ -59,15 +58,14 @@ public class TaskTroopDispatch extends TaskInterval {
 						dispatchedTroop.y = sourceBuilding.y;
 						dispatchedTroop.layer = "over";
 						dispatchedTroop.setBattle(sourceBuilding.getBattle());
-						long costTime = (long) (1000L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
-						costTime /= 100L;
+						long costTime = (long) (10L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
 						BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
 								, new PointBean(sourceBuilding.x, sourceBuilding.y), new PointBean(targetBuilding.x, targetBuilding.y), 0, 200L, 0L, 0L);
 						action.offset = i;
 						dispatchedTroop.currentAction = action;
 						dispatchedTroop.owner = sourceBuilding.owner;
 						battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
-						TaskTroopMove moveTask = new TaskTroopMove(UUID.randomUUID().toString(), lastIntervalTime, sourceBuilding, targetBuilding, itemConfId, moveNum);
+						TaskTroopMove moveTask = new TaskTroopMove(UUID.randomUUID().toString(), lastIntervalTime, sourceBuilding, targetBuilding, itemConfId, 1);
 						moveTask.army = dispatchedTroop;
 						moveTask.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
 						dispatchedTroop.move = moveTask;

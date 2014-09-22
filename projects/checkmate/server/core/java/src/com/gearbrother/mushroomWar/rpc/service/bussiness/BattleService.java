@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleItemBuilding;
-import com.gearbrother.mushroomWar.pojo.PropertyEvent;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
-import com.gearbrother.mushroomWar.pojo.GameConf;
+import com.gearbrother.mushroomWar.pojo.PropertyEvent;
 import com.gearbrother.mushroomWar.pojo.TaskSkill;
 import com.gearbrother.mushroomWar.pojo.TaskTroopDispatch;
 import com.gearbrother.mushroomWar.pojo.World;
@@ -28,15 +27,6 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
 @Service
 public class BattleService {
 	static Logger logger = LoggerFactory.getLogger(BattleService.class);
-
-	private GameConf _conf;
-
-	public GameConf getConf() {
-		return _conf;
-	}
-	public void setConf(GameConf newValue) {
-		_conf = newValue;
-	}
 
 	private Map<String, BattleRoom> _runningBattles;
 
@@ -95,7 +85,6 @@ public class BattleService {
 		building.skillTask.updateExecuteTime(currentTimeMillis + 1100, room);
 	}
 
-//
 //	@RpcServiceMethod(desc = "使用技能")
 //	public void skillUse(ISession session
 //			, @RpcServiceMethodParameter(name = "skillIndex") int skillIndex

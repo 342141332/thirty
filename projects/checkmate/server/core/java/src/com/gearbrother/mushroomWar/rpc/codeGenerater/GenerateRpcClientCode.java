@@ -149,8 +149,9 @@ public class GenerateRpcClientCode {
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
 			as3ServiceFolder = new File("D:/neo/mine/project/git/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/service/bussiness/");
 		else
-			as3ServiceFolder = new File("/Users/lifeng/git/thirty/client/core/flash/com.gearbrother.mushroomWar.client.core.flash/src/com/gearbrother/mushroomWar/rpc/service/bussiness/");
+			as3ServiceFolder = new File("/Users/lifeng/git/thirty/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/service/bussiness/");
 		emptyFolder(as3ServiceFolder);
+		as3ServiceFolder.mkdir();
 		for (int k = 0; k < classes.size(); k++) {
 			Class<?> serviceClazz = classes.get(k);
 			RpcBeanTemplate as3ServiceClass = new RpcBeanTemplate(serviceClazz);
@@ -165,8 +166,9 @@ public class GenerateRpcClientCode {
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
 			as3ProtocolFolder = new File("D:/neo/mine/project/git/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness/");
 		else
-			as3ProtocolFolder = new File("/Users/lifeng/git/thirty/client/core/flash/com.gearbrother.mushroomWar.client.core.flash/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
+			as3ProtocolFolder = new File("/Users/lifeng/git/thirty/projects/checkmate/client/core/flash/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
 		emptyFolder(as3ProtocolFolder);
+		as3ProtocolFolder.mkdir();
 		FileOutputStream s2 = new FileOutputStream(new File(as3ProtocolFolder, "Protocol.as"));
 		List<String> cases = new ArrayList<String>();
 		List<String> clazzConstants = new ArrayList<String>();
@@ -207,8 +209,9 @@ public class GenerateRpcClientCode {
 		if ("Windows 7".equals(System.getProperties().get("os.name")))
 			javaProtocolFolder = new File("D:/neo/mine/project/git/projects/checkmate/server/core/java/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness/");
 		else
-			javaProtocolFolder = new File("/Users/lifeng/git/thirty/server/core/java/com.gearbrother.mushroomWar.server.core.java/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
+			javaProtocolFolder = new File("/Users/lifeng/git/thirty/projects/checkmate/server/core/java/src/com/gearbrother/mushroomWar/rpc/protocol/bussiness");
 		emptyFolder(javaProtocolFolder);
+		javaProtocolFolder.mkdir();
 		for (int i = 0; i < classes.size(); i++) {
 			Class<?> modelClass = classes.get(i);
 			if (modelClass.getAnnotation(RpcBeanPartTransportable.class) != null) {

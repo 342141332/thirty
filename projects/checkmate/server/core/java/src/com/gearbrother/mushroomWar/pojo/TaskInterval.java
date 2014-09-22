@@ -22,7 +22,7 @@ public abstract class TaskInterval extends Task {
 		long currentTimes = GMathUtil.roundDownToMultiple(executeTime, interval);
 		if (currentTimes > lastIntervalTime) {
 			lastIntervalTime = doInterval(lastIntervalTime, currentTimes);
-			commit(lastIntervalTime + interval);
+			updateExecuteTime(lastIntervalTime + interval);
 		} else {
 			throw new Error("why here?");
 		}

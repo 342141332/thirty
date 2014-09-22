@@ -26,7 +26,7 @@ abstract public class Task extends RpcBean {
 		this.instanceId = instanceId;
 	}
 
-	public void commit(long executeTime) {
+	public void updateExecuteTime(long executeTime) {
 		updateExecuteTime(executeTime, battleRoom);
 	}
 
