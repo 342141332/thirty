@@ -42,7 +42,7 @@ public class TaskTroopMove extends Task {
 	public void execute(long executeTime) {
 		int current = this.targetBuilding.troops.containsKey(itemConfId) ? this.targetBuilding.troops.get(itemConfId) : 0;
 		if (army.owner == this.targetBuilding.owner) {
-			logger.debug("move {} > {}", current, current + num);
+			logger.debug("move {}:{} > {}:{}", itemConfId, current, itemConfId, current + num);
 			this.targetBuilding.troops.put(itemConfId, current + num);
 		} else {
 			current = current - num;
@@ -51,7 +51,8 @@ public class TaskTroopMove extends Task {
 			} else {
 				this.targetBuilding.troops.put(itemConfId, Math.abs(current));
 				this.targetBuilding.owner = army.owner;
-				this.targetBuilding.produce = new TaskProduce(executeTime, 300, this.targetBuilding, "A0", 2);
+				this.targetBuilding.produce = new TaskProduce(executeTime, 1000, this.targetBuilding, "A0", 1);
+				this.targetBuilding.produce.updateExecuteTime(executeTime + this.targetBuilding.produce.interval, battleRoom);
 			}
 		}
 		army.setBattle(null);

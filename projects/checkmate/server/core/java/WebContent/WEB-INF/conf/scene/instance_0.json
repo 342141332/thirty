@@ -13,6 +13,34 @@
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D1",
 			"cartoon": "static/asset/avatar/house_1.swf",
 			"layer": "over"
+		},
+		{
+			"x": 500,
+			"y": 100,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D2",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 100,
+			"y": 300,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D3",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 300,
+			"y": 300,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D4",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 500,
+			"y": 300,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D5",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
 		}
 	],
 	"cellPixel": 32,

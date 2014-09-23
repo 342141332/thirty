@@ -61,7 +61,9 @@ public class Battle extends RpcBean {
 		this.height = json.get("height").asInt();
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
-			new BattleItemBuilding(itemsNode.get(i)).setBattle(this);
+			BattleItemBuilding battleItemBuilding = new BattleItemBuilding(itemsNode.get(i));
+			battleItemBuilding.setBattle(this);
+			battleItemBuilding.troops.put("A0", 10);
 		}
 	}
 

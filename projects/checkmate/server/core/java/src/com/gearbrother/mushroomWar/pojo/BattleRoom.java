@@ -2,6 +2,7 @@ package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.Timer;
@@ -76,7 +77,7 @@ public class BattleRoom extends RpcBean {
 				BattleItemBuilding home = (BattleItemBuilding) battle.items.get(random);
 				home.owner = seat;
 				buildingIds.remove(random);
-				TaskProduce produce = new TaskProduce(battle.startTime, 700, home, "A0", 2);
+				TaskProduce produce = new TaskProduce(battle.startTime, 1000, home, "A0", 1);
 				home.produce = produce;
 				home.produce.updateExecuteTime(battle.startTime + produce.interval, this);
 			}
@@ -100,30 +101,40 @@ public class BattleRoom extends RpcBean {
 	}
 	
 	public static void main(String[] args) {
-		final BattleRoom room = new BattleRoom(World.instance.hall, 4, 4);
-		room.battle = new Battle();
-		BattleItemBuilding buildingA = new BattleItemBuilding();
-		buildingA.x = 0;
-		buildingA.y = 0;
-		long currentTime = System.currentTimeMillis();
-		buildingA.produce = new TaskProduce(currentTime, 300, buildingA, "itemConfId", 2);
-		buildingA.produce.updateExecuteTime(currentTime + 300, room);
-		buildingA.setBattle(room.battle);
-		BattleItemBuilding buildingB = new BattleItemBuilding();
-		buildingB.x = 500;
-		buildingB.y = 0;
-		buildingB.setBattle(room.battle);
-		buildingA.dispatch = new TaskTroopDispatch(currentTime, 500, buildingA, buildingB, 10);
-		buildingA.dispatch.updateExecuteTime(currentTime + 500, room);
-		buildingB.dispatch = new TaskTroopDispatch(currentTime, 500, buildingB, buildingA, 10);
-		buildingB.dispatch.updateExecuteTime(currentTime + 500, room);
+		final List<BattleRoom> rooms = new ArrayList<BattleRoom>();
+		for (int i = 0; i < 2000; i++) {
+			long currentTime = System.currentTimeMillis();
+			final BattleRoom room = new BattleRoom(World.instance.hall, 4, 4);
+			room.battle = new Battle();
+			List<BattleItemBuilding> buildings = new ArrayList<BattleItemBuilding>();
+			for (int j = 0; j < 40; j++) {
+				BattleItemBuilding building = new BattleItemBuilding();
+				building.instanceId = "Building_" + j;
+				building.x = 0;
+				building.y = 0;
+				building.setBattle(room.battle);
+				building.produce = new TaskProduce(currentTime, 300, building, "itemConfId", 1);
+				building.produce.updateExecuteTime(currentTime + 300, room);
+				buildings.add(building);
+			}
+			for (int j = 0; j < buildings.size(); j++) {
+				BattleItemBuilding building = buildings.get(j);
+				BattleItemBuilding pickedBuilding = (BattleItemBuilding) GMathUtil.random(buildings);
+				building.dispatch = new TaskTroopDispatch(currentTime, 500, building, pickedBuilding, 10);
+				building.dispatch.updateExecuteTime(currentTime + 500, room);
+			}
+			rooms.add(room);
+		}
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
 				long now = System.currentTimeMillis();
-				room.execute(now);
+				for (Iterator<BattleRoom> iterator = rooms.iterator(); iterator.hasNext();) {
+					BattleRoom room = (BattleRoom) iterator.next();
+					room.execute(now);
+				}
 			}
-		}, 0, 50);
+		}, 0, 100);
 	}
 }

@@ -40,7 +40,7 @@ public class TaskProduce extends TaskInterval {
 		long oldNum = troop;
 		troop += (now - lastIntervalTime) / interval * num;
 		building.troops.put(itemConfId, troop);
-		logger.debug("produce {}:{} > {}:{}", itemConfId, oldNum, itemConfId, troop);
+		logger.debug("{} produce {}:{} > {}:{}", building.instanceId, itemConfId, oldNum, itemConfId, troop);
 		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
 		return now;
 	}

@@ -26,6 +26,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import flash.filters.DropShadowFilter;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
+	import flash.text.TextFormatAlign;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 
@@ -73,18 +74,21 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				progressSkin.graphics.beginFill(0x00cc00, 1);
 				progressSkin.graphics.drawRect(0, 0, 50, 2);
 				progressSkin.graphics.endFill();
-				addChild(hp = new GProgress(progressSkin));
+				/*addChild(hp = new GProgress(progressSkin));
 				hp.mouseEnabled = hp.mouseChildren = false;
 				hp.filters = [new GlowFilter(0x000000, 1, 4, 4, 300)];
 				hp.maxValue = model.maxHp;
 				hp.minValue = 0;
 				hp.value = model.hp;
 				hp.x = 0;
-				hp.y = -23;
+				hp.y = -23;*/
 				_oldProperties = {};
 				_oldProperties[BattleItemProtocol.HP] = model.hp;
 				addChild(upgradeBtn = new GButton());
 				upgradeBtn.text = "upgrade";
+				upgradeBtn.validateLayoutNow();
+				upgradeBtn.x = -upgradeBtn.width >> 1;
+				upgradeBtn.y = 50;
 			} else {
 				mouseChildren = mouseEnabled = false;
 			}
@@ -120,11 +124,17 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					var building:BattleItemBuildingModel = model as BattleItemBuildingModel;
 					if (!troopText) {
 						addChild(troopText = new GText());
+						troopText.align = TextFormatAlign.CENTER;
 						troopText.mouseEnabled = troopText.mouseChildren = false;
 						troopText.fontColor = 0xffffff;
 						troopText.filters = [new GlowFilter(0x000000, 1, 3, 3, 200)];
 					}
-					troopText.text = JSON.stringify(building.troops);
+					troopText.htmlText = JSON.stringify(building.troops) + "\r<font color=\"#92D050\">Lv." + (model as BattleItemBuildingModel).level + "</font>";
+					troopText.x = -troopText.preferredSize.width >> 1;
+					troopText.y = -troopText.preferredSize.height >> 1;
+					troopText.width = troopText.preferredSize.width;
+					troopText.height = troopText.preferredSize.height;
+					troopText.validateLayoutNow();
 				}
 			}
 			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.OWNER_ID)) && model is BattleItemBuildingModel) {
