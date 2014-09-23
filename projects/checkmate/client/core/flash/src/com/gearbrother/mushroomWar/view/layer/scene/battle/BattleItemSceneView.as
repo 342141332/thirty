@@ -91,7 +91,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				hp.x = 0;
 				hp.y = -23;*/
 				_oldProperties = {};
-				_oldProperties[BattleItemProtocol.HP] = model.hp;
 				addChild(upgradeBtn = new GButton());
 				upgradeBtn.tipData = "消耗一定数量的兵，缩短造兵时间0.1S";
 				upgradeBtn.text = "upgrade";
@@ -117,7 +116,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 		override public function handleModelChanged(events:Object=null):void {
 			var model:IBattleItemModel = bindData;
-			if (events && hp && (events.hasOwnProperty(BattleItemProtocol.HP) || events.hasOwnProperty(BattleItemProtocol.MAX_HP))) {
+			/*if (events && hp && (events.hasOwnProperty(BattleItemProtocol.HP) || events.hasOwnProperty(BattleItemProtocol.MAX_HP))) {
 				var changedHp:int = model.hp - _oldProperties[BattleItemProtocol.HP];
 				if (changedHp > 0) {
 					popup("+ " + changedHp + " HP", 0x66cc00);
@@ -129,7 +128,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				_brightFilter.apply(_avatar);
 				clearTimeout(_unBrightDelayID);
 				_unBrightDelayID = setTimeout(_brightFilter.unapply, 200, _avatar);
-			}
+			}*/
 			if (!events || events.hasOwnProperty(BattleItemBuildingProtocol.TROOPS)) {
 				if (model is BattleItemBuildingModel) {
 					var building:BattleItemBuildingModel = model as BattleItemBuildingModel;
@@ -226,7 +225,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					x = pos.x * model.battle.cellPixel;
 					y = pos.y * model.battle.cellPixel;*/
 				} else {
-					remove();
+					model.battle = null;
 				}
 			}
 			if (_lastPos) {

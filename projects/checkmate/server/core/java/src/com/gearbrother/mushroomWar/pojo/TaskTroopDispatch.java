@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 
 @RpcBeanPartTransportable
 public class TaskTroopDispatch extends TaskInterval {
@@ -50,27 +51,27 @@ public class TaskTroopDispatch extends TaskInterval {
 				troop = troop - moveNum;
 				if (moveNum > 0) {
 					sourceBuilding.troops.put(itemConfId, troop);
-//					for (int i = 0; i < moveNum; i++) {
-						BattleItem dispatchedTroop = new BattleItem();
-						dispatchedTroop.instanceId = UUID.randomUUID().toString();
-						dispatchedTroop.cartoon = "static/asset/avatar/enemy_2.swf";
-						dispatchedTroop.x = sourceBuilding.x;
-						dispatchedTroop.y = sourceBuilding.y;
-						dispatchedTroop.layer = "floor";
-						dispatchedTroop.setBattle(sourceBuilding.getBattle());
-						long costTime = (long) (50L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
-						BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
-								, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);
-//						action.offset = i;
-						dispatchedTroop.currentAction = action;
-						dispatchedTroop.owner = sourceBuilding.owner;
-						battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
-						TaskTroopMove moveTask = new TaskTroopMove(UUID.randomUUID().toString(), lastIntervalTime, sourceBuilding, targetBuilding, itemConfId, moveNum);
-						moveTask.army = dispatchedTroop;
-						moveTask.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
-						dispatchedTroop.move = moveTask;
-						battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, sourceBuilding));
-//					}
+					BattleItem dispatchedTroop = new BattleItem();
+					dispatchedTroop.instanceId = UUID.randomUUID().toString();
+					dispatchedTroop.cartoon = "static/asset/avatar/enemy_2.swf";
+					dispatchedTroop.x = sourceBuilding.x;
+					dispatchedTroop.y = sourceBuilding.y;
+					dispatchedTroop.layer = "floor";
+					dispatchedTroop.setBattle(sourceBuilding.getBattle());
+					long costTime = (long) (50L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
+					BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
+							, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);
+					dispatchedTroop.currentAction = action;
+					dispatchedTroop.owner = sourceBuilding.owner;
+					battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
+					TaskTroopMove moveTask = new TaskTroopMove(UUID.randomUUID().toString(), lastIntervalTime, sourceBuilding, targetBuilding, itemConfId, moveNum);
+					moveTask.army = dispatchedTroop;
+					moveTask.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
+					dispatchedTroop.move = moveTask;
+					BattleItemBuildingProtocol sourceBuildingProto = new BattleItemBuildingProtocol();
+					sourceBuildingProto.setInstanceId(sourceBuilding.instanceId);
+					sourceBuildingProto.setTroops(sourceBuilding.troops);
+					battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, sourceBuildingProto));
 				}
 				if (troop == 0)
 					sourceBuilding.troops.remove(itemConfId);

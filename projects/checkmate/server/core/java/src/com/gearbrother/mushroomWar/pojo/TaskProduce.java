@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 
 @RpcBeanPartTransportable
 public class TaskProduce extends TaskInterval {
@@ -41,7 +42,10 @@ public class TaskProduce extends TaskInterval {
 		troop += (now - lastIntervalTime) / interval * num;
 		building.troops.put(itemConfId, troop);
 		logger.debug("{} produce {}:{} > {}:{}", building.instanceId, itemConfId, oldNum, itemConfId, troop);
-		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
+		BattleItemBuildingProtocol buildingProto = new BattleItemBuildingProtocol();
+		buildingProto.setInstanceId(building.instanceId);
+		buildingProto.setTroops(building.troops);
+		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, buildingProto));
 		return now;
 	}
 }

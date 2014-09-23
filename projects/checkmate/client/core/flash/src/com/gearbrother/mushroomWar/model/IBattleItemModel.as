@@ -22,10 +22,6 @@ package com.gearbrother.mushroomWar.model {
 
 		function get layer():String;
 
-		function get hp():int;
-
-		function get maxHp():int;
-
 		function get ownerId():String;
 
 		function get currentAction():Object;
