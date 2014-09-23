@@ -12,14 +12,20 @@ public class BattleItemActionMove extends RpcBean {
 	@RpcBeanProperty(desc = "开始时间")
 	public long startTime;
 
+	public BattleItemBuilding startPos;
 	@RpcBeanProperty(desc = "开始位置")
-	public PointBean startPos;
+	public String getStartBuildingId() {
+		return startPos.instanceId;
+	}
+	
+	public BattleItemBuilding targetPos;
+	@RpcBeanProperty(desc = "目的地")
+	public String getTargetBuildingId() {
+		return targetPos.instanceId;
+	}
 	
 	@RpcBeanProperty(desc = "结束时间")
 	public long endTime;
-	
-	@RpcBeanProperty(desc = "目的地")
-	public PointBean targetPos;
 	
 	@RpcBeanProperty(desc = "移动速度")
 	public double moveSpeed;
@@ -33,13 +39,13 @@ public class BattleItemActionMove extends RpcBean {
 	@RpcBeanProperty(desc = "游离")
 	public int offset;
 
-	public BattleItemActionMove(long startTime, long endTime, PointBean startPos, PointBean targetPos, int moveTo, double moveSpeed, double changeSpeed, long changeSpeedTime) {
+	public BattleItemActionMove(long startTime, long endTime, BattleItemBuilding start, BattleItemBuilding target, int moveTo, double moveSpeed, double changeSpeed, long changeSpeedTime) {
 		super();
 
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.startPos = startPos;
-		this.targetPos = targetPos;
+		this.startPos = start;
+		this.targetPos = target;
 		this.moveSpeed = moveSpeed;
 		this.changeSpeed = changeSpeed;
 		this.changeSpeedTime = changeSpeedTime;

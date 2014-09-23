@@ -298,10 +298,9 @@ package com.gearbrother.glash.display {
 		 *
 		 */
 		public function queueLabel(labelName:String, loopNum:int = -1):void {
-			if (_nextLabels.length)
-				_nextLabels.push([labelName, loopNum]);
-			else
+			if (!_nextLabels.length)
 				setLabel(labelName, loopNum);
+			_nextLabels.push([labelName, loopNum]);
 		}
 
 		/**

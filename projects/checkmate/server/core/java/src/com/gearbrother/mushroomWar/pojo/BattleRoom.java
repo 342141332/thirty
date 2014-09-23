@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedSet;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -69,15 +70,22 @@ public class BattleRoom extends RpcBean {
 
 	public void play() {
 		battle.startTime = System.currentTimeMillis();
-		List<String> buildingIds = new ArrayList<String>(battle.getItems(BattleItemBuilding.class).keySet());
+		Map<String, BattleItem> buildings = battle.getItems(BattleItemBuilding.class);
+		List<BattleItemBuilding> hostBuildings = new ArrayList<BattleItemBuilding>();
+		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
+			String buildingId = (String) iterator.next();
+			BattleItemBuilding building = (BattleItemBuilding) buildings.get(buildingId);
+			if (building.host) {
+				hostBuildings.add(building);
+			}
+		}
 		for (int i = 0; i < seats.length; i++) {
 			BattleRoomSeat seat = seats[i];
 			if (seat != null) {
-				String random = (String) GMathUtil.random(buildingIds);
-				BattleItemBuilding home = (BattleItemBuilding) battle.items.get(random);
+				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
+				hostBuildings.remove(home);
 				home.owner = seat;
-				buildingIds.remove(random);
-				TaskProduce produce = new TaskProduce(battle.startTime, 1000, home, "A0", 1);
+				TaskProduce produce = new TaskProduce(battle.startTime, 1100, home, "A0", 1);
 				home.produce = produce;
 				home.produce.updateExecuteTime(battle.startTime + produce.interval, this);
 			}

@@ -14,6 +14,11 @@ public class BattleItemBuilding extends BattleItem {
 	public TaskProduce produce;
 	
 	public TaskSkill skillTask;
+	
+	public boolean host;
+	
+	@RpcBeanProperty(desc = "")
+	public long fightTime;
 
 	@RpcBeanProperty(desc = "")
 	public Map<String, Integer> troops;
@@ -31,5 +36,6 @@ public class BattleItemBuilding extends BattleItem {
 		super(json);
 
 		troops = new HashMap<String, Integer>();
+		this.host = json.has("host") ? json.get("host").booleanValue() : false;
 	}
 }

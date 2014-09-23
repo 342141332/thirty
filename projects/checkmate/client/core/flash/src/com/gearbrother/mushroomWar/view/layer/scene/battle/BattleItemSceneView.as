@@ -3,6 +3,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.common.oper.ext.GBmdDefinition;
 	import com.gearbrother.glash.common.oper.ext.GDefinition;
 	import com.gearbrother.glash.display.GMovieBitmap;
+	import com.gearbrother.glash.display.GMovieClip;
 	import com.gearbrother.glash.display.GSkinSprite;
 	import com.gearbrother.glash.display.control.GButton;
 	import com.gearbrother.glash.display.control.GProgress;
@@ -42,6 +43,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		
 		static public const ownerFilter:GFilter = new GFilter(new GlowFilter(0x92D050, 1, 3, 3, 200));
 		
+		static public const enemyFilter:GFilter = new GFilter(new GlowFilter(0xFF3300, 1, 3, 3, 200));
+		
 		private var _brightFilter:GFilter = GFilter.getBright(170);
 		
 		private var _unBrightDelayID:int;
@@ -56,6 +59,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		
 		public var settledAvatar:AvatarView;
 		
+		public var fightEffect:GMovieBitmap;
+		
 		protected var _oldProperties:Object;
 
 		public function BattleItemSceneView(model:IBattleItemModel) {
@@ -66,10 +71,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			this.graphics.drawRect(0, 0, model.battle.cellPixel * model.width, model.battle.cellPixel * model.height);
 			this.graphics.endFill();*/
 			
-			addChildAt(_avatar = new AvatarView(), 0);
+			addChild(_avatar = new AvatarView());
 			_avatar.enableTick = false;
 
 			if (model is BattleItemBuildingModel) {
+				fightEffect = new GMovieBitmap(20);
+				fightEffect.definition = new GBmdDefinition(new GDefinition(new GAliasFile("static/asset/effect/siege_fb.swf"), "Siege2"));
+
 				var progressSkin:Shape = new Shape();
 				progressSkin.graphics.beginFill(0x00cc00, 1);
 				progressSkin.graphics.drawRect(0, 0, 50, 2);
@@ -85,11 +93,14 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				_oldProperties = {};
 				_oldProperties[BattleItemProtocol.HP] = model.hp;
 				addChild(upgradeBtn = new GButton());
+				upgradeBtn.tipData = "消耗一定数量的兵，缩短造兵时间0.1S";
 				upgradeBtn.text = "upgrade";
 				upgradeBtn.validateLayoutNow();
 				upgradeBtn.x = -upgradeBtn.width >> 1;
 				upgradeBtn.y = 50;
+				upgradeBtn.visible = false;
 			} else {
+				_avatar.scaleX = _avatar.scaleY = .7;
 				mouseChildren = mouseEnabled = false;
 			}
 			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
@@ -137,11 +148,20 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					troopText.validateLayoutNow();
 				}
 			}
-			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.OWNER_ID)) && model is BattleItemBuildingModel) {
-				if (GameModel.instance.loginedUser && GameModel.instance.loginedUser.uuid == model.ownerId)
-					ownerFilter.apply(this);
-				else
-					ownerFilter.unapply(this);
+			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.OWNER_ID))/* && model is BattleItemBuildingModel*/) {
+				if (GameModel.instance.loginedUser && model.ownerId) {
+					if (GameModel.instance.loginedUser.uuid == model.ownerId) {
+						enemyFilter.unapply(_avatar);
+						ownerFilter.apply(_avatar);
+						if (upgradeBtn)
+							upgradeBtn.visible = true;
+					} else {
+						enemyFilter.apply(_avatar);
+						ownerFilter.unapply(_avatar);
+						if (upgradeBtn)
+							upgradeBtn.visible = false;
+					}
+				}
 			}
 			if (!events || events.hasOwnProperty(BattleItemProtocol.CARTOON)) {
 				if (model is BattleItemBuildingModel) {
@@ -169,6 +189,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					settledAvatar.setCartoon((model as BattleItemBuildingModel).settledHero.cartoon, AvatarView.STATE_SKILL_DOWN);
 				}
 			}
+			if (!events || events.hasOwnProperty(BattleItemBuildingProtocol.FIGHT_TIME)) {
+				if (bindData is BattleItemBuildingModel
+					&& (bindData as BattleItemBuildingModel).fightTime > GameModel.instance.application.serverTime) {
+					addChildAt(fightEffect, 1);
+				}
+			}
 		}
 
 		private var _texts:Array;
@@ -187,11 +213,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				var move:BattleItemActionMoveModel = model.currentAction as BattleItemActionMoveModel;
 				if (move.endTime > GameModel.instance.application.serverTime) {
 					var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
-					var distance:Number = GPointUtil.distance2(move.startPos.x, move.startPos.y, move.targetPos.x, move.targetPos.y);
+					var distance:Number = GPointUtil.distance2(model.battle.items[move.startBuildingId].x, model.battle.items[move.startBuildingId].y
+						, model.battle.items[move.targetBuildingId].x, model.battle.items[move.targetBuildingId].y);
 					var offset:Number = Math.sin(Math.PI * progress);
-					var radian:Number = GMathUtil.getRadian2(move.startPos.x, move.startPos.y, move.targetPos.x, move.targetPos.y) + offset * RADIAN[move.offset] * Math.PI / 180;
-					x = (move.startPos.x + Math.cos(radian) * distance * progress);
-					y = (move.startPos.y + Math.sin(radian) * distance * progress);
+					var radian:Number = GMathUtil.getRadian2(model.battle.items[move.startBuildingId].x, model.battle.items[move.startBuildingId].y
+						, model.battle.items[move.targetBuildingId].x, model.battle.items[move.targetBuildingId].y) + offset * 0/*RADIAN[move.offset] */* Math.PI / 180;
+					x = (model.battle.items[move.startBuildingId].x + Math.cos(radian) * distance * progress);
+					y = (model.battle.items[move.startBuildingId].y + Math.sin(radian) * distance * progress);
 					/*var pos:Point = Point.interpolate(
 						new Point(move.startPos.x, move.startPos.y), new Point(move.targetPos.x, move.targetPos.y)
 						, 1 - progress
@@ -225,6 +253,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				_lastPos = [x, y];
 			}
 			_avatar.tick(interval);
+			if (bindData is BattleItemBuildingModel	&& fightEffect.parent) {
+				if ((bindData as BattleItemBuildingModel).fightTime + 700 > GameModel.instance.application.serverTime) {
+				} else {
+					fightEffect.remove();
+				}
+			}
 			if (settledAvatar)
 				settledAvatar.tick(interval);
 		}

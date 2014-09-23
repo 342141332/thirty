@@ -46,12 +46,18 @@ public class TaskTroopMove extends Task {
 			this.targetBuilding.troops.put(itemConfId, current + num);
 		} else {
 			current = current - num;
+			targetBuilding.fightTime = executeTime;
 			if (current > 0) {
 				this.targetBuilding.troops.put(itemConfId, current);
 			} else {
 				this.targetBuilding.troops.put(itemConfId, Math.abs(current));
 				this.targetBuilding.owner = army.owner;
-				this.targetBuilding.produce = new TaskProduce(executeTime, 1000, this.targetBuilding, "A0", 1);
+				if (this.targetBuilding.produce != null)
+					this.targetBuilding.produce.halt();
+				if (this.targetBuilding.dispatch != null)
+					this.targetBuilding.dispatch.halt();
+				this.targetBuilding.level = 0;
+				this.targetBuilding.produce = new TaskProduce(executeTime, 1100, this.targetBuilding, "A0", 1);
 				this.targetBuilding.produce.updateExecuteTime(executeTime + this.targetBuilding.produce.interval, battleRoom);
 			}
 		}

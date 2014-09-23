@@ -50,7 +50,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		override protected function _handleLibsSuccess(res:*):void {
 			var skinFile:GFile  = libsHandler.cachedOper[libs[0]] as GFile;
 			var hbox:GHBox = new GHBox();
-			hbox.addChild(new GNoScale(skinFile.getInstance("PRODUCE_TIME_ICON")));
+//			hbox.addChild(new GNoScale(skinFile.getInstance("PRODUCE_TIME_ICON")));
 //			hbox.addChild(clockText = new GText());
 //			clockText.fontColor = 0xffffff;
 //			clockText.fontSize = 14;

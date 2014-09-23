@@ -56,11 +56,11 @@ public class TaskTroopDispatch extends TaskInterval {
 						dispatchedTroop.cartoon = "static/asset/avatar/enemy_2.swf";
 						dispatchedTroop.x = sourceBuilding.x;
 						dispatchedTroop.y = sourceBuilding.y;
-						dispatchedTroop.layer = "over";
+						dispatchedTroop.layer = "floor";
 						dispatchedTroop.setBattle(sourceBuilding.getBattle());
-						long costTime = (long) (20L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
+						long costTime = (long) (50L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
 						BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
-								, new PointBean(sourceBuilding.x, sourceBuilding.y), new PointBean(targetBuilding.x, targetBuilding.y), 0, 200L, 0L, 0L);
+								, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);
 //						action.offset = i;
 						dispatchedTroop.currentAction = action;
 						dispatchedTroop.owner = sourceBuilding.owner;

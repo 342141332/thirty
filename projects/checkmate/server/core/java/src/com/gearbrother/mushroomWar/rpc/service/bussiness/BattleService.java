@@ -41,7 +41,7 @@ public class BattleService {
 					_runningBattles.get(instanceId).execute(now);
 				}
 			}
-		}, 0, 50);
+		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -62,10 +62,12 @@ public class BattleService {
 		room.execute(current);
 		BattleItemBuilding targetBuilding = (BattleItemBuilding) room.battle.items.get(targetBuildingInstanceId);
 		if (sourceBuilding.dispatch != null) {
-			sourceBuilding.dispatch.updateExecuteTime(0, null);
+			sourceBuilding.dispatch.updateExecuteTime(current, null);
 		}
-		sourceBuilding.dispatch = new TaskTroopDispatch(current, 300, sourceBuilding, targetBuilding, 10);
-		sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
+		if (sourceBuilding != targetBuilding) {
+			sourceBuilding.dispatch = new TaskTroopDispatch(current, 600, sourceBuilding, targetBuilding, 2);
+			sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
+		}
 		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, room.battle));
 	}
 
