@@ -191,7 +191,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			}
 			if (!events || events.hasOwnProperty(BattleItemBuildingProtocol.FIGHT_TIME)) {
 				if (bindData is BattleItemBuildingModel
-					&& (bindData as BattleItemBuildingModel).fightTime > GameModel.instance.application.serverTime) {
+					&& (bindData as BattleItemBuildingModel).fightTime + 700 > GameModel.instance.application.serverTime) {
 					addChildAt(fightEffect, 1);
 				}
 			}

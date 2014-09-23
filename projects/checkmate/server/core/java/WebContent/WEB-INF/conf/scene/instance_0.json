@@ -10,7 +10,7 @@
 		},
 		{
 			"x": 400,
-			"y": 200,
+			"y": 100,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D1",
 			"cartoon": "static/asset/avatar/house_1.swf",
 			"layer": "over"
@@ -23,7 +23,7 @@
 			"layer": "over"
 		},
 		{
-			"x": 200,
+			"x": 100,
 			"y": 400,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D3",
 			"cartoon": "static/asset/avatar/house_1.swf",
@@ -37,7 +37,7 @@
 			"layer": "over"
 		},
 		{
-			"x": 600,
+			"x": 700,
 			"y": 400,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D5",
 			"cartoon": "static/asset/avatar/house_1.swf",
@@ -52,7 +52,7 @@
 		},
 		{
 			"x": 400,
-			"y": 600,
+			"y": 700,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D7",
 			"cartoon": "static/asset/avatar/house_1.swf",
 			"layer": "over"
