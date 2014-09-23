@@ -33,7 +33,8 @@ package com.gearbrother.mushroomWar.model {
 		
 		public function decode(obj:Object):BattleItemBuildingModel {
 			for (var k:String in obj) {
-				this[k] = obj[k];
+				if (this.hasOwnProperty(k))
+					this[k] = obj[k];
 			}
 			return this;
 		}

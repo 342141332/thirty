@@ -340,7 +340,7 @@ package com.gearbrother.mushroomWar {
 			if (event.response is ApplicationModel) {
 				var application:ApplicationModel = event.response as ApplicationModel;
 				application._lastSetTimeMilliseconds = getTimer();
-				GameModel.instance.application = application;
+				GameModel.instance.application.merge(application);
 			}
 		}
 		
