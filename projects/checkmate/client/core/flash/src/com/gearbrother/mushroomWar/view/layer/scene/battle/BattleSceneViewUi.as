@@ -50,15 +50,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		override protected function _handleLibsSuccess(res:*):void {
 			var skinFile:GFile  = libsHandler.cachedOper[libs[0]] as GFile;
 			var hbox:GHBox = new GHBox();
-			hbox.addChild(new GNoScale(skinFile.getInstance("PRODUCE_TIME_ICON")));
-			hbox.addChild(clockText = new GText());
-			clockText.fontColor = 0xffffff;
-			clockText.fontSize = 14;
-			clockText.fontBold = true;
-			clockText.text = "00:00:00";
+//			hbox.addChild(new GNoScale(skinFile.getInstance("PRODUCE_TIME_ICON")));
+//			hbox.addChild(clockText = new GText());
+//			clockText.fontColor = 0xffffff;
+//			clockText.fontSize = 14;
+//			clockText.fontBold = true;
+//			clockText.text = "00:00:00";
 			topCenter = new GVBox();
 			topCenter.addChild(hbox);
-			topCenter.addChild(progressView = new ProgressView(skinFile.getInstance("ProgressSkin")));
+//			topCenter.addChild(progressView = new ProgressView(skinFile.getInstance("ProgressSkin")));
 			addChild(topCenter);
 			addChild(skillIcons = new GHBox());
 			
@@ -68,7 +68,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 		
 		override public function tick(interval:int):void {
-			clockText.text = GDateUtil.formatSeconds(Math.max(0, GameModel.instance.application.serverTime - battle.startTime) / 1000);
+//			clockText.text = GDateUtil.formatSeconds(Math.max(0, GameModel.instance.application.serverTime - battle.startTime) / 1000);
 		}
 		
 		override public function handleModelChanged(events:Object = null):void {

@@ -14,7 +14,6 @@ import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleItemBuilding;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
 import com.gearbrother.mushroomWar.pojo.PropertyEvent;
-import com.gearbrother.mushroomWar.pojo.TaskSkill;
 import com.gearbrother.mushroomWar.pojo.TaskTroopDispatch;
 import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
@@ -42,7 +41,7 @@ public class BattleService {
 					_runningBattles.get(instanceId).execute(now);
 				}
 			}
-		}, 0, 50);
+		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -63,10 +62,12 @@ public class BattleService {
 		room.execute(current);
 		BattleItemBuilding targetBuilding = (BattleItemBuilding) room.battle.items.get(targetBuildingInstanceId);
 		if (sourceBuilding.dispatch != null) {
-			sourceBuilding.dispatch.updateExecuteTime(0, null);
+			sourceBuilding.dispatch.updateExecuteTime(current, null);
 		}
-		sourceBuilding.dispatch = new TaskTroopDispatch(current, 300, sourceBuilding, targetBuilding, 10);
-		sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
+		if (sourceBuilding != targetBuilding) {
+			sourceBuilding.dispatch = new TaskTroopDispatch(current, 600, sourceBuilding, targetBuilding, 2);
+			sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
+		}
 		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, room.battle));
 	}
 
@@ -75,14 +76,24 @@ public class BattleService {
 			, @RpcServiceMethodParameter(name = "buildingInstanceUuid") String buildingInstanceId) {
 		BattleRoom room = session.getSeat().room;
 		BattleItemBuilding building = (BattleItemBuilding) room.battle.items.get(buildingInstanceId);
-		building.cartoon = "static/asset/avatar/house002.swf";
-		building.settledHero = session.getSeat().choosedHeroes[0];
-		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
-		long currentTimeMillis = System.currentTimeMillis();
-		TaskSkill skillTask = building.skillTask = new TaskSkill(currentTimeMillis, 1100);
-		skillTask.battle = room.battle;
-		skillTask.hero = building;
-		building.skillTask.updateExecuteTime(currentTimeMillis + 1100, room);
+		if (building.owner.user == session.getLogined()
+				&& building.troops.keySet().size() > 0
+				&& building.troops.get(building.troops.keySet().iterator().next()) > 7
+				&& building.produce.interval > 100L) {
+			int total = building.troops.get(building.troops.keySet().iterator().next()).intValue();
+			total -= 7;
+			building.troops.put(building.troops.keySet().iterator().next(), total);
+			building.level += 1;
+			building.produce.updateExecuteTime(building.produce.lastIntervalTime + building.produce.interval - 100L, room);
+			building.produce.interval -= 100L;
+			room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
+		}
+//		building.cartoon = "static/asset/avatar/house002.swf";
+//		building.settledHero = session.getSeat().choosedHeroes[0];
+//		TaskSkill skillTask = building.skillTask = new TaskSkill(currentTimeMillis, 1100);
+//		skillTask.battle = room.battle;
+//		skillTask.hero = building;
+//		building.skillTask.updateExecuteTime(currentTimeMillis + 1100, room);
 	}
 
 //	@RpcServiceMethod(desc = "使用技能")

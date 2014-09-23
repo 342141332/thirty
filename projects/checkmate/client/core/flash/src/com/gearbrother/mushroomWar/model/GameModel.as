@@ -12,6 +12,7 @@ package com.gearbrother.mushroomWar.model {
 		public var loginedUser:UserModel;
 
 		public function GameModel() {
+			application = new ApplicationModel();
 		}
 	}
 }

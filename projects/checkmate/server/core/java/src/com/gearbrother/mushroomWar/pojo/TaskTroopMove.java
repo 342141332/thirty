@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 
 public class TaskTroopMove extends Task {
 	static Logger logger = LoggerFactory.getLogger(TaskTroopMove.class);
@@ -41,21 +42,32 @@ public class TaskTroopMove extends Task {
 	@Override
 	public void execute(long executeTime) {
 		int current = this.targetBuilding.troops.containsKey(itemConfId) ? this.targetBuilding.troops.get(itemConfId) : 0;
+		BattleItemBuildingProtocol targetBuildingProto = new BattleItemBuildingProtocol();
+		targetBuildingProto.setInstanceId(this.targetBuilding.instanceId);
 		if (army.owner == this.targetBuilding.owner) {
-			logger.debug("move {} > {}", current, current + num);
+			logger.debug("move {}:{} > {}:{}", itemConfId, current, itemConfId, current + num);
 			this.targetBuilding.troops.put(itemConfId, current + num);
 		} else {
 			current = current - num;
+			targetBuilding.fightTime = executeTime;
 			if (current > 0) {
 				this.targetBuilding.troops.put(itemConfId, current);
 			} else {
 				this.targetBuilding.troops.put(itemConfId, Math.abs(current));
 				this.targetBuilding.owner = army.owner;
-				this.targetBuilding.produce = new TaskProduce(executeTime, 300, this.targetBuilding, "A0", 2);
+				targetBuildingProto.setOwnerId(this.targetBuilding.getOwnerId());
+				if (this.targetBuilding.produce != null)
+					this.targetBuilding.produce.halt();
+				if (this.targetBuilding.dispatch != null)
+					this.targetBuilding.dispatch.halt();
+				this.targetBuilding.level = 0;
+				targetBuildingProto.setLevel(this.targetBuilding.level);
+				this.targetBuilding.produce = new TaskProduce(executeTime, 1100, this.targetBuilding, "A0", 1);
+				this.targetBuilding.produce.updateExecuteTime(executeTime + this.targetBuilding.produce.interval, battleRoom);
 			}
 		}
 		army.setBattle(null);
-		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, army));
-		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, this.targetBuilding));
+		targetBuildingProto.setTroops(this.targetBuilding.troops);
+		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, targetBuildingProto));
 	}
 }

@@ -1,22 +1,73 @@
 {
 	"items": [
 		{
-			"x": 100,
-			"y": 100,
+			"x": 200,
+			"y": 200,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D0",
 			"cartoon": "static/asset/avatar/house_1.swf",
-			"layer": "over"
+			"layer": "over",
+			"host": true
 		},
 		{
-			"x": 300,
+			"x": 400,
 			"y": 100,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D1",
 			"cartoon": "static/asset/avatar/house_1.swf",
 			"layer": "over"
+		},
+		{
+			"x": 600,
+			"y": 200,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D2",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 100,
+			"y": 400,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D3",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 400,
+			"y": 400,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D4",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 700,
+			"y": 400,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D5",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 200,
+			"y": 600,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D6",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 400,
+			"y": 700,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D7",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over"
+		},
+		{
+			"x": 600,
+			"y": 600,
+			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D8",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"layer": "over",
+			"host": true
 		}
 	],
 	"cellPixel": 32,
 	"puzzleTotal": 0,
-	"width": 320,
-	"height": 220
+	"width": 800,
+	"height": 800
 }

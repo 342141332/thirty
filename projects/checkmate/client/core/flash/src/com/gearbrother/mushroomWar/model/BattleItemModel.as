@@ -40,13 +40,6 @@ package com.gearbrother.mushroomWar.model {
 			obj.y = y;
 			obj.layer = layer;
 			obj.cartoon = cartoon;
-			if (isCollisionable) {
-				obj.isCollisionable = true;
-				if (isSheepPassable)
-					obj.isSheepPassable = isSheepPassable;
-				if (isWolfPassable)
-					obj.isWolfPassable = isWolfPassable;
-			}
 			return obj;
 		}
 

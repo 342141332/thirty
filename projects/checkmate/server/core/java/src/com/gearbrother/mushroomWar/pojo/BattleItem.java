@@ -46,21 +46,6 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "人物动画")
 	public String cartoon;
 
-	@RpcBeanProperty(desc = "是否会阻挡")
-	public boolean isCollisionable;
-
-	@RpcBeanProperty(desc = "羊阻挡")
-	public boolean isSheepPassable;
-
-	@RpcBeanProperty(desc = "狼阻挡")
-	public boolean isWolfPassable;
-
-	@RpcBeanProperty(desc = "当前血量")
-	public int hp;
-
-	@RpcBeanProperty(desc = "满级血量")
-	public int maxHp;
-
 	@RpcBeanProperty(desc = "等级")
 	public int level;
 

@@ -25,11 +25,9 @@
 		</property>
 	</bean>
 
-<!-- 
     <bean factory-bean="serviceSocketAccepter" factory-method="getSessionConfig" >
         <property name="tcpNoDelay" value="true"/>
     </bean>
- -->
 
 	<bean id="serviceSocketAccepter" class="org.apache.mina.transport.socket.nio.NioSocketAcceptor"
 		init-method="bind" destroy-method="unbind" scope="singleton">

@@ -311,6 +311,10 @@ package com.gearbrother.mushroomWar {
 					tip.bindData = "<font color=\"#92D050\">" + (data as AvatarModel).name + " Lv." + ((data as AvatarModel).level.id + 1) + "</font>\n"
 						+ "<font color=\"#ffffff\">" + (data as AvatarModel).describe + "</font>";
 					return tip;
+				} else if (data is String) {
+					tip = new StringTip();
+					tip.bindData = "<font color=\"#ffffff\">" + data + "</font>";
+					return tip;
 				} else {
 					return null;
 				}
@@ -336,7 +340,7 @@ package com.gearbrother.mushroomWar {
 			if (event.response is ApplicationModel) {
 				var application:ApplicationModel = event.response as ApplicationModel;
 				application._lastSetTimeMilliseconds = getTimer();
-				GameModel.instance.application = application;
+				GameModel.instance.application.merge(application);
 			}
 		}
 		

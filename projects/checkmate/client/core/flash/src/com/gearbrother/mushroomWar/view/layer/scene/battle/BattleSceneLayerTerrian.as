@@ -4,6 +4,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.common.oper.ext.GFile;
 	import com.gearbrother.glash.display.GNoScale;
 	import com.gearbrother.glash.util.camera.Camera;
+	import com.gearbrother.glash.util.display.GDisplayUtil;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.IBattleItemModel;
@@ -13,6 +14,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import flash.display.DisplayObject;
 	import flash.display.GradientType;
 	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
@@ -26,20 +28,23 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	 */
 	public class BattleSceneLayerTerrian extends GNoScale {
 		private var _camera:Camera;
-
-		private var _bmps:Vector.<Bitmap>;
+		
+		override protected function _handleLibsSuccess(res:*):void {
+			var file:GFile = libsHandler.cachedOper[libs[0]];
+			var shape:Sprite = file.getInstance("BackgroundStyle1");
+			var bmd:BitmapData = GDisplayUtil.grab(shape);
+			this.graphics.beginBitmapFill(bmd);
+			this.graphics.drawRect(0, 0, _camera.bound.width, _camera.bound.height);
+			this.graphics.endFill();
+			cacheAsBitmap = true;
+		}
 
 		public function BattleSceneLayerTerrian(battleModel:BattleModel, camera:Camera) {
 			super(skin);
 
 			bindData = battleModel;
 			_camera = camera;
-			_bmps = new Vector.<Bitmap>();
-//			libs = [new GAliasFile("static/asset/item/floor_3.swf"), new GAliasFile("static/asset/item/graden.swf")];
-		}
-
-		override protected function _handleLibsSuccess(res:*):void {
-			revalidateBindData();
+			libs = [new GAliasFile("static/asset/background/1.swf")];
 		}
 
 		override protected function doInit():void {
@@ -49,8 +54,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 
 		private function _handleCameraChanged(event:Event = null):void {
-			if (_bmps.length)
-				_bmps[0].scrollRect = _camera.screenRect;
+			scrollRect = _camera.screenRect;
 		}
 
 		override public function handleModelChanged(events:Object=null):void {
@@ -125,10 +129,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 		
 		override protected function doDispose():void {
-			while (_bmps.length) {
-				var bmp:Bitmap = _bmps.shift();
-				bmp.bitmapData.dispose();
-			}
 			_camera.removeEventListener(Event.CHANGE, _handleCameraChanged);
 			super.doDispose();
 		}
