@@ -14,11 +14,5 @@
 	<natures>
 		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>bin-release</name>
-			<type>2</type>
-			<location>D:/neo/mine/project/git/thirty/server/core/java/com.gearbrother.mushroomWar.server.core.java/WebContent/static</location>
-		</link>
-	</linkedResources>
 </projectDescription>
+
