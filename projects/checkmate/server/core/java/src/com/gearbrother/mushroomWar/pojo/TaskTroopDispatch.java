@@ -59,8 +59,7 @@ public class TaskTroopDispatch extends TaskInterval {
 					dispatchedTroop.layer = "floor";
 					dispatchedTroop.setBattle(sourceBuilding.getBattle());
 					long costTime = (long) (50L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
-					BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
-							, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);
+					BattleItemActionMove action = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);
 					dispatchedTroop.currentAction = action;
 					dispatchedTroop.owner = sourceBuilding.owner;
 					battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));

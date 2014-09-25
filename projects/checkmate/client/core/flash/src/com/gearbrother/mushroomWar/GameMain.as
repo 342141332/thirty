@@ -339,7 +339,7 @@ package com.gearbrother.mushroomWar {
 		private function _handleGameChannelEvent(event:RpcEvent):void {
 			if (event.response is ApplicationModel) {
 				var application:ApplicationModel = event.response as ApplicationModel;
-				application._lastSetTimeMilliseconds = getTimer();
+				GameModel.instance.application._lastSetTimeMilliseconds = getTimer();
 				GameModel.instance.application.merge(application);
 			}
 		}

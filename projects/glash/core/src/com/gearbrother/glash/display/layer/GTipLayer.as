@@ -34,7 +34,7 @@ package com.gearbrother.glash.display.layer {
 		/**
 		 * 延迟显示的毫秒数
 		 */
-		public var delay:int = 250;
+		public var delay:int = 100;
 
 		/**
 		 * ToolTip目标
@@ -70,8 +70,9 @@ package com.gearbrother.glash.display.layer {
 		protected override function doInit():void {
 			super.doInit();
 
-			stage.addEventListener(MouseEvent.MOUSE_OVER, _handleMouseEvent, false, 0, true);
-			stage.addEventListener(MouseEvent.MOUSE_OUT, _handleMouseEvent, false, 0, true);
+			stage.addEventListener(MouseEvent.MOUSE_OVER, _handleMouseEvent);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, _handleMouseEvent);
+			stage.addEventListener(MouseEvent.MOUSE_OUT, _handleMouseEvent);
 			_refreshTimer = new Timer(delay, 1);
 			_refreshTimer.addEventListener(TimerEvent.TIMER, _updateTipTarget);
 		}
@@ -81,6 +82,18 @@ package com.gearbrother.glash.display.layer {
 			switch (event.type) {
 				case MouseEvent.MOUSE_OVER:
 					tipTarget = target;
+					break;
+				case MouseEvent.MOUSE_MOVE:
+					if (_tipView) {
+						if (_tipView.x + _tipView.width > width)
+							_tipView.x = width - _tipView.width;
+						else
+							_tipView.x = mouseX;
+						if (_tipView.y + _tipView.height > height)
+							_tipView.y = height - _tipView.height;
+						else
+							_tipView.y = mouseY;
+					}
 					break;
 				case MouseEvent.MOUSE_OUT:
 					tipTarget = null;
@@ -130,6 +143,10 @@ package com.gearbrother.glash.display.layer {
 			if (_tipView) {
 				_tipView.width = _tipView.preferredSize.width;
 				_tipView.height = _tipView.preferredSize.height;
+				if (_tipView.x + _tipView.width > width)
+					_tipView.x = width - _tipView.width;
+				if (_tipView.y + _tipView.height > height)
+					_tipView.y = height - _tipView.height;
 				_tipView.validateLayoutNow();
 			}
 		}

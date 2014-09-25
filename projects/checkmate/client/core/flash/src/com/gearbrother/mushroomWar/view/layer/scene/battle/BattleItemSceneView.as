@@ -215,13 +215,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				var move:BattleItemActionMoveModel = model.currentAction as BattleItemActionMoveModel;
 				if (move.endTime > GameModel.instance.application.serverTime) {
 					var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
-					var distance:Number = GPointUtil.distance2(model.battle.items[move.startBuildingId].x, model.battle.items[move.startBuildingId].y
-						, model.battle.items[move.targetBuildingId].x, model.battle.items[move.targetBuildingId].y);
+					var startBuilding:BattleItemBuildingModel = model.battle.items[move.startBuildingId];
+					var targetBuilding:BattleItemBuildingModel = model.battle.items[move.targetBuildingId];
+					var distance:Number = GPointUtil.distance2(startBuilding.x, startBuilding.y, targetBuilding.x, targetBuilding.y);
 					var offset:Number = Math.sin(Math.PI * progress);
-					var radian:Number = GMathUtil.getRadian2(model.battle.items[move.startBuildingId].x, model.battle.items[move.startBuildingId].y
-						, model.battle.items[move.targetBuildingId].x, model.battle.items[move.targetBuildingId].y) + offset * 0/*RADIAN[move.offset] */* Math.PI / 180;
-					x = (model.battle.items[move.startBuildingId].x + Math.cos(radian) * distance * progress);
-					y = (model.battle.items[move.startBuildingId].y + Math.sin(radian) * distance * progress);
+					var radian:Number = GMathUtil.getRadian2(startBuilding.x, startBuilding.y, targetBuilding.x, targetBuilding.y) + offset * 0/*RADIAN[move.offset] */* Math.PI / 180;
+					x = (startBuilding.x + Math.cos(radian) * distance * progress);
+					y = (startBuilding.y + Math.sin(radian) * distance * progress);
 					/*var pos:Point = Point.interpolate(
 						new Point(move.startPos.x, move.startPos.y), new Point(move.targetPos.x, move.targetPos.y)
 						, 1 - progress

@@ -15,6 +15,7 @@ import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.IBagItem;
 import com.gearbrother.mushroomWar.pojo.Skill;
 import com.gearbrother.mushroomWar.pojo.User;
+import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
 
@@ -44,6 +45,7 @@ public class UserService {
 			, @RpcServiceMethodParameter(name = "userName", desc = "玩家名字") String userName) {
 		User user = newUser(userName);
 		session.setLogined(user);
+		World.instance.loginedSessions.put(user.uuid, session);
 		Application application = new Application();
 		application.syntime = System.currentTimeMillis();
 		session.send(application);
