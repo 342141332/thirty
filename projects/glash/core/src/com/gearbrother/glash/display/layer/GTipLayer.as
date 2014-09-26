@@ -106,25 +106,31 @@ package com.gearbrother.glash.display.layer {
 				_tipTarget = _delayTarget;
 				var newTipView:GNoScale = _tipTarget && getTipView != null ? getTipView(_tipTarget.tipData) : null;
 				if (newTipView) {
-					var left:int = mouseX + 10;
-					if (left + newTipView.width > stage.stageWidth)
-						left = mouseX - 10 - newTipView.width;
-					var top:int = mouseY + 10;
-					if (top + newTipView.height > stage.stageHeight)
-						top = mouseY - 10 - newTipView.height;
 					if (_tipView) {
 						_tipView.remove();
 						_tipView = null;
 
 						_tipView = newTipView;
 						addChild(_tipView);
-						_tipView.x = left;
-						_tipView.y = top;
+						if (_tipView.x + _tipView.width > width)
+							_tipView.x = width - _tipView.width;
+						else
+							_tipView.x = mouseX;
+						if (_tipView.y + _tipView.height > height)
+							_tipView.y = height - _tipView.height;
+						else
+							_tipView.y = mouseY;
 					} else {
 						_tipView = newTipView;
 						addChild(_tipView);
-						_tipView.x = left;
-						_tipView.y = top;
+						if (_tipView.x + _tipView.width > width)
+							_tipView.x = width - _tipView.width;
+						else
+							_tipView.x = mouseX;
+						if (_tipView.y + _tipView.height > height)
+							_tipView.y = height - _tipView.height;
+						else
+							_tipView.y = mouseY;
 						_tipView.alpha = .0;
 						TweenLite.to(_tipView, .3, {alpha: 1.0});
 					}

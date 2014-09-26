@@ -63,7 +63,6 @@ public class Battle extends RpcBean {
 		for (int i = 0; i < itemsNode.size(); i++) {
 			BattleItemBuilding battleItemBuilding = new BattleItemBuilding(itemsNode.get(i));
 			battleItemBuilding.setBattle(this);
-			battleItemBuilding.troops.put("A0", 10);
 		}
 	}
 

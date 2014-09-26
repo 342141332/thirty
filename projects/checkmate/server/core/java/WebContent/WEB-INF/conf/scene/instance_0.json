@@ -62,8 +62,7 @@
 			"y": 600,
 			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D8",
 			"cartoon": "static/asset/avatar/house_1.swf",
-			"layer": "over",
-			"host": true
+			"layer": "over"
 		}
 	],
 	"cellPixel": 32,

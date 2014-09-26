@@ -99,8 +99,6 @@ public class BattleRoom extends RpcBean {
 				boolean res = tasks.remove(head);
 				if (!res)
 					throw new Error("remove fail");
-//				Task second = queue.size() > 0 ? queue.first() : null;
-//				long time = Math.max(now, second != null ? second.nextExecuteTime : 0);
 				head.execute(now);
 			} else {
 				break;
@@ -128,7 +126,7 @@ public class BattleRoom extends RpcBean {
 			for (int j = 0; j < buildings.size(); j++) {
 				BattleItemBuilding building = buildings.get(j);
 				BattleItemBuilding pickedBuilding = (BattleItemBuilding) GMathUtil.random(buildings);
-				building.dispatch = new TaskTroopDispatch(currentTime, 500, building, pickedBuilding, 10);
+				building.dispatch = new TaskDispatch(currentTime, 500, building, pickedBuilding, 10);
 				building.dispatch.updateExecuteTime(currentTime + 500, room);
 			}
 			rooms.add(room);

@@ -62,8 +62,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		
 		public var settledAvatar:AvatarView;
 		
-		public var fightEffect:GMovieBitmap;
-		
 		protected var _oldProperties:Object;
 
 		public function BattleItemSceneView(model:IBattleItemModel) {
@@ -78,9 +76,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			_avatar.enableTick = false;
 
 			if (model is BattleItemBuildingModel) {
-				fightEffect = new GMovieBitmap(20);
-				fightEffect.definition = new GBmdDefinition(new GDefinition(new GAliasFile("static/asset/effect/siege_fb.swf"), "Siege2"));
-
 				var progressSkin:Shape = new Shape();
 				progressSkin.graphics.beginFill(0x00cc00, 1);
 				progressSkin.graphics.drawRect(0, 0, 50, 2);
@@ -156,13 +151,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					if (GameModel.instance.loginedUser.uuid == model.ownerId) {
 						enemyFilter.unapply(_avatar);
 						ownerFilter.apply(_avatar);
-						if (upgradeBtn)
-							upgradeBtn.visible = true;
 					} else {
 						enemyFilter.apply(_avatar);
 						ownerFilter.unapply(_avatar);
-						if (upgradeBtn)
-							upgradeBtn.visible = false;
 					}
 				}
 			}
@@ -191,11 +182,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				if (model.currentAction == "skill") {
 					settledAvatar.setCartoon((model as BattleItemBuildingModel).settledHero.cartoon, AvatarView.STATE_SKILL_DOWN);
 				}
-			}
-			if (!events || events.hasOwnProperty(BattleItemBuildingProtocol.FIGHT_TIME)) {
-				if (bindData is BattleItemBuildingModel)
-					if ((bindData as BattleItemBuildingModel).fightTime + 700 > GameModel.instance.application.serverTime)
-						addChildAt(fightEffect, 1);
 			}
 		}
 
@@ -262,12 +248,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					var values:Array = ObjectUtils.getProperties(buildingModel.troops);
 					troopText.htmlText = (values.length > 0 ? values[0] : 0) + int((GameModel.instance.application.serverTime - buildingModel.produce.lastIntervalTime) / buildingModel.produce.interval * buildingModel.produce.num)
 						+ "\r<font color=\"#92D050\">Lv." + buildingModel.level + "</font>";
-				}
-				if (fightEffect.parent) {
-					if ((bindData as BattleItemBuildingModel).fightTime + 700 > GameModel.instance.application.serverTime) {
-					} else {
-						fightEffect.remove();
-					}
 				}
 			}
 			if (settledAvatar)

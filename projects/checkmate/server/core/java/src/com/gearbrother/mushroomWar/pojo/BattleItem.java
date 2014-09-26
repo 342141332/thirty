@@ -35,10 +35,10 @@ public class BattleItem extends RpcBean {
 	}
 
 	@RpcBeanProperty(desc = "")
-	public double x;
+	public int x;
 
 	@RpcBeanProperty(desc = "")
-	public double y;
+	public int y;
 
 	@RpcBeanProperty(desc = "所在动画层")
 	public String layer;
@@ -52,7 +52,7 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "当前行为")
 	public Object currentAction;
 
-	public TaskTroopMove move;
+	public TaskArrive move;
 
 	public BattleRoomSeat owner;
 
@@ -67,8 +67,8 @@ public class BattleItem extends RpcBean {
 		this();
 
 		instanceId = json.get("instanceId").asText();
-		x = json.get("x").asDouble();
-		y = json.get("y").asDouble();
+		x = json.get("x").asInt();
+		y = json.get("y").asInt();
 		cartoon = json.get("cartoon").asText();
 		layer = json.get("layer").asText();
 	}

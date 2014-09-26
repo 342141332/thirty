@@ -289,9 +289,6 @@
 				if (_selectedItem) {
 					uuid.text = _selectedItem.instanceId;
 					layer.selectedItem = _selectedItem.layer;
-					collisionable.selectedItem = _selectedItem.isCollisionable;
-					sheepPassable.selectedItem = _selectedItem.isSheepPassable;
-					wolfPassable.selectedItem = _selectedItem.isWolfPassable;
 				} else {
 					
 				}
@@ -300,9 +297,6 @@
 			private function _handleFormEvent(event:Event):void {
 				_selectedItem.instanceId = uuid.text;
 				_selectedItem.layer = layer.selectedItem;
-				_selectedItem.isCollisionable = collisionable.selectedItem;
-				_selectedItem.isSheepPassable = sheepPassable.selectedItem;
-				_selectedItem.isWolfPassable = wolfPassable.selectedItem;
 			}
 			
 			private function _handleMouseEvent(event:MouseEvent):void {

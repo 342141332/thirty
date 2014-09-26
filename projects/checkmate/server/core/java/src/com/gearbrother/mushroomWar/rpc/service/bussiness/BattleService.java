@@ -14,7 +14,7 @@ import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleItemBuilding;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
 import com.gearbrother.mushroomWar.pojo.PropertyEvent;
-import com.gearbrother.mushroomWar.pojo.TaskTroopDispatch;
+import com.gearbrother.mushroomWar.pojo.TaskDispatch;
 import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
@@ -65,7 +65,7 @@ public class BattleService {
 			sourceBuilding.dispatch.updateExecuteTime(current, null);
 		}
 		if (sourceBuilding != targetBuilding) {
-			sourceBuilding.dispatch = new TaskTroopDispatch(current, 600, sourceBuilding, targetBuilding, 2);
+			sourceBuilding.dispatch = new TaskDispatch(current, 600, sourceBuilding, targetBuilding, 2);
 			sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
 		}
 		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, room.battle));
@@ -76,16 +76,8 @@ public class BattleService {
 			, @RpcServiceMethodParameter(name = "buildingInstanceUuid") String buildingInstanceId) {
 		BattleRoom room = session.getSeat().room;
 		BattleItemBuilding building = (BattleItemBuilding) room.battle.items.get(buildingInstanceId);
-		if (building.owner.user == session.getLogined()
-				&& building.troops.keySet().size() > 0
-				&& building.troops.get(building.troops.keySet().iterator().next()) > 7
-				&& building.produce.interval > 100L) {
-			int total = building.troops.get(building.troops.keySet().iterator().next()).intValue();
-			total -= 7;
-			building.troops.put(building.troops.keySet().iterator().next(), total);
+		if (building.owner.user == session.getLogined()) {
 			building.level += 1;
-			building.produce.updateExecuteTime(building.produce.lastIntervalTime + building.produce.interval - 100L, room);
-			building.produce.interval -= 100L;
 			room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
 		}
 //		building.cartoon = "static/asset/avatar/house002.swf";

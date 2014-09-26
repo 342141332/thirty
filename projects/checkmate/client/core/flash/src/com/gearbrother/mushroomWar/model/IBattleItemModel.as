@@ -10,9 +10,9 @@ package com.gearbrother.mushroomWar.model {
 	public interface IBattleItemModel {
 		function get instanceId():String;
 		
-		function get x():Number;
+		function get x():int;
 		
-		function get y():Number;
+		function get y():int;
 
 		function get cartoon():String;
 

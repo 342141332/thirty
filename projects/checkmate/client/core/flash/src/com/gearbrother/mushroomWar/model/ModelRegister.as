@@ -15,6 +15,7 @@ package com.gearbrother.mushroomWar.model {
 			Protocol.protocols[Protocol.BattleRoom] = BattleRoomModel;
 			Protocol.protocols[Protocol.BattleRoomSeat] = BattleRoomSeatModel;
 			Protocol.protocols[Protocol.BattleItem] = BattleItemModel;
+			Protocol.protocols[Protocol.BattleItemSoilder] = BattleItemSoilderModel;
 			Protocol.protocols[Protocol.BattleItemBuilding] = BattleItemBuildingModel;
 			Protocol.protocols[Protocol.BattleItemActionMove] = BattleItemActionMoveModel;
 			Protocol.protocols[Protocol.Hall] = HallModel;
