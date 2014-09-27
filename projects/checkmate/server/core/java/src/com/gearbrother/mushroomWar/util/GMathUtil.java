@@ -77,6 +77,7 @@ public class GMathUtil {
 	}
 
 	static public int random(int max, int min) {
+		//TODO 溢出
 		return (int) (Math.random() * (max - min + 1) + min);
 	}
 	

@@ -36,6 +36,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			this.graphics.beginBitmapFill(bmd);
 			this.graphics.drawRect(0, 0, _camera.bound.width, _camera.bound.height);
 			this.graphics.endFill();
+			this.graphics.beginFill(0xffffff, .1);
+			this.graphics.drawRect(0, 0, 200, 200);
+			this.graphics.endFill();
 			cacheAsBitmap = true;
 		}
 

@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
-import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 
 public class TaskArrive extends Task {
 	static Logger logger = LoggerFactory.getLogger(TaskArrive.class);
@@ -42,17 +41,13 @@ public class TaskArrive extends Task {
 
 	@Override
 	public void execute(long executeTime) {
-		BattleItemBuildingProtocol targetBuildingProto = new BattleItemBuildingProtocol();
-		targetBuildingProto.setInstanceId(this.targetBuilding.instanceId);
-		if (soilder.owner == this.targetBuilding.owner) {
-			logger.debug("arrive {}:{} > {}:{}");
+		logger.debug("arrive {}:{} > {}:{}");
+		if (soilder.owner == targetBuilding.owner) {
 		} else {
-//			if (this.targetBuilding.produce != null)
-//				this.targetBuilding.produce.halt();
-//			if (this.targetBuilding.dispatch != null)
-//				this.targetBuilding.dispatch.halt();
-			this.targetBuilding.troops.first();
+			TaskAttack attack = new TaskAttack(executeTime, 1100, soilder, targetBuilding);
+			attack.updateExecuteTime(executeTime + 1100, battleRoom);
+			soilder.currentAction = attack;
+			battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilder));
 		}
-		battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, targetBuildingProto));
 	}
 }

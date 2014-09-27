@@ -11,7 +11,6 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 public class BattleItemBuilding extends BattleItem {
 	public TaskDispatch dispatch;
 
-	@RpcBeanProperty(desc = "")
 	public TaskProduce produce;
 
 	public TaskSkill skillTask;
@@ -21,8 +20,6 @@ public class BattleItemBuilding extends BattleItem {
 	@RpcBeanProperty(desc = "")
 	public TreeSet<BattleItemSoilder> troops;
 	
-	public TreeSet<BattleItem> settleTroops;
-
 	@RpcBeanProperty(desc = "")
 	public Avatar settledHero;
 
@@ -38,6 +35,7 @@ public class BattleItemBuilding extends BattleItem {
 					}
 				}
 			);
+		this.maxHp = this.hp = 10;
 	}
 
 	public BattleItemBuilding(JsonNode json) {
@@ -53,5 +51,6 @@ public class BattleItemBuilding extends BattleItem {
 				}
 			);
 		this.host = json.has("host") ? json.get("host").booleanValue() : false;
+		this.maxHp = this.hp = 10;
 	}
 }

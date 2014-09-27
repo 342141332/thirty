@@ -45,11 +45,12 @@ public class TaskDispatch extends TaskInterval {
 				BattleItemSoilder dispatchedTroop = sourceBuilding.troops.first();
 				sourceBuilding.troops.remove(dispatchedTroop);
 				long costTime = (long) (50L * Math.sqrt(Math.pow(sourceBuilding.x - targetBuilding.x, 2) + Math.pow(sourceBuilding.y - targetBuilding.y, 2)));
-				dispatchedTroop.currentAction = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime, sourceBuilding, targetBuilding, 0, 200L, 0L, 0L);;
+				dispatchedTroop.currentAction = new BattleItemActionMove(lastIntervalTime, lastIntervalTime + costTime
+						, dispatchedTroop.x, dispatchedTroop.y, targetBuilding.x, targetBuilding.y);
 				dispatchedTroop.owner = sourceBuilding.owner;
-				TaskArrive moveTask = new TaskArrive(lastIntervalTime, sourceBuilding, targetBuilding, dispatchedTroop);
-				moveTask.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
-				dispatchedTroop.move = moveTask;
+				TaskArrive arrive = new TaskArrive(lastIntervalTime, sourceBuilding, targetBuilding, dispatchedTroop);
+				arrive.updateExecuteTime(lastIntervalTime + costTime, battleRoom);
+				dispatchedTroop.move = arrive;
 				battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, dispatchedTroop));
 			}
 		}

@@ -39,6 +39,12 @@ public class BattleItem extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	public int y;
+	
+	@RpcBeanProperty(desc = "")
+	public int hp;
+	
+	@RpcBeanProperty(desc = "")
+	public int maxHp;
 
 	@RpcBeanProperty(desc = "所在动画层")
 	public String layer;

@@ -13,6 +13,10 @@ package com.gearbrother.mushroomWar.model {
 		function get x():int;
 		
 		function get y():int;
+		
+		function get hp():int;
+		
+		function get maxHp():int;
 
 		function get cartoon():String;
 

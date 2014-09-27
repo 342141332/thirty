@@ -90,6 +90,9 @@ public class BattleRoom extends RpcBean {
 				home.produce.updateExecuteTime(battle.startTime + produce.interval, this);
 			}
 		}
+		BattleItemBuilding enemyBuilding = (BattleItemBuilding) battle.items.get("5914B166-5A41-93B7-41CF-A9051D3BF1D2");
+		enemyBuilding.produce = new TaskProduce(battle.startTime, 1000, enemyBuilding, "A0", 2);
+		enemyBuilding.produce.updateExecuteTime(battle.startTime + 1000, this);
 	}
 
 	public void execute(long now) {
