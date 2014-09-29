@@ -114,7 +114,7 @@ package com.gearbrother.glash.display {
 				frameLabel.frame = label.frame;
 			}
 			var keys:Array = ObjectUtils.getKeys(_labels);
-			keys.sort();
+			keys.sort(Array.NUMERIC);
 			for (var i:int; i < keys.length; i++) {
 				var key:int = keys[i];
 				frameLabel = _labels[key];

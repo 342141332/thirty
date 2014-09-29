@@ -1,53 +1,76 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemSoilderProtocol;
 
+@RpcBeanPartTransportable
 public class TaskArrive extends Task {
 	static Logger logger = LoggerFactory.getLogger(TaskArrive.class);
 
 	static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
 	
-	public BattleItemBuilding targetBuilding;
-	@RpcBeanProperty(desc = "")
-	public String getTargetBuildingId() {
-		return targetBuilding.instanceId;
-	}
-	
-	public BattleItemBuilding sourceBuilding;
-	@RpcBeanProperty(desc = "")
-	public String getSourceBuildingId() {
-		return targetBuilding.instanceId;
-	}
-	
 	@RpcBeanProperty(desc = "")
 	public long startTime;
 	
 	@RpcBeanProperty(desc = "")
-	public BattleItemSoilder soilder;
+	public long endTime;
 	
-	public TaskArrive(long startTime, BattleItemBuilding sourceBuilding, BattleItemBuilding targetBuilding, BattleItemSoilder soilder) {
-		super();
+	@RpcBeanProperty(desc = "")
+	public int startX;
+	
+	@RpcBeanProperty(desc = "")
+	public int startY;
+	
+	@RpcBeanProperty(desc = "")
+	public int targetX;
+
+	@RpcBeanProperty(desc = "")
+	public int targetY;
+	
+	public BattleItemBuilding targetBuilding;
+
+	public BattleItemSoilder behavior;
+
+	public TaskArrive(Battle battle, long executeTime, long startTime
+			, int startX, int startY, int endX, int endY, BattleItemBuilding targetBuilding, BattleItemSoilder behavior) {
+		super(battle, executeTime);
 
 		this.startTime = startTime;
-		this.sourceBuilding = sourceBuilding;
+		this.endTime = executeTime;
+		this.startX = startX;
+		this.startY = startY;
+		this.targetX = endX;
+		this.targetY = endY;
 		this.targetBuilding = targetBuilding;
-		this.soilder = soilder;
+		this.behavior = behavior;
 	}
 
 	@Override
-	public void execute(long executeTime) {
+	public void execute(long now) {
 		logger.debug("arrive {}:{} > {}:{}");
-		if (soilder.owner == targetBuilding.owner) {
-		} else {
-			TaskAttack attack = new TaskAttack(executeTime, 1100, soilder, targetBuilding);
-			attack.updateExecuteTime(executeTime + 1100, battleRoom);
-			soilder.currentAction = attack;
-			battleRoom.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilder));
+		behavior.x = targetX;
+		behavior.y = targetY;
+		behavior.task = null;
+		targetBuilding.settledTroops.add(behavior);
+		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
+		soilderProto.setInstanceId(behavior.instanceId);
+		soilderProto.setTask(behavior.task);
+		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderProto));
+		if (targetBuilding.owner != behavior.owner) {
+			for (Iterator<BattleItemSoilder> iterator = targetBuilding.settledTroops.iterator(); iterator.hasNext();) {
+				BattleItemSoilder soilder = (BattleItemSoilder) iterator.next();
+				if (soilder.task == null) {
+					soilder.task = new TaskAttack(battle, now + 700, 2700, soilder, targetBuilding);
+					break;
+				}
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
@@ -56,9 +57,7 @@ public class BattleItem extends RpcBean {
 	public int level;
 
 	@RpcBeanProperty(desc = "当前行为")
-	public Object currentAction;
-
-	public TaskArrive move;
+	public Task task;
 
 	public BattleRoomSeat owner;
 
@@ -66,6 +65,8 @@ public class BattleItem extends RpcBean {
 	public String getOwnerId() {
 		return owner != null ? owner.user.uuid : null;
 	}
+	
+	public BattleItemSoilder tryAttackTarget;
 
 	public Object controller;
 
@@ -80,5 +81,6 @@ public class BattleItem extends RpcBean {
 	}
 
 	public BattleItem() {
+		instanceId = UUID.randomUUID().toString();
 	}
 }

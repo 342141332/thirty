@@ -1,6 +1,7 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,6 @@ public class World {
 		connectedSessions = new ArrayList<ISession>();
 		loginedSessions = new HashMap<String, ISession>();
 		hall = new Hall();
-		runningBattles = new HashMap<String, BattleRoom>();
+		runningBattles = Collections.synchronizedMap(new HashMap<String, BattleRoom>());
 	}
 }

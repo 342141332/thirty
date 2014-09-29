@@ -88,7 +88,11 @@ public class GMathUtil {
 	static public long random(long max, long min) {
 		return (long) (((max - min + 1) + min) * Math.random());
 	}
-//
+	
+	static public int distance(int x1, int y1, int x2, int y2) {
+		return (int) Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(x2 - y2, 2));
+	}
+
 //	static public Object[] random(Object[] list, int num) {
 //		return list;
 //	}

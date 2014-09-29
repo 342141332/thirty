@@ -2,52 +2,40 @@ package com.gearbrother.mushroomWar.pojo;
 
 import java.util.UUID;
 
-import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
-
 abstract public class Task extends RpcBean {
-	@RpcBeanProperty(desc = "实例唯一id")
 	final public String instanceId;
 
-	private long _nextExecuteTime;
-	@RpcBeanProperty(desc = "下次执行时间")
-	public long getNextExecuteTime() {
-		return _nextExecuteTime;
+	private long executeTime;
+	public long getExecuteTime() {
+		return executeTime;
+	}
+	public void setExecuteTime(long value) {
+		if (executeTime != value) {
+			battle.taskQueue.remove(this);
+			executeTime = value;
+			battle.taskQueue.add(this);
+		}
+	}
+	public void halt() {
+		battle.taskQueue.remove(this);
 	}
 
-	protected BattleRoom battleRoom;
+	final public Battle battle;
 
-	public Task() {
-		this(UUID.randomUUID().toString());
+	public Task(Battle parent, long executeTime) {
+		this(parent, executeTime, UUID.randomUUID().toString());
 	}
 
-	public Task(String instanceId) {
+	public Task(Battle battle, long executeTime, String instanceId) {
 		super();
 
+		this.battle = battle;
 		this.instanceId = instanceId;
+		this.executeTime = executeTime;
+		this.battle.taskQueue.add(this);
 	}
 
-	public void updateExecuteTime(long executeTime) {
-		updateExecuteTime(executeTime, battleRoom);
-	}
-
-	public void updateExecuteTime(long executeTime, BattleRoom queue) {
-		if (_nextExecuteTime != executeTime || this.battleRoom != queue) {
-			halt();
-			_nextExecuteTime = executeTime;
-			this.battleRoom = queue;
-			if (this.battleRoom != null)
-				this.battleRoom.tasks.add(this);
-		}
-	}
-
-	public void halt() {
-		if (this.battleRoom != null) {
-			this.battleRoom.tasks.remove(this);
-			this.battleRoom = null;
-		}
-	}
-
-	public abstract void execute(long executeTime);
+	public abstract void execute(long now);
 
 	@Override
 	public int hashCode() {

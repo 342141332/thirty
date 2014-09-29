@@ -170,7 +170,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 					levelProgress.value = avatarModel.exp;
 				}*/
 				var avatarView:AvatarView = new AvatarView();
-				avatarView.setCartoon(avatarModel.cartoon, AvatarView.STATE_STOP_LEFT);
+				avatarView.setCartoon(avatarModel.cartoon, AvatarView.idle);
 				addChild(avatarView);
 				avatarView.x = width >> 1;
 				avatarView.y = height >> 1;

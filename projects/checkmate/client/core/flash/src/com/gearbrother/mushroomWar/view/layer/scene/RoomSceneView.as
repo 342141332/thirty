@@ -116,7 +116,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				}
 				if (!events) {
 					var heroes:Array = ObjectUtils.getProperties(GameModel.instance.loginedUser.heroes);
-					for (i = 0; i < myHeroViews.length; i++) {
+					/*for (i = 0; i < myHeroViews.length; i++) {
 						var avatarUiView:AvatarUiView = myHeroViews[i] as AvatarUiView;
 						if (heroes.hasOwnProperty(i)) {
 							avatarUiView.dndData = avatarUiView.bindData = heroes[i];
@@ -125,7 +125,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 							avatarUiView.bindData = null;
 							avatarUiView.dndable = false;
 						}
-					}
+					}*/
 					var bagItems:Array = ObjectUtils.getProperties(GameModel.instance.loginedUser.bagItems);
 					var tools:Array = bagItems.filter(
 						function(d:*, ...res):Boolean {

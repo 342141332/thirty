@@ -39,12 +39,10 @@ public class BinaryTree {
 			BinaryTree binaryTree = (BinaryTree) iterator.next();
 			for (int i = 0; i < 150; i++) {
 				binaryTree.tree.add(new Node(GMathUtil.random(Integer.MAX_VALUE >> 8, Integer.MIN_VALUE >> 8)));
-			}
-			for (int i = 0; i < 150; i++) {
 				binaryTree.tree.pollFirst();
 			}
 		}
-		System.out.println("IO 300*2000 instance cause "+ (System.currentTimeMillis() - initialize) + " milliseconds");
+		System.out.println("IO 300 * 2000 instance cause "+ (System.currentTimeMillis() - initialize) + " milliseconds");
 	}
 	
 	@Override

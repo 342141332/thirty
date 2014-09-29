@@ -1,8 +1,11 @@
 package com.gearbrother.mushroomWar.pojo;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +48,10 @@ public class Battle extends RpcBean {
 	
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriod;
+
+	public SortedSet<Task> taskQueue;
+
+	public SessionObserver observer;
 	
 	private JsonNode json;
 
@@ -59,10 +66,39 @@ public class Battle extends RpcBean {
 		this.json = json;
 		this.width = json.get("width").asInt();
 		this.height = json.get("height").asInt();
+		this.taskQueue = new TreeSet<Task>(
+				new Comparator<Task>() {
+					
+					@Override
+					public int compare(Task o1, Task o2) {
+						long offset = o1.getExecuteTime() - o2.getExecuteTime();
+						if (offset > 0)
+							return 1;
+						else if (offset < 0)
+							return -1;
+						else
+							return o1.instanceId.compareTo(o2.instanceId);
+					}
+				}
+			);
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
 			BattleItemBuilding battleItemBuilding = new BattleItemBuilding(itemsNode.get(i));
 			battleItemBuilding.setBattle(this);
+		}
+	}
+
+	public void execute(long now) {
+		while (taskQueue.size() > 0) {
+			Task head = taskQueue.first();
+			if (now >= head.getExecuteTime()) {
+				boolean res = taskQueue.remove(head);
+				if (!res)
+					throw new Error("remove fail");
+				head.execute(now);
+			} else {
+				break;
+			}
 		}
 	}
 

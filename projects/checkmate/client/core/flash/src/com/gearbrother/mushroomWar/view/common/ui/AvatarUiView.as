@@ -126,7 +126,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 			tipData = model;
 			if (model) {
 				if (avatar) {
-					avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_LEFT);
+					avatar.setCartoon(model.cartoon, AvatarView.idle);
 				}
 				if (nameLabel)
 					nameLabel.text = model.name;
@@ -170,7 +170,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 			} else {
 				if (avatar)
-					avatar.setCartoon(null, AvatarView.STATE_STOP_LEFT);
+					avatar.setCartoon(null, AvatarView.idle);
 				if (nameLabel)
 					nameLabel.text = "";
 				for (i = 0; i < equipIcons.length; i++) {

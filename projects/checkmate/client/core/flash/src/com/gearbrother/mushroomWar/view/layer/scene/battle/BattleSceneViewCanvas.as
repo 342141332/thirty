@@ -7,7 +7,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.glash.util.display.GPen;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.BattleItemActionMoveModel;
+	import com.gearbrother.mushroomWar.model.TaskArriveModel;
 	import com.gearbrother.mushroomWar.model.BattleItemBuildingModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
@@ -143,15 +143,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 						case 1:
 							if (change.item is IBattleItemModel) {
 								battleItem.battle = model;
-								if (battleItem.currentAction is BattleItemActionMoveModel) {
-									logger.warn("--------- startTime={0} server={1} offset={2}"
-										, [
-											(battleItem.currentAction as BattleItemActionMoveModel).startTime
-											, GameModel.instance.application.serverTime
-											, GameModel.instance.application.serverTime - (battleItem.currentAction as BattleItemActionMoveModel).startTime
-										]
-									);
-								}
 								for each (var layer:BattleSceneLayerOverland in layers) {
 									layer.addItem(change.item as IBattleItemModel);
 								}
@@ -169,7 +160,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							break;
 						case 4:
 							battleItem = model.items[battleItem.instanceId];
-							(battleItem as BattleItemBuildingModel).currentAction = "skill";
+							(battleItem as BattleItemBuildingModel).task = "skill";
 							break;
 						case 5:
 							battleItem = model.items[battleItem.instanceId];

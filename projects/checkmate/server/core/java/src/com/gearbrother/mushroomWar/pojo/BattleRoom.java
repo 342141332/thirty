@@ -1,14 +1,11 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.TreeSet;
 import java.util.UUID;
 
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
@@ -39,8 +36,6 @@ public class BattleRoom extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	final public BattleRoomSeat[] seats;
-
-	final public SortedSet<Task> tasks;
 	
 	final public SessionObserver observer;
 
@@ -55,21 +50,12 @@ public class BattleRoom extends RpcBean {
 		this.blueMax = blueMax;
 		this.redMax = redMax;
 		this.seats = new BattleRoomSeat[blueMax + redMax];
-		this.tasks = new TreeSet<Task>(
-				new Comparator<Task>() {
-					
-					@Override
-					public int compare(Task o1, Task o2) {
-						return o1.getNextExecuteTime() > o2.getNextExecuteTime()
-								? 1 : (o1.getNextExecuteTime() < o2.getNextExecuteTime() ? -1 : o1.instanceId.compareTo(o2.instanceId));
-					}
-				}
-			);
 		this.observer = new SessionObserver();
 	}
 
 	public void play() {
 		battle.startTime = System.currentTimeMillis();
+		battle.observer = this.observer;
 		Map<String, BattleItem> buildings = battle.getItems(BattleItemBuilding.class);
 		List<BattleItemBuilding> hostBuildings = new ArrayList<BattleItemBuilding>();
 		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
@@ -85,28 +71,11 @@ public class BattleRoom extends RpcBean {
 				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
 				hostBuildings.remove(home);
 				home.owner = seat;
-				TaskProduce produce = new TaskProduce(battle.startTime, 1100, home, "A0", 1);
-				home.produce = produce;
-				home.produce.updateExecuteTime(battle.startTime + produce.interval, this);
+				home.produce = new TaskProduce(battle, battle.startTime, 1100, home, "A0", 2);
 			}
 		}
-		BattleItemBuilding enemyBuilding = (BattleItemBuilding) battle.items.get("5914B166-5A41-93B7-41CF-A9051D3BF1D2");
-		enemyBuilding.produce = new TaskProduce(battle.startTime, 1000, enemyBuilding, "A0", 2);
-		enemyBuilding.produce.updateExecuteTime(battle.startTime + 1000, this);
-	}
-
-	public void execute(long now) {
-		while (tasks.size() > 0) {
-			Task head = tasks.first();
-			if (now >= head.getNextExecuteTime()) {
-				boolean res = tasks.remove(head);
-				if (!res)
-					throw new Error("remove fail");
-				head.execute(now);
-			} else {
-				break;
-			}
-		}
+		BattleItemBuilding enemyBuilding = (BattleItemBuilding) battle.items.get("5914B166-5A41-93B7-41CF-A9051D3BF1D1");
+		enemyBuilding.produce = new TaskProduce(battle, battle.startTime, 1100, enemyBuilding, "A0", 2);
 	}
 	
 	public static void main(String[] args) {
@@ -122,15 +91,11 @@ public class BattleRoom extends RpcBean {
 				building.x = 0;
 				building.y = 0;
 				building.setBattle(room.battle);
-				building.produce = new TaskProduce(currentTime, 300, building, "itemConfId", 1);
-				building.produce.updateExecuteTime(currentTime + 300, room);
 				buildings.add(building);
 			}
 			for (int j = 0; j < buildings.size(); j++) {
 				BattleItemBuilding building = buildings.get(j);
 				BattleItemBuilding pickedBuilding = (BattleItemBuilding) GMathUtil.random(buildings);
-				building.dispatch = new TaskDispatch(currentTime, 500, building, pickedBuilding, 10);
-				building.dispatch.updateExecuteTime(currentTime + 500, room);
 			}
 			rooms.add(room);
 		}
@@ -141,7 +106,7 @@ public class BattleRoom extends RpcBean {
 				long now = System.currentTimeMillis();
 				for (Iterator<BattleRoom> iterator = rooms.iterator(); iterator.hasNext();) {
 					BattleRoom room = (BattleRoom) iterator.next();
-					room.execute(now);
+					room.battle.execute(now);
 				}
 			}
 		}, 0, 100);

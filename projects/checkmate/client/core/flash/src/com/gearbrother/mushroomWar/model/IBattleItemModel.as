@@ -28,7 +28,7 @@ package com.gearbrother.mushroomWar.model {
 
 		function get ownerId():String;
 
-		function get currentAction():Object;
+		function get task():Object;
 
 		function encode():Object;
 	}

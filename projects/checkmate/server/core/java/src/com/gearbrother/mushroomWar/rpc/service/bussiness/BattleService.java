@@ -1,9 +1,6 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,17 +28,24 @@ public class BattleService {
 
 	public BattleService() {
 		_runningBattles = World.instance.runningBattles;
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		new Thread(new Runnable() {
+			
 			@Override
 			public void run() {
-				long now = System.currentTimeMillis();
-				for (Iterator<String> iterator = _runningBattles.keySet().iterator(); iterator.hasNext();) {
-					String instanceId = (String) iterator.next();
-					_runningBattles.get(instanceId).execute(now);
+				while (true) {
+					long now = System.currentTimeMillis();
+					for (BattleRoom room : _runningBattles.values()) {
+						room.battle.execute(now);
+					}
 				}
 			}
-		}, 0, 100);
+		}).start();
+//		Timer timer = new Timer();
+//		timer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//			}
+//		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -56,19 +60,13 @@ public class BattleService {
 		BattleRoom room = session.getSeat().room;
 		long current = System.currentTimeMillis();
 		BattleItemBuilding sourceBuilding = (BattleItemBuilding) room.battle.items.get(sourceBuildingInstanceId);
+		BattleItemBuilding targetBuilding = (BattleItemBuilding) room.battle.items.get(targetBuildingInstanceId);
 		if (sourceBuilding.owner != session.getSeat())
 			return;
-
-		room.execute(current);
-		BattleItemBuilding targetBuilding = (BattleItemBuilding) room.battle.items.get(targetBuildingInstanceId);
-		if (sourceBuilding.dispatch != null) {
-			sourceBuilding.dispatch.updateExecuteTime(current, null);
+		if (sourceBuilding == targetBuilding) {
+			return;
 		}
-		if (sourceBuilding != targetBuilding) {
-			sourceBuilding.dispatch = new TaskDispatch(current, 600, sourceBuilding, targetBuilding, 2);
-			sourceBuilding.dispatch.updateExecuteTime(sourceBuilding.dispatch.lastIntervalTime + sourceBuilding.dispatch.interval, room);
-		}
-		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, room.battle));
+		new TaskDispatch(room.battle, current + 600, 600, sourceBuilding, targetBuilding, 2);
 	}
 
 	@RpcServiceMethod(desc = "")
