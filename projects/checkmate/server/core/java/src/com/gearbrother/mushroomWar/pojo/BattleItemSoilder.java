@@ -5,12 +5,8 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 @RpcBeanPartTransportable(isPartTransport = true)
 public class BattleItemSoilder extends BattleItem {
 	public int attackDamage;
-
-	public BattleItemBuilding building;
-
-	public BattleItemSoilder(BattleItemBuilding building) {
+	
+	public BattleItemSoilder() {
 		super();
-
-		this.building = building;
 	}
 }

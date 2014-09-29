@@ -90,12 +90,13 @@ public class Battle extends RpcBean {
 
 	public void execute(long now) {
 		while (taskQueue.size() > 0) {
-			Task head = taskQueue.first();
-			if (now >= head.getExecuteTime()) {
-				boolean res = taskQueue.remove(head);
+			Task task = taskQueue.first();
+			if (now >= task.getExecuteTime()) {
+				boolean res = taskQueue.remove(task);
 				if (!res)
 					throw new Error("remove fail");
-				head.execute(now);
+				task.isInQueue = false;
+				task.execute(now);
 			} else {
 				break;
 			}

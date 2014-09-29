@@ -20,9 +20,18 @@ public class PropertyEvent extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	public Object item;
+	
+	@RpcBeanProperty(desc = "")
+	public String code;
 
 	public PropertyEvent(int type, Object item) {
 		this.type = type;
 		this.item = item;
+	}
+	
+	public PropertyEvent(int type, Object item, String code) {
+		this(type, item);
+		
+		this.code = code;
 	}
 }

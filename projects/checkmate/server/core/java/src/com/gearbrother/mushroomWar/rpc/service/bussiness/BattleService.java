@@ -1,6 +1,8 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,24 +30,28 @@ public class BattleService {
 
 	public BattleService() {
 		_runningBattles = World.instance.runningBattles;
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while (true) {
-					long now = System.currentTimeMillis();
-					for (BattleRoom room : _runningBattles.values()) {
-						room.battle.execute(now);
-					}
-				}
-			}
-		}).start();
-//		Timer timer = new Timer();
-//		timer.schedule(new TimerTask() {
+//		new Thread(new Runnable() {
+//			
 //			@Override
 //			public void run() {
+//				while (true) {
+//					long now = System.currentTimeMillis();
+//					for (BattleRoom room : _runningBattles.values()) {
+//						room.battle.execute(now);
+//					}
+//				}
 //			}
-//		}, 0, 100);
+//		}).start();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				long now = System.currentTimeMillis();
+				for (BattleRoom room : _runningBattles.values()) {
+					room.battle.execute(now);
+				}
+			}
+		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -76,6 +82,8 @@ public class BattleService {
 		BattleItemBuilding building = (BattleItemBuilding) room.battle.items.get(buildingInstanceId);
 		if (building.owner.user == session.getLogined()) {
 			building.level += 1;
+			building.character = "static/kingdomrush/7176.swf";
+			building.cartoon = "static/kingdomrush/building_1_1.swf";
 			room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
 		}
 //		building.cartoon = "static/asset/avatar/house002.swf";

@@ -12,12 +12,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.util.math.GMathUtil;
 	import com.gearbrother.glash.util.math.GPointUtil;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
 	import com.gearbrother.mushroomWar.model.BattleItemBuildingModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleItemSoilderModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.IBattleItemModel;
+	import com.gearbrother.mushroomWar.model.TaskArriveModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskAttackProtocol;
@@ -55,11 +55,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		private var _unBrightDelayID:int;
 		
 		public var hp:GProgress;
-		
+
 		public var troopText:GText;
-		
+
 		public var upgradeBtn:GButton;
-		
+
+		public var produceBtn:GButton;
+
 		public var _avatar:AvatarView;
 		
 		public var settledAvatar:AvatarView;
@@ -91,12 +93,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				hp.x = -hp.width >> 1;
 				hp.y = 10;
 				addChild(upgradeBtn = new GButton());
-				upgradeBtn.tipData = "消耗一定数量的兵，缩短造兵时间0.1S";
-				upgradeBtn.text = "upgrade";
+				upgradeBtn.text = "升级";
 				upgradeBtn.validateLayoutNow();
 				upgradeBtn.x = -upgradeBtn.width >> 1;
 				upgradeBtn.y = 50;
-				upgradeBtn.visible = false;
 			} else {
 				mouseChildren = mouseEnabled = false;
 			}
@@ -164,8 +164,20 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				if (model.task is TaskArriveModel) {
 					var move:TaskArriveModel = model.task as TaskArriveModel;
 					_avatar.setCartoon(model.cartoon, AvatarView.running);
+					if (move.targetX > x)
+						_avatar.scaleX = 1;
+					else if (move.targetX < x)
+						_avatar.scaleX = -1;
 				} else if (model.task is TaskAttackProtocol) {
+					var attack:TaskAttackProtocol = model.task as TaskAttackProtocol;
 					_avatar.setCartoon(model.cartoon, AvatarView.fighting);
+					var target:IBattleItemModel = model.battle.items[attack.targetId] as IBattleItemModel;
+					if (target) {
+						if (target.x > x)
+							_avatar.scaleX = 1;
+						else if (target.x < x)
+							_avatar.scaleX = -1;
+					}
 				} else {
 					_avatar.setCartoon(model.cartoon, AvatarView.idle);
 				}

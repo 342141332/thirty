@@ -11,43 +11,31 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 public class BattleItemBuilding extends BattleItem {
 	public TaskProduce produce;
 
+	public TaskDefense defense;
+
 	public boolean host;
 
 	public Set<BattleItemSoilder> settledTroops;
-	
+
 	@RpcBeanProperty(desc = "")
 	public Avatar settledHero;
+	
+	public String character;
 
 	public BattleItemBuilding() {
 		super();
 
 		settledTroops = new HashSet<BattleItemSoilder>();
-//		troops = new TreeSet<BattleItemSoilder>(
-//				new Comparator<BattleItemSoilder>() {
-//					
-//					@Override
-//					public int compare(BattleItemSoilder o1, BattleItemSoilder o2) {
-//						return Math.abs(o1.x - x) - Math.abs(o2.x - x);
-//					}
-//				}
-//			);
 		this.maxHp = this.hp = 10;
+		this.character = "static/kingdomrush/7207.swf";
 	}
 
 	public BattleItemBuilding(JsonNode json) {
 		super(json);
 
 		settledTroops = new HashSet<BattleItemSoilder>();
-//		troops = new TreeSet<BattleItemSoilder>(
-//				new Comparator<BattleItemSoilder>() {
-//					
-//					@Override
-//					public int compare(BattleItemSoilder o1, BattleItemSoilder o2) {
-//						return Math.abs(o1.x - x) - Math.abs(o2.x - x);
-//					}
-//				}
-//			);
 		this.host = json.has("host") ? json.get("host").booleanValue() : false;
 		this.maxHp = this.hp = 10;
+		this.character = "static/kingdomrush/7207.swf";
 	}
 }

@@ -56,8 +56,17 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "等级")
 	public int level;
 
+	private Task _task;
 	@RpcBeanProperty(desc = "当前行为")
-	public Task task;
+	public Task getTask() {
+		return _task;
+	}
+	@RpcBeanProperty(desc = "当前行为")
+	public void setTask(Task value) {
+		if (this._task != null && value != null)
+			throw new Error("f");
+		this._task = value;
+	}
 
 	public BattleRoomSeat owner;
 
@@ -66,7 +75,7 @@ public class BattleItem extends RpcBean {
 		return owner != null ? owner.user.uuid : null;
 	}
 	
-	public BattleItemSoilder tryAttackTarget;
+	public BattleItemSoilder focusTarget;
 
 	public Object controller;
 

@@ -31,12 +31,12 @@ public class TaskDispatch extends TaskInterval {
 	public void execute(long now) {
 		for (Iterator<BattleItemSoilder> iterator = sourceBuilding.settledTroops.iterator(); iterator.hasNext();) {
 			BattleItemSoilder dispatchedTroop = (BattleItemSoilder) iterator.next();
+			iterator.remove();
 			long costTime = (long) (50L * Math.sqrt(Math.pow(dispatchedTroop.x - targetBuilding.x, 2) + Math.pow(dispatchedTroop.y - targetBuilding.y, 2)));
 			TaskArrive arrive = new TaskArrive(battle, now + costTime, now
-							, dispatchedTroop.x, dispatchedTroop.y, targetBuilding.x + GMathUtil.random(50, -50), targetBuilding.y + GMathUtil.random(17)
-							, targetBuilding, dispatchedTroop);
-			dispatchedTroop.task = arrive;
-			dispatchedTroop.building = null;
+							, dispatchedTroop.x, dispatchedTroop.y, targetBuilding.x + GMathUtil.random(37, -37), targetBuilding.y + GMathUtil.random(27)
+							, dispatchedTroop, targetBuilding, targetBuilding);
+			dispatchedTroop.setTask(arrive);
 			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, dispatchedTroop));
 		}
 	}

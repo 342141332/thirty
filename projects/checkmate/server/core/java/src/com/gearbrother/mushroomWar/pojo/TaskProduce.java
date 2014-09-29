@@ -21,8 +21,6 @@ public class TaskProduce extends TaskInterval {
 
 	public int num;
 
-	public int total;
-
 	public TaskProduce(Battle battle, long executeTime, long interval, BattleItemBuilding building, String itemConfId, int num) {
 		super(battle, executeTime, interval);
 
@@ -34,22 +32,27 @@ public class TaskProduce extends TaskInterval {
 	@Override
 	public void execute(long now) {
 		logger.debug("{} produce {}:{} > {}:{}", building.instanceId, itemConfId);
+		int total = 0;
+		for (BattleItemSoilder troop : building.settledTroops) {
+			if (troop.owner == building.owner)
+				total++;
+		}
 		if (total < num) {
-			BattleItemSoilder dispatchedTroop = new BattleItemSoilder(building);
+			BattleItemSoilder dispatchedTroop = new BattleItemSoilder();
 			dispatchedTroop.instanceId = UUID.randomUUID().toString();
-			dispatchedTroop.cartoon = "static/kingdomrush/7207.swf";
+			dispatchedTroop.cartoon = building.character;
 			dispatchedTroop.x = building.x + GMathUtil.random(30, -30);
 			dispatchedTroop.y = building.y + GMathUtil.random(17);
 			dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
 			dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
 			dispatchedTroop.layer = "over";
 			dispatchedTroop.setBattle(building.getBattle());
-			dispatchedTroop.building = building;
 			dispatchedTroop.owner = building.owner;
 			building.settledTroops.add(dispatchedTroop);
 			building.getBattle().observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
-			total++;
-			setExecuteTime(now + interval);
+			if (building.defense == null)
+				building.defense = new TaskDefense(battle, now + 500, building);
 		}
+		setExecuteTime(now + interval);
 	}
 }

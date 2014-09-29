@@ -10,20 +10,32 @@ abstract public class Task extends RpcBean {
 		return executeTime;
 	}
 	public void setExecuteTime(long value) {
-		if (executeTime != value) {
-			battle.taskQueue.remove(this);
+		if (isInQueue) {
+			halt();
 			executeTime = value;
 			battle.taskQueue.add(this);
+			isInQueue = true;
+		} else if (executeTime != value) {
+			executeTime = value;
+			battle.taskQueue.add(this);
+			isInQueue = true;
 		}
 	}
 	public void halt() {
-		battle.taskQueue.remove(this);
+		if (isInQueue) {
+			if (battle.taskQueue.remove(this))
+				isInQueue = false;
+			else
+				throw new Error("");
+		}
 	}
+	
+	boolean isInQueue;
 
 	final public Battle battle;
 
-	public Task(Battle parent, long executeTime) {
-		this(parent, executeTime, UUID.randomUUID().toString());
+	public Task(Battle battle, long executeTime) {
+		this(battle, executeTime, UUID.randomUUID().toString());
 	}
 
 	public Task(Battle battle, long executeTime, String instanceId) {
@@ -31,8 +43,7 @@ abstract public class Task extends RpcBean {
 
 		this.battle = battle;
 		this.instanceId = instanceId;
-		this.executeTime = executeTime;
-		this.battle.taskQueue.add(this);
+		setExecuteTime(executeTime);
 	}
 
 	public abstract void execute(long now);
