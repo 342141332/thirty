@@ -66,7 +66,7 @@ public class BattleItem extends RpcBean {
 		return owner != null ? owner.user.uuid : null;
 	}
 	
-	public BattleItemSoilder tryAttackTarget;
+	public BattleItemSoilder focusTarget;
 
 	public Object controller;
 

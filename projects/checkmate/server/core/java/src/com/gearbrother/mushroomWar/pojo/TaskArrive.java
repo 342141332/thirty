@@ -1,7 +1,6 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,12 +33,14 @@ public class TaskArrive extends Task {
 	@RpcBeanProperty(desc = "")
 	public int targetY;
 	
-	public BattleItemBuilding targetBuilding;
+	public BattleItemBuilding joinBuilding;
 
 	public BattleItemSoilder behavior;
+	
+	public BattleItem target;
 
 	public TaskArrive(Battle battle, long executeTime, long startTime
-			, int startX, int startY, int endX, int endY, BattleItemBuilding targetBuilding, BattleItemSoilder behavior) {
+			, int startX, int startY, int endX, int endY, BattleItemSoilder behavior, BattleItemBuilding joinBuilding, BattleItem target) {
 		super(battle, executeTime);
 
 		this.startTime = startTime;
@@ -48,8 +49,9 @@ public class TaskArrive extends Task {
 		this.startY = startY;
 		this.targetX = endX;
 		this.targetY = endY;
-		this.targetBuilding = targetBuilding;
 		this.behavior = behavior;
+		this.joinBuilding = joinBuilding;
+		this.target = target;
 	}
 
 	@Override
@@ -58,19 +60,14 @@ public class TaskArrive extends Task {
 		behavior.x = targetX;
 		behavior.y = targetY;
 		behavior.task = null;
-		targetBuilding.settledTroops.add(behavior);
+		joinBuilding.settledTroops.add(behavior);
 		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
 		soilderProto.setInstanceId(behavior.instanceId);
 		soilderProto.setTask(behavior.task);
 		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderProto));
-		if (targetBuilding.owner != behavior.owner) {
-			for (Iterator<BattleItemSoilder> iterator = targetBuilding.settledTroops.iterator(); iterator.hasNext();) {
-				BattleItemSoilder soilder = (BattleItemSoilder) iterator.next();
-				if (soilder.task == null) {
-					soilder.task = new TaskAttack(battle, now + 700, 2700, soilder, targetBuilding);
-					break;
-				}
-			}
-		}
+		if (target instanceof BattleItemBuilding)
+			new TaskDefense(battle, now + 100, (BattleItemBuilding) target);
+		else if (target instanceof BattleItemSoilder)
+			new TaskAttack(battle, now + 100, 2700, behavior, target, joinBuilding);
 	}
 }

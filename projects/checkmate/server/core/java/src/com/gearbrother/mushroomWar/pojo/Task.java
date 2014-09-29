@@ -22,8 +22,8 @@ abstract public class Task extends RpcBean {
 
 	final public Battle battle;
 
-	public Task(Battle parent, long executeTime) {
-		this(parent, executeTime, UUID.randomUUID().toString());
+	public Task(Battle battle, long executeTime) {
+		this(battle, executeTime, UUID.randomUUID().toString());
 	}
 
 	public Task(Battle battle, long executeTime, String instanceId) {

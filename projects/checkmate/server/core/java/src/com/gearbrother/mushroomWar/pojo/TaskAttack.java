@@ -12,44 +12,28 @@ public class TaskAttack extends TaskInterval {
 
 	public BattleItemSoilder behavior;
 
+	public BattleItem searchedTarget;
+	
 	public BattleItemBuilding field;
 
-	public BattleItem searchedTarget;
-
-	public TaskAttack(Battle battle, long executeTime, long interval, BattleItemSoilder behavior, BattleItemBuilding field) {
+	public TaskAttack(Battle battle, long executeTime, long interval, BattleItemSoilder behavior, BattleItem target, BattleItemBuilding field) {
 		super(battle, executeTime, interval);
 
 		this.behavior = behavior;
+		this.searchedTarget = target;
 		this.field = field;
 	}
 
 	@Override
 	public void execute(long now) {
-		logger.debug("{} attack {}", behavior.instanceId, field.instanceId);
+		logger.debug("{} attack {}", behavior.instanceId, behavior.instanceId);
 		behavior.task = this;
-		//search target
-		if (searchedTarget == null || searchedTarget.hp == 0) {
-			searchedTarget = field;
-			if (behavior.tryAttackTarget != null && behavior.tryAttackTarget.hp > 0) {
-				searchedTarget = behavior.tryAttackTarget;
-			} else {
-				for (BattleItemSoilder troop : field.settledTroops) {
-					if (troop.owner != behavior.owner) {
-						searchedTarget = troop;
-						break;
-					}
-				}
-			}
-		}
 		//change hp
 		searchedTarget.hp = Math.max(0, searchedTarget.hp - behavior.attackDamage);
-		searchedTarget.tryAttackTarget = behavior;
+		if (searchedTarget.focusTarget == null)
+			searchedTarget.focusTarget = behavior;
 		//update
 		if (searchedTarget.hp > 0) {
-			if (searchedTarget instanceof BattleItemSoilder && ((BattleItemSoilder) searchedTarget).task == null) {
-				TaskAttack attack = new TaskAttack(battle, now + 700, 2700, (BattleItemSoilder) searchedTarget, field);
-				searchedTarget.task = attack;
-			}
 			setExecuteTime(now + interval);
 			BattleItemSoilderProtocol currentTargetProto = new BattleItemSoilderProtocol();
 			currentTargetProto.setInstanceId(searchedTarget.instanceId);
@@ -63,13 +47,14 @@ public class TaskAttack extends TaskInterval {
 					searchedTarget.task = null;
 				}
 				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, searchedTarget));
+				new TaskDefense(battle, now + 100, field);
 			} else if (searchedTarget instanceof BattleItemBuilding) {
 				BattleItemBuilding building = (BattleItemBuilding) searchedTarget;
 				building.owner = behavior.owner;
 				building.settledTroops.add(behavior);
 				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, searchedTarget));
 			}
-			searchedTarget = null;
+			behavior.task = null;
 		}
 		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
 		soilderProto.setInstanceId(behavior.instanceId);

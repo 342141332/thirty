@@ -34,7 +34,7 @@ public class TaskDispatch extends TaskInterval {
 			long costTime = (long) (50L * Math.sqrt(Math.pow(dispatchedTroop.x - targetBuilding.x, 2) + Math.pow(dispatchedTroop.y - targetBuilding.y, 2)));
 			TaskArrive arrive = new TaskArrive(battle, now + costTime, now
 							, dispatchedTroop.x, dispatchedTroop.y, targetBuilding.x + GMathUtil.random(50, -50), targetBuilding.y + GMathUtil.random(17)
-							, targetBuilding, dispatchedTroop);
+							, dispatchedTroop, targetBuilding, targetBuilding);
 			dispatchedTroop.task = arrive;
 			dispatchedTroop.building = null;
 			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, dispatchedTroop));
