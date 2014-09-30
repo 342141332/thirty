@@ -59,17 +59,28 @@ public class TaskArrive extends Task {
 		logger.debug("arrive {}:{} > {}:{}");
 		behavior.x = targetX;
 		behavior.y = targetY;
+<<<<<<< HEAD
 		behavior.setTask(null);
+=======
+		behavior.task = null;
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 		joinBuilding.settledTroops.add(behavior);
 		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
 		soilderProto.setInstanceId(behavior.instanceId);
 		soilderProto.setTask(behavior.getTask());
 		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderProto));
+<<<<<<< HEAD
 		if (target instanceof BattleItemBuilding) {
 			if (((BattleItemBuilding) target).defense == null)
 				((BattleItemBuilding) target).defense = new TaskDefense(battle, now + 100, (BattleItemBuilding) target);
 		} else if (target instanceof BattleItemSoilder) {
 			behavior.setTask(new TaskAttack(battle, now + 100, 2700, behavior, target, joinBuilding));
 		}
+=======
+		if (target instanceof BattleItemBuilding)
+			new TaskDefense(battle, now + 100, (BattleItemBuilding) target);
+		else if (target instanceof BattleItemSoilder)
+			new TaskAttack(battle, now + 100, 2700, behavior, target, joinBuilding);
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 	}
 }

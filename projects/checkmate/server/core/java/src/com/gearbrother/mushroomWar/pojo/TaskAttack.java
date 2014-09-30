@@ -13,26 +13,70 @@ public class TaskAttack extends TaskInterval {
 
 	public BattleItemSoilder behavior;
 
+<<<<<<< HEAD
 	public BattleItem target;
 	@RpcBeanProperty(desc = "")
 	public String getTargetId() {
 		return target.instanceId;
 	}
+=======
+	public BattleItem searchedTarget;
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 	
 	public BattleItemBuilding field;
 
+<<<<<<< HEAD
 	public TaskAttack(Battle battle, long executeTime, long interval
 			, BattleItemSoilder behavior, BattleItem target, BattleItemBuilding field) {
+=======
+	public TaskAttack(Battle battle, long executeTime, long interval, BattleItemSoilder behavior, BattleItem target, BattleItemBuilding field) {
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 		super(battle, executeTime, interval);
 
 		this.behavior = behavior;
+<<<<<<< HEAD
 		this.target = target;
+=======
+		this.searchedTarget = target;
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 		this.field = field;
 	}
 
 	@Override
 	public void execute(long now) {
 		logger.debug("{} attack {}", behavior.instanceId, behavior.instanceId);
+<<<<<<< HEAD
+=======
+		behavior.task = this;
+		//change hp
+		searchedTarget.hp = Math.max(0, searchedTarget.hp - behavior.attackDamage);
+		if (searchedTarget.focusTarget == null)
+			searchedTarget.focusTarget = behavior;
+		//update
+		if (searchedTarget.hp > 0) {
+			setExecuteTime(now + interval);
+			BattleItemSoilderProtocol currentTargetProto = new BattleItemSoilderProtocol();
+			currentTargetProto.setInstanceId(searchedTarget.instanceId);
+			currentTargetProto.setHp(searchedTarget.hp);
+			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, currentTargetProto));
+		} else {
+			if (searchedTarget instanceof BattleItemSoilder) {
+				field.settledTroops.remove(searchedTarget);
+				if (searchedTarget.task != null) {
+					searchedTarget.task.halt();
+					searchedTarget.task = null;
+				}
+				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, searchedTarget));
+				new TaskDefense(battle, now + 100, field);
+			} else if (searchedTarget instanceof BattleItemBuilding) {
+				BattleItemBuilding building = (BattleItemBuilding) searchedTarget;
+				building.owner = behavior.owner;
+				building.settledTroops.add(behavior);
+				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, searchedTarget));
+			}
+			behavior.task = null;
+		}
+>>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
 		soilderProto.setInstanceId(behavior.instanceId);
 		soilderProto.setTask(this);
