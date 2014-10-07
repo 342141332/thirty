@@ -2,9 +2,7 @@ package com.gearbrother.mushroomWar.pojo;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.slf4j.Logger;
@@ -34,6 +32,11 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "col")
 	public int width;
+	
+	@RpcBeanProperty(desc = "")
+	public int cellPixel;
+	
+	public BattleItem[][] collisions;
 
 	Map<Class<?>, Map<String, BattleItem>> sortItems;
 	public Map<String, BattleItem> getItems(Class<?> clazz) {
@@ -49,7 +52,7 @@ public class Battle extends RpcBean {
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriod;
 
-	public SortedSet<Task> taskQueue;
+	public TreeSet<Task> taskQueue;
 
 	public SessionObserver observer;
 	
@@ -66,6 +69,11 @@ public class Battle extends RpcBean {
 		this.json = json;
 		this.width = json.get("width").asInt();
 		this.height = json.get("height").asInt();
+		this.cellPixel = json.get("cellPixel").asInt();
+		this.collisions = new BattleItem[height][width];
+		for (int r = 0; r < height; r++) {
+			this.collisions[r] = new BattleItem[width];
+		}
 		this.taskQueue = new TreeSet<Task>(
 				new Comparator<Task>() {
 					
@@ -83,7 +91,7 @@ public class Battle extends RpcBean {
 			);
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
-			BattleItemBuilding battleItemBuilding = new BattleItemBuilding(itemsNode.get(i));
+			BattleItem battleItemBuilding = new BattleItem(itemsNode.get(i));
 			battleItemBuilding.setBattle(this);
 		}
 	}
@@ -92,29 +100,15 @@ public class Battle extends RpcBean {
 		while (taskQueue.size() > 0) {
 			Task task = taskQueue.first();
 			if (now >= task.getExecuteTime()) {
-				boolean res = taskQueue.remove(task);
-				if (!res)
-					throw new Error("remove fail");
-				task.isInQueue = false;
+				Task polledFirst = taskQueue.pollFirst();
+				if (polledFirst != task)
+					throw new Error("polledFirst != task");
+				task.setIsInQueue(false);
 				task.execute(now);
 			} else {
 				break;
 			}
 		}
-	}
-
-	public boolean isAllCaptured() {
-		Object oneOwner = null;
-		Map<String, BattleItem> buildings = sortItems.get(BattleItemBuilding.class);
-		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
-			String userUuid = (String) iterator.next();
-			BattleItemBuilding building = (BattleItemBuilding) buildings.get(userUuid);
-			if (oneOwner == null || oneOwner == building.owner)
-				oneOwner = building.owner;
-			else
-				return false;
-		}
-		return true;
 	}
 	
 	public Battle clone() {

@@ -26,7 +26,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	public class BattleSceneLayerOverland extends GPaperLayer {
 		public var id:String;
 		
-		
 		public var itemViews:Object;
 
 		public function BattleSceneLayerOverland(id:String, battleModel:BattleModel, camera:Camera) {
@@ -61,8 +60,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			var battleModel:BattleModel = bindData;
 			var itemView:DisplayObject = new BattleItemSceneView(item);
-			var throwToX:int = itemView.x = item.x;
-			var throwToY:int = itemView.y = item.y;
+			var throwToX:int = itemView.x = (item.x + .5) * battleModel.cellPixel;
+			var throwToY:int = itemView.y = (item.y + .5) * battleModel.cellPixel;
 			if (!itemViews.hasOwnProperty(item.instanceId)) {
 				itemViews[item.instanceId] = addChild(itemView);
 			} else {

@@ -22,7 +22,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			layout = new FillLayout()
 			addChild(battleSceneViewInner = new BattleSceneViewCanvas(battle));
-			addChild(new BattleSceneViewUi(battle));
+			addChild(new BattleSceneViewUi(battle, battleSceneViewInner));
 		}
 		
 		public function active():void {

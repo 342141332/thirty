@@ -11,7 +11,7 @@ package com.gearbrother.mushroomWar.view.common {
 	import com.gearbrother.glash.display.GBitmapFrame;
 	import com.gearbrother.glash.display.GBmdMovieInfo;
 	import com.gearbrother.glash.manager.RootManager;
-	
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -26,7 +26,7 @@ package com.gearbrother.mushroomWar.view.common {
 	import flash.utils.Timer;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
-	
+
 	import org.as3commons.lang.StringUtils;
 
 
@@ -39,9 +39,9 @@ package com.gearbrother.mushroomWar.view.common {
 	 */
 	public class AvatarFile extends GBmdDefinition {
 		private var _frame:int;
-		
+
 		private var _offsetX:int;
-		
+
 		private var _offsetY:int;
 
 		private var _timer:Timer;
@@ -49,19 +49,19 @@ package com.gearbrother.mushroomWar.view.common {
 		private var _result:GBmdMovieInfo;
 
 		private var _source:MovieClip;
-		
+
 		private var _readFrameAt:int;
-		
+
 		private var _limitTimeInFrame:int;
-		
-		public function AvatarFile(frame:int, definition:GDefinition, offsetX:int = -27, offsetY:int = -50) {
+
+		public function AvatarFile(frame:int, definition:GDefinition, offsetX:int = -25, offsetY:int = -25) {
 			super(definition);
-			
+
 			_frame = frame;
 			_offsetX = offsetX;
 			_offsetY = offsetY;
 		}
-		
+
 		override protected function _handleDefinitionEvent(event:Event = null):void {
 			if (definition.resultType == GOper.RESULT_TYPE_SUCCESS) {
 				var movieClip:MovieClip = definition.result;
@@ -92,11 +92,11 @@ package com.gearbrother.mushroomWar.view.common {
 				}
 			} while (getTimer() - t < _limitTimeInFrame)
 		}
-		
+
 		protected function _handle(item:DisplayObject):GBitmapFrame {
 			var frame:GBitmapFrame = new GBitmapFrame();
 			var rect:Rectangle = item.getBounds(item);
-			if (Math.floor(rect.x) != rect.x) {	//has float
+			if (Math.floor(rect.x) != rect.x) { //has float
 				rect.left--;
 				rect.left = int(rect.left);
 			}
@@ -113,7 +113,7 @@ package com.gearbrother.mushroomWar.view.common {
 				rect.bottom = int(rect.bottom);
 			}
 			var bitmapData:BitmapData = new BitmapData(Math.max(1, rect.width), Math.max(1, rect.height), true, 0);
-			var m:Matrix = item.transform.matrix;//new Matrix();
+			var m:Matrix = item.transform.matrix; //new Matrix();
 			m.translate(-rect.x, -rect.y);
 			bitmapData.draw(item, m);
 			frame.bmd = bitmapData;
@@ -122,16 +122,16 @@ package com.gearbrother.mushroomWar.view.common {
 			frame.label = (item as MovieClip).cu*/
 			return frame;
 		}
-		
+
 		protected function readCompleteHandler():void {
 			_timer.removeEventListener(TimerEvent.TIMER, timeHandler);
 			_timer.stop();
 			_timer = null;
 			_source = null;
-			
+
 			notifyResult(_result);
 		}
-		
+
 		override public function dispose():void {
 			if (_timer) {
 				_timer.removeEventListener(TimerEvent.TIMER, timeHandler);
@@ -139,7 +139,7 @@ package com.gearbrother.mushroomWar.view.common {
 				_timer = null;
 			}
 			_source = null;
-			
+
 			for each (var bitmapData:BitmapData in _result.bmds)
 				bitmapData.dispose();
 			GOperPool.instance.returnInstance(definition);

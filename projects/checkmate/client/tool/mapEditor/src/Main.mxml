@@ -80,8 +80,8 @@
 				newPaper.doubleClickEnabled = true;
 				newPaper.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 				comp.addChild(_paper = newPaper);
-				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.width;
-				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.height;
+				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.width * _selectedProject.cellPixel;
+				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.height * _selectedProject.cellPixel;
 				_terrianLayer = _paper.addChild(new BattleSceneLayerTerrian(_selectedProject, _paper.camera)) as BattleSceneLayerTerrian;
 				_paper.addChild(new BattleSceneLayerOverland("floor", _selectedProject, _paper.camera));
 				_paper.addChild(new BattleSceneLayerOverland("over", _selectedProject, _paper.camera));
@@ -90,9 +90,9 @@
 				col.value = newValue.width;
 				itemToolbarData.removeAll();
 				var templates:Array = [];
-				var template1:BattleItemTemplateModel = new BattleItemTemplateModel();
-				template1.cartoon = "static/asset/avatar/house_1.swf";
-				templates.push(template1);
+//				var template1:BattleItemTemplateModel = new BattleItemTemplateModel();
+//				template1.cartoon = "static/asset/avatar/house_1.swf";
+//				templates.push(template1);
 				for each (var templateModel:BattleItemTemplateModel in templates) {
 					itemToolbarData.addItem([templateModel, _selectedProject]);
 				}

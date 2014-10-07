@@ -36,6 +36,8 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		public var expLabel:GText;
 		
 		public var hpLabel:GText;
+		
+		public var coin:Coin;
 
 		public var armorLabel:GText;
 		
@@ -81,6 +83,8 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				levelLabel = new GText(skin["levelLabel"]);
 			if (skin.hasOwnProperty("levelProgress"))
 				levelProgress = new GProgress(skin["levelProgress"]);
+			if (skin.hasOwnProperty("coin"))
+				coin = new Coin(skin["coin"]);
 			if (skin["expLabel"])
 				expLabel = new GText(skin["expLabel"]);
 			if (skin["hpLabel"])
@@ -126,7 +130,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 			tipData = model;
 			if (model) {
 				if (avatar) {
-					avatar.setCartoon(model.cartoon, AvatarView.idle);
+					avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
 				}
 				if (nameLabel)
 					nameLabel.text = model.name;
@@ -139,6 +143,8 @@ package com.gearbrother.mushroomWar.view.common.ui {
 					levelProgress.minValue = model.level.exp;
 					levelProgress.value = model.exp;
 				}
+				if (coin)
+					coin.textLabel.text = "3";
 				if (expLabel)
 					expLabel.text = model.exp;
 				if (hpLabel)
@@ -170,7 +176,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 			} else {
 				if (avatar)
-					avatar.setCartoon(null, AvatarView.idle);
+					avatar.setCartoon(null, AvatarView.STATE_STOP_DOWN);
 				if (nameLabel)
 					nameLabel.text = "";
 				for (i = 0; i < equipIcons.length; i++) {
@@ -187,5 +193,19 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 			}
 		}
+	}
+}
+import com.gearbrother.glash.display.GSkinSprite;
+import com.gearbrother.glash.display.control.text.GText;
+
+import flash.display.DisplayObjectContainer;
+
+class Coin extends GSkinSprite {
+	public var textLabel:GText;
+	
+	public function Coin(skin:DisplayObjectContainer) {
+		super(skin);
+		
+		textLabel = new GText(skin["textLabel"]);
 	}
 }

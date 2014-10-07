@@ -1,72 +1,7 @@
 {
 	"items": [
-		{
-			"x": 200,
-			"y": 200,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D0",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over",
-			"host": true
-		},
-		{
-			"x": 400,
-			"y": 100,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D1",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 600,
-			"y": 200,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D2",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 100,
-			"y": 400,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D3",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 400,
-			"y": 400,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D4",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 700,
-			"y": 400,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D5",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 200,
-			"y": 600,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D6",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "floor"
-		},
-		{
-			"x": 400,
-			"y": 700,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D7",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		},
-		{
-			"x": 600,
-			"y": 600,
-			"instanceId": "5914B166-5A41-93B7-41CF-A9051D3BF1D8",
-			"cartoon": "static/kingdomrush/building_1.swf",
-			"layer": "over"
-		}
 	],
-	"cellPixel": 32,
-	"puzzleTotal": 0,
-	"width": 800,
-	"height": 800
+	"cellPixel": 50,
+	"width": 10,
+	"height": 17
 }

@@ -39,7 +39,9 @@ public class GameConf implements ApplicationContextAware {
 	
 	public Skill attack;
 	
-	public Map<String, Avatar> avatars = new HashMap<String, Avatar>();
+	public Map<String, Avatar> soilders = new HashMap<String, Avatar>();
+	
+	public Map<String, Avatar> heroes = new HashMap<String, Avatar>();
 	
 	public Map<String, Battle> battles = new HashMap<String, Battle>();
 	
@@ -70,9 +72,9 @@ public class GameConf implements ApplicationContextAware {
 			speedUp = weapons.get("1");
 			house = tools.get("house_0");
 			attack = weapons.get("attack");
-
-			File animalFolder = context.getResource("WEB-INF/conf/avatar").getFile();
-			for (File animalFile : animalFolder.listFiles()) {
+			
+			File soilderFolder = context.getResource("WEB-INF/conf/soilder").getFile();
+			for (File animalFile : soilderFolder.listFiles()) {
 				if (animalFile.isFile() && animalFile.getName().equals(".svn") == false) {
 					FileInputStream fileInputStream = new FileInputStream(animalFile);
 					JsonNode avatarRoot = Constant.mapper.readTree(fileInputStream);
@@ -80,7 +82,22 @@ public class GameConf implements ApplicationContextAware {
 						Entry<String, JsonNode> avatarNode = (Entry<String, JsonNode>) iterator.next();
 						Avatar avatar = new Avatar(avatarNode.getValue());
 						avatar.confId = avatarNode.getKey();
-						avatars.put(avatar.confId, avatar);
+						soilders.put(avatar.confId, avatar);
+					}
+					fileInputStream.close();
+				}
+			}
+			
+			File heroFolder = context.getResource("WEB-INF/conf/hero").getFile();
+			for (File animalFile : heroFolder.listFiles()) {
+				if (animalFile.isFile() && animalFile.getName().equals(".svn") == false) {
+					FileInputStream fileInputStream = new FileInputStream(animalFile);
+					JsonNode avatarRoot = Constant.mapper.readTree(fileInputStream);
+					for (Iterator<Entry<String, JsonNode>> iterator = avatarRoot.fields(); iterator.hasNext();) {
+						Entry<String, JsonNode> avatarNode = (Entry<String, JsonNode>) iterator.next();
+						Avatar avatar = new Avatar(avatarNode.getValue());
+						avatar.confId = avatarNode.getKey();
+						heroes.put(avatar.confId, avatar);
 					}
 					fileInputStream.close();
 				}

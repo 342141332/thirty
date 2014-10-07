@@ -1,8 +1,7 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,13 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
-import com.gearbrother.mushroomWar.pojo.BattleItemBuilding;
+import com.gearbrother.mushroomWar.pojo.BattleItem;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
+import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.PropertyEvent;
-import com.gearbrother.mushroomWar.pojo.TaskDispatch;
+import com.gearbrother.mushroomWar.pojo.TaskFoward;
 import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
+import com.gearbrother.mushroomWar.util.GMathUtil;
 
 /**
  * @author feng.lee
@@ -30,28 +31,28 @@ public class BattleService {
 
 	public BattleService() {
 		_runningBattles = World.instance.runningBattles;
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				while (true) {
-//					long now = System.currentTimeMillis();
-//					for (BattleRoom room : _runningBattles.values()) {
-//						room.battle.execute(now);
-//					}
-//				}
-//			}
-//		}).start();
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		new Thread(new Runnable() {
+			
 			@Override
 			public void run() {
-				long now = System.currentTimeMillis();
-				for (BattleRoom room : _runningBattles.values()) {
-					room.battle.execute(now);
+				while (true) {
+					long now = System.currentTimeMillis();
+					for (BattleRoom room : _runningBattles.values()) {
+						room.battle.execute(now);
+					}
 				}
 			}
-		}, 0, 100);
+		}).start();
+//		Timer timer = new Timer();
+//		timer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				long now = System.currentTimeMillis();
+//				for (BattleRoom room : _runningBattles.values()) {
+//					room.battle.execute(now);
+//				}
+//			}
+//		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -61,31 +62,36 @@ public class BattleService {
 
 	@RpcServiceMethod(desc = "派遣")
 	public void dispatch(ISession session
-			, @RpcServiceMethodParameter(name = "sourceBuildingInstanceId", desc = "初始建筑") String sourceBuildingInstanceId
-			, @RpcServiceMethodParameter(name = "targetBuildingInstanceId", desc = "目标建筑") String targetBuildingInstanceId) {
+			, @RpcServiceMethodParameter(name = "x") int x
+			, @RpcServiceMethodParameter(name = "y") int y
+			, @RpcServiceMethodParameter(name = "instanceUuid") String instanceUuid) {
 		BattleRoom room = session.getSeat().room;
 		long current = System.currentTimeMillis();
-		BattleItemBuilding sourceBuilding = (BattleItemBuilding) room.battle.items.get(sourceBuildingInstanceId);
-		BattleItemBuilding targetBuilding = (BattleItemBuilding) room.battle.items.get(targetBuildingInstanceId);
-		if (sourceBuilding.owner != session.getSeat())
-			return;
-		if (sourceBuilding == targetBuilding) {
-			return;
+		int forwardX = 0;
+		int forwardY = 0;
+		if (session.getSeat().room.blueMax > session.getSeat().index) {
+			y = forwardX;
+			forwardY = 1;
+		} else {
+			y = room.battle.height - 1;
+			forwardY = -1;
 		}
-		new TaskDispatch(room.battle, current + 600, 600, sourceBuilding, targetBuilding, 2);
+		BattleItem dispatchedTroop = new BattleItem();
+		dispatchedTroop.instanceId = UUID.randomUUID().toString();
+		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).cartoon;
+		dispatchedTroop.setXY(x, y);
+		dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
+		dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
+		dispatchedTroop.layer = "over";
+		dispatchedTroop.setBattle(room.battle);
+		dispatchedTroop.owner = session.getSeat();
+		dispatchedTroop.setTask(new TaskFoward(room.battle, current + 1000, 3000L, forwardX, forwardY, dispatchedTroop));
+		room.battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
 	}
 
 	@RpcServiceMethod(desc = "")
 	public void upgrade(ISession session
 			, @RpcServiceMethodParameter(name = "buildingInstanceUuid") String buildingInstanceId) {
-		BattleRoom room = session.getSeat().room;
-		BattleItemBuilding building = (BattleItemBuilding) room.battle.items.get(buildingInstanceId);
-		if (building.owner.user == session.getLogined()) {
-			building.level += 1;
-			building.character = "static/kingdomrush/7176.swf";
-			building.cartoon = "static/kingdomrush/building_1_1.swf";
-			room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, building));
-		}
 //		building.cartoon = "static/asset/avatar/house002.swf";
 //		building.settledHero = session.getSeat().choosedHeroes[0];
 //		TaskSkill skillTask = building.skillTask = new TaskSkill(currentTimeMillis, 1100);

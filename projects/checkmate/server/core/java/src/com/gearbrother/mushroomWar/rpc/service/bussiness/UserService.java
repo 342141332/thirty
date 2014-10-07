@@ -66,9 +66,9 @@ public class UserService {
 			user.bagItems.put(skill.confId, skill.clone());
 		}
 		user.heroes = new HashMap<String, Avatar>();
-		for (Iterator<String> iterator = gameConfs.avatars.keySet().iterator(); iterator.hasNext();) {
+		for (Iterator<String> iterator = gameConfs.heroes.keySet().iterator(); iterator.hasNext();) {
 			String confId = (String) iterator.next();
-			Avatar avatar = gameConfs.avatars.get(confId).clone();
+			Avatar avatar = gameConfs.heroes.get(confId).clone();
 			avatar.uuid = UUID.randomUUID().toString();
 			user.heroes.put(avatar.uuid, avatar);
 		}

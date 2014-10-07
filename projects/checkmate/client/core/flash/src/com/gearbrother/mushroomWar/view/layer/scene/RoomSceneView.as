@@ -156,6 +156,10 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				remove();
 				var signal:BattleSignalBeginProtocol = event.response as BattleSignalBeginProtocol;
 				var battle:BattleModel = signal.battle as BattleModel;
+				for each (var seat:BattleRoomSeatModel in model.seats) {
+					if (seat && seat.instanceId == GameModel.instance.loginedUser.uuid)
+						battle.loginedBattleUser = seat;
+				}
 				GameMain.instance.scenelayer.addChild(new BattleSceneView(battle));
 			} else if (event.response is BattleRoomModel) {
 				(bindData as BattleRoomModel).merge(event.response as BattleRoomModel);

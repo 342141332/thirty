@@ -7,4 +7,8 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 public class BattleSignalBegin extends RpcBean {
 	@RpcBeanProperty(desc = "战斗")
 	public Battle battle;
+
+	public BattleSignalBegin(Battle battle) {
+		this.battle = battle;
+	}
 }

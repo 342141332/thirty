@@ -56,26 +56,22 @@ public class BattleRoom extends RpcBean {
 	public void play() {
 		battle.startTime = System.currentTimeMillis();
 		battle.observer = this.observer;
-		Map<String, BattleItem> buildings = battle.getItems(BattleItemBuilding.class);
-		List<BattleItemBuilding> hostBuildings = new ArrayList<BattleItemBuilding>();
-		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
-			String buildingId = (String) iterator.next();
-			BattleItemBuilding building = (BattleItemBuilding) buildings.get(buildingId);
-			if (building.host) {
-				hostBuildings.add(building);
-			}
-		}
-		for (int i = 0; i < seats.length; i++) {
-			BattleRoomSeat seat = seats[i];
-			if (seat != null) {
-				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
-				hostBuildings.remove(home);
-				home.owner = seat;
-				home.produce = new TaskProduce(battle, battle.startTime, 3000, home, "A0", 2);
-			}
-		}
-		BattleItemBuilding enemyBuilding = (BattleItemBuilding) battle.items.get("5914B166-5A41-93B7-41CF-A9051D3BF1D1");
-		enemyBuilding.produce = new TaskProduce(battle, battle.startTime, 3000, enemyBuilding, "A0", 2);
+//		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
+//			String buildingId = (String) iterator.next();
+//			BattleItemBuilding building = (BattleItemBuilding) buildings.get(buildingId);
+//			building.produce = new TaskProduce(battle, battle.startTime, 3000, building, "A0", 2);
+//			if (building.host) {
+//				hostBuildings.add(building);
+//			}
+//		}
+//		for (int i = 0; i < seats.length; i++) {
+//			BattleRoomSeat seat = seats[i];
+//			if (seat != null) {
+//				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
+//				hostBuildings.remove(home);
+//				home.owner = seat;
+//			}
+//		}
 	}
 	
 	public static void main(String[] args) {
@@ -84,18 +80,16 @@ public class BattleRoom extends RpcBean {
 			long currentTime = System.currentTimeMillis();
 			final BattleRoom room = new BattleRoom(World.instance.hall, 4, 4);
 			room.battle = new Battle();
-			List<BattleItemBuilding> buildings = new ArrayList<BattleItemBuilding>();
+			List<BattleItem> buildings = new ArrayList<BattleItem>();
 			for (int j = 0; j < 40; j++) {
-				BattleItemBuilding building = new BattleItemBuilding();
+				BattleItem building = new BattleItem();
 				building.instanceId = "Building_" + j;
-				building.x = 0;
-				building.y = 0;
 				building.setBattle(room.battle);
 				buildings.add(building);
 			}
 			for (int j = 0; j < buildings.size(); j++) {
-				BattleItemBuilding building = buildings.get(j);
-				BattleItemBuilding pickedBuilding = (BattleItemBuilding) GMathUtil.random(buildings);
+				BattleItem building = buildings.get(j);
+				BattleItem pickedBuilding = (BattleItem) GMathUtil.random(buildings);
 			}
 			rooms.add(room);
 		}

@@ -7,8 +7,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.glash.util.display.GPen;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
-	import com.gearbrother.mushroomWar.model.BattleItemBuildingModel;
+	import com.gearbrother.mushroomWar.model.AvatarModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
@@ -56,6 +55,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		public function get model():BattleModel {
 			return data as BattleModel;
 		}
+		
+		public var dispatchAvatar:AvatarModel;
 
 		/**
 		 * 
@@ -65,8 +66,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super();
 
 			data = battle;
-			camera.bound.width = battle.width;
-			camera.bound.height = battle.height;
+			camera.bound.width = battle.width * battle.cellPixel;
+			camera.bound.height = battle.height * battle.cellPixel;
 			
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
 			layers = {};
@@ -85,38 +86,18 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super.doInit();
 			
 			//add listener
-			stage.addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyEvent);
-			stage.addEventListener(KeyboardEvent.KEY_UP, _handleKeyEvent);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
+			addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyEvent);
+			addEventListener(KeyboardEvent.KEY_UP, _handleKeyEvent);
+			addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
 			GameMain.instance.gameChannel.addEventListener(RpcEvent.DATA, _handleGameChannelEvent);
 			enableTick = true;
 		}
 
-		private var _mouseDown:BattleItemSceneView;
-
 		private function _handleMouseEvent(event:MouseEvent):void {
 			switch (event.type) {
 				case MouseEvent.MOUSE_DOWN:
-					if (event.target is BattleItemSceneView) {
-						_mouseDown = event.target as BattleItemSceneView;
-						stage.addEventListener(MouseEvent.MOUSE_MOVE, _handleMouseEvent);
-						stage.addEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);
-					}
-					break;
-				case MouseEvent.MOUSE_MOVE:
-					pen.clear();
-					pen.lineStyle(5, 0xff0000, .3);
-					pen.drawLine(_mouseDown.x, _mouseDown.y, layerFlag.mouseX, layerFlag.mouseY);
-					break;
-				case MouseEvent.MOUSE_UP:
-					if (_mouseDown && event.target is BattleItemSceneView) {
-						GameMain.instance.battleService.dispatch((_mouseDown.bindData as BattleItemBuildingModel).instanceId
-							, ((event.target as BattleItemSceneView).bindData as BattleItemBuildingModel).instanceId);
-					}
-					stage.removeEventListener(MouseEvent.MOUSE_MOVE, _handleMouseEvent);
-					stage.removeEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);
-					_mouseDown = null;
-					pen.clear();
+					if (dispatchAvatar)
+						GameMain.instance.battleService.dispatch(int(mouseX / model.cellPixel), int(mouseY / model.cellPixel), dispatchAvatar.confId);
 					break;
 			}
 		}
@@ -155,12 +136,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							battleItem = model.items[battleItem.instanceId];
 							battleItem.battle = null;
 							for each (layer in layers) {
-								layer.removeItem(battleItem);
+								layer.removeItem(battleItem, .7);
 							}
 							break;
 						case 4:
 							battleItem = model.items[battleItem.instanceId];
-							(battleItem as BattleItemBuildingModel).task = "skill";
+							(battleItem as BattleItemModel).task = "skill";
 							break;
 						case 5:
 							battleItem = model.items[battleItem.instanceId];

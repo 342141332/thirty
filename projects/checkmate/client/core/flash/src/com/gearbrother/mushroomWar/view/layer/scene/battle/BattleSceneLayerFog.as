@@ -3,7 +3,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.util.camera.Camera;
 	import com.gearbrother.mushroomWar.model.ApplicationModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
+	import com.gearbrother.mushroomWar.model.TaskArriveFieldModel;
 	import com.gearbrother.mushroomWar.model.BattleItemUserModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	

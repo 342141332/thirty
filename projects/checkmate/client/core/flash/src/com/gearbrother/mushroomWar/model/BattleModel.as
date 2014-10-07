@@ -28,8 +28,6 @@ package com.gearbrother.mushroomWar.model {
 			this._collisions[row][col] = newValue;
 		}
 		
-		public var cellPixel:int = 32;
-		
 		public function BattleModel(prototype:Object = null) {
 			super(prototype);
 			
@@ -43,11 +41,12 @@ package com.gearbrother.mushroomWar.model {
 		public function decode(prototype:Object):BattleModel {
 			items = {};
 			for each (var itemObj:Object in prototype.items) {
-				var item:BattleItemBuildingModel = new BattleItemBuildingModel().decode(itemObj);
+				var item:BattleItemModel = new BattleItemModel().decode(itemObj);
 				item.battle = this;
 			}
 			width = prototype.width;
 			height = prototype.height;
+			cellPixel = prototype.cellPixel;
 			return this;
 		}
 

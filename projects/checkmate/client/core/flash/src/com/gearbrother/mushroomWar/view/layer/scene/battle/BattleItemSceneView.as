@@ -12,15 +12,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.util.math.GMathUtil;
 	import com.gearbrother.glash.util.math.GPointUtil;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.BattleItemBuildingModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
-	import com.gearbrother.mushroomWar.model.BattleItemSoilderModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.IBattleItemModel;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskAttackProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskMoveProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskProduceProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarView;
 	import com.greensock.TweenLite;
@@ -64,8 +61,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 		public var _avatar:AvatarView;
 		
-		public var settledAvatar:AvatarView;
-		
 		protected var _oldProperties:Object;
 
 		public function BattleItemSceneView(model:IBattleItemModel) {
@@ -78,9 +73,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			this.graphics.endFill();*/
 			
 			addChild(_avatar = new AvatarView());
-			_avatar.enableTick = false;
 
-			if (model is BattleItemBuildingModel) {
+			/*if (model is BattleItemBuildingModel) {
 				var progressSkin:Shape = new Shape();
 				progressSkin.graphics.beginFill(0x009900, 1);
 				progressSkin.graphics.drawRect(0, 0, 20, 1);
@@ -99,7 +93,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				upgradeBtn.y = 50;
 			} else {
 				mouseChildren = mouseEnabled = false;
-			}
+			}*/
 			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 		}
 		
@@ -114,20 +108,25 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 		override public function handleModelChanged(events:Object=null):void {
 			var model:IBattleItemModel = bindData;
-			if (events && (events.hasOwnProperty(BattleItemProtocol.HP) || events.hasOwnProperty(BattleItemProtocol.MAX_HP))) {
-				var changedHp:int = model.hp - _oldProperties[BattleItemProtocol.HP];
-				if (changedHp > 0) {
-					popup("+ " + changedHp + " HP", 0x66cc00);
-				} else if (changedHp < 0) {
-					popup(changedHp + " HP", 0xff3333);
+			if (!events
+				|| events.hasOwnProperty(BattleItemProtocol.HP)
+				|| events.hasOwnProperty(BattleItemProtocol.MAX_HP)) {
+				if (_oldProperties.hasOwnProperty(BattleItemProtocol.HP)) {
+					var changedHp:int = model.hp - _oldProperties[BattleItemProtocol.HP];
+					if (changedHp > 0) {
+						popup("+ " + changedHp + " HP", 0x66cc00, 11);
+					} else if (changedHp < 0) {
+						popup(changedHp + " HP", 0xff3333, 11);
+					}
+					_brightFilter.apply(_avatar);
+					clearTimeout(_unBrightDelayID);
+					_unBrightDelayID = setTimeout(_brightFilter.unapply, 200, _avatar);
 				}
 				if (hp) {
+					hp.maxValue = model.maxHp;
 					hp.value = model.hp;
 				}
 				_oldProperties[BattleItemProtocol.HP] = model.hp;
-				_brightFilter.apply(_avatar);
-				clearTimeout(_unBrightDelayID);
-				_unBrightDelayID = setTimeout(_brightFilter.unapply, 200, _avatar);
 			}
 			/*if (!events || events.hasOwnProperty(BattleItemBuildingProtocol.SETTLED_TROOPS)) {
 				if (model is BattleItemBuildingModel) {
@@ -147,7 +146,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					troopText.validateLayoutNow();
 				}
 			}*/
-			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.OWNER_ID))/* && model is BattleItemBuildingModel*/) {
+			if ((!events || events.hasOwnProperty(BattleItemProtocol.OWNER_ID))/* && model is BattleItemBuildingModel*/) {
 				if (GameModel.instance.loginedUser && model.ownerId) {
 					if (GameModel.instance.loginedUser.uuid == model.ownerId) {
 						enemyFilter.unapply(_avatar);
@@ -159,18 +158,22 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				}
 			}
 			if (!events
-				|| events.hasOwnProperty(BattleItemProtocol.TASK)
+				|| events.hasOwnProperty(BattleItemProtocol.ACTION)
 				|| events.hasOwnProperty(BattleItemProtocol.CARTOON)) {
-				if (model.task is TaskArriveModel) {
-					var move:TaskArriveModel = model.task as TaskArriveModel;
-					_avatar.setCartoon(model.cartoon, AvatarView.running);
-					if (move.targetX > x)
-						_avatar.scaleX = 1;
-					else if (move.targetX < x)
-						_avatar.scaleX = -1;
-				} else if (model.task is TaskAttackProtocol) {
-					var attack:TaskAttackProtocol = model.task as TaskAttackProtocol;
-					_avatar.setCartoon(model.cartoon, AvatarView.fighting);
+				if (model.action is TaskMoveProtocol) {
+					var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
+					if (move.targetX > model.x)
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_RIGHT);
+					else if (move.targetX < model.x)
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_LEFT);
+					else if (move.targetY > model.y)
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_DOWN);
+					else if (move.targetY < model.y)
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_UP);
+					_avatar.enableTick = true;
+				} else if (model.action is TaskAttackProtocol) {
+					var attack:TaskAttackProtocol = model.action as TaskAttackProtocol;
+					_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
 					var target:IBattleItemModel = model.battle.items[attack.targetId] as IBattleItemModel;
 					if (target) {
 						if (target.x > x)
@@ -178,22 +181,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 						else if (target.x < x)
 							_avatar.scaleX = -1;
 					}
+					_avatar.enableTick = true;
 				} else {
-					_avatar.setCartoon(model.cartoon, AvatarView.idle);
-				}
-			}
-			if ((!events || events.hasOwnProperty(BattleItemBuildingProtocol.SETTLED_HERO)) && bindData is BattleItemBuildingModel) {
-				var buildingModel:BattleItemBuildingModel = bindData;
-				if (buildingModel.settledHero) {
-					if (!settledAvatar) {
-						addChild(settledAvatar = new AvatarView());
-						settledAvatar.setCartoon(buildingModel.settledHero.cartoon, AvatarView.idle);
-					}
-				} else {
-					if (settledAvatar) {
-						settledAvatar.remove();
-						settledAvatar = null;
-					}
+					_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
 				}
 			}
 		}
@@ -215,19 +205,16 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 //			_texts.push({"text": text, "fontColor": fontColor, "fontSize": fontSize});
 		}
 		
-		static public const RADIAN:Array = [-20, -16, -12, -8, -2, 2, 8, 12, 16, 20];
-		
 		override public function tick(interval:int):void {
 			var model:IBattleItemModel = bindData;
-			if (model.task is TaskArriveModel) {
-				var move:TaskArriveModel = model.task as TaskArriveModel;
+			if (model.action is TaskMoveProtocol) {
+				var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
 				var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
-				x = move.startX + (move.targetX - move.startX) * progress;
-				y = move.startY + (move.targetY - move.startY) * progress;
+				if (model.battle) {
+					x = ((move.startX + .5) + (move.targetX - move.startX) * progress) * model.battle.cellPixel;
+					y = ((move.startY + .5) + (move.targetY - move.startY) * progress) * model.battle.cellPixel;
+				}
 			}
-			_avatar.tick(interval);
-			if (settledAvatar)
-				settledAvatar.tick(interval);
 		}
 	}
 }
