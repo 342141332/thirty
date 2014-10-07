@@ -61,6 +61,7 @@ public class BattleRoom extends RpcBean {
 		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
 			String buildingId = (String) iterator.next();
 			BattleItemBuilding building = (BattleItemBuilding) buildings.get(buildingId);
+			building.produce = new TaskProduce(battle, battle.startTime, 3000, building, "A0", 2);
 			if (building.host) {
 				hostBuildings.add(building);
 			}
@@ -71,11 +72,8 @@ public class BattleRoom extends RpcBean {
 				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
 				hostBuildings.remove(home);
 				home.owner = seat;
-				home.produce = new TaskProduce(battle, battle.startTime, 3000, home, "A0", 2);
 			}
 		}
-		BattleItemBuilding enemyBuilding = (BattleItemBuilding) battle.items.get("5914B166-5A41-93B7-41CF-A9051D3BF1D1");
-		enemyBuilding.produce = new TaskProduce(battle, battle.startTime, 3000, enemyBuilding, "A0", 2);
 	}
 	
 	public static void main(String[] args) {

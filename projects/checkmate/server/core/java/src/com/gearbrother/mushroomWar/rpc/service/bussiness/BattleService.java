@@ -1,8 +1,6 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,28 +28,28 @@ public class BattleService {
 
 	public BattleService() {
 		_runningBattles = World.instance.runningBattles;
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
-//				while (true) {
-//					long now = System.currentTimeMillis();
-//					for (BattleRoom room : _runningBattles.values()) {
-//						room.battle.execute(now);
-//					}
-//				}
-//			}
-//		}).start();
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		new Thread(new Runnable() {
+			
 			@Override
 			public void run() {
-				long now = System.currentTimeMillis();
-				for (BattleRoom room : _runningBattles.values()) {
-					room.battle.execute(now);
+				while (true) {
+					long now = System.currentTimeMillis();
+					for (BattleRoom room : _runningBattles.values()) {
+						room.battle.execute(now);
+					}
 				}
 			}
-		}, 0, 100);
+		}).start();
+//		Timer timer = new Timer();
+//		timer.schedule(new TimerTask() {
+//			@Override
+//			public void run() {
+//				long now = System.currentTimeMillis();
+//				for (BattleRoom room : _runningBattles.values()) {
+//					room.battle.execute(now);
+//				}
+//			}
+//		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")
@@ -72,7 +70,7 @@ public class BattleService {
 		if (sourceBuilding == targetBuilding) {
 			return;
 		}
-		new TaskDispatch(room.battle, current + 600, 600, sourceBuilding, targetBuilding, 2);
+		new TaskDispatch(room.battle, current, 600, sourceBuilding, targetBuilding, 2);
 	}
 
 	@RpcServiceMethod(desc = "")

@@ -10,8 +10,8 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemSoilderProtocol;
 
 @RpcBeanPartTransportable
-public class TaskArrive extends Task {
-	static Logger logger = LoggerFactory.getLogger(TaskArrive.class);
+public class TaskArriveBuilding extends Task {
+	static Logger logger = LoggerFactory.getLogger(TaskArriveBuilding.class);
 
 	static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss.SSS");
 	
@@ -33,14 +33,13 @@ public class TaskArrive extends Task {
 	@RpcBeanProperty(desc = "")
 	public int targetY;
 	
-	public BattleItemBuilding joinBuilding;
-
 	public BattleItemSoilder behavior;
 	
-	public BattleItem target;
-
-	public TaskArrive(Battle battle, long executeTime, long startTime
-			, int startX, int startY, int endX, int endY, BattleItemSoilder behavior, BattleItemBuilding joinBuilding, BattleItem target) {
+	public BattleItemBuilding building;
+	
+	public TaskArriveBuilding(Battle battle, long executeTime, long startTime
+			, int startX, int startY, int endX, int endY
+			, BattleItemSoilder behavior, BattleItemBuilding building) {
 		super(battle, executeTime);
 
 		this.startTime = startTime;
@@ -50,37 +49,33 @@ public class TaskArrive extends Task {
 		this.targetX = endX;
 		this.targetY = endY;
 		this.behavior = behavior;
-		this.joinBuilding = joinBuilding;
-		this.target = target;
+		this.building = building;
 	}
 
 	@Override
 	public void execute(long now) {
-		logger.debug("arrive {}:{} > {}:{}");
+		logger.debug("arrive building");
+		behavior.setTask(null);
 		behavior.x = targetX;
 		behavior.y = targetY;
-<<<<<<< HEAD
-		behavior.setTask(null);
-=======
-		behavior.task = null;
->>>>>>> branch 'master' of https://github.com/342141332/thirty.git
-		joinBuilding.settledTroops.add(behavior);
+		building.restingSoilders.add(behavior);
 		BattleItemSoilderProtocol soilderProto = new BattleItemSoilderProtocol();
 		soilderProto.setInstanceId(behavior.instanceId);
 		soilderProto.setTask(behavior.getTask());
 		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderProto));
-<<<<<<< HEAD
-		if (target instanceof BattleItemBuilding) {
-			if (((BattleItemBuilding) target).defense == null)
-				((BattleItemBuilding) target).defense = new TaskDefense(battle, now + 100, (BattleItemBuilding) target);
-		} else if (target instanceof BattleItemSoilder) {
-			behavior.setTask(new TaskAttack(battle, now + 100, 2700, behavior, target, joinBuilding));
-		}
-=======
-		if (target instanceof BattleItemBuilding)
-			new TaskDefense(battle, now + 100, (BattleItemBuilding) target);
-		else if (target instanceof BattleItemSoilder)
-			new TaskAttack(battle, now + 100, 2700, behavior, target, joinBuilding);
->>>>>>> branch 'master' of https://github.com/342141332/thirty.git
+		if (building.defense == null)
+			building.defense = new TaskDefense(battle, now + 100, building);
+		else if (!building.defense.getIsInQueue())
+			building.defense.setExecuteTime(now + 100);
+	}
+
+	@Override
+	public void halt() {
+		super.halt();
+
+		long current = System.currentTimeMillis();
+		double progress = Math.min(1, (current - startTime) / (endTime - startTime));
+		behavior.x = (int) ((targetX - startX) * progress + startX);
+		behavior.y = (int) ((targetY - startY) * progress + startY);
 	}
 }

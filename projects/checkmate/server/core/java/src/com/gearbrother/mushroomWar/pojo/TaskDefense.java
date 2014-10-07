@@ -1,12 +1,13 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-<<<<<<< HEAD
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.gearbrother.mushroomWar.pojo.BattleItemBuilding.BattleField;
 import com.gearbrother.mushroomWar.util.GMathUtil;
 
 public class TaskDefense extends Task {
@@ -23,96 +24,57 @@ public class TaskDefense extends Task {
 	@Override
 	public void execute(long now) {
 		logger.debug("defense");
-		List<BattleItemSoilder> defenders = new ArrayList<BattleItemSoilder>();
-		List<BattleItemSoilder> enemies = new ArrayList<BattleItemSoilder>();
-		for (BattleItemSoilder soilder : major.settledTroops) {
-			if (soilder.owner == major.owner) {
-				defenders.add(soilder);
+		List<BattleItemSoilder> restingSoildersA = new ArrayList<BattleItemSoilder>();
+		List<BattleItemSoilder> restingSoildersB = new ArrayList<BattleItemSoilder>();
+		for (BattleItemSoilder soilder : major.restingSoilders) {
+			if (major.owner == soilder.owner)
+				restingSoildersA.add(soilder);
+			else
+				restingSoildersB.add(soilder);
+		}
+		//check fields
+		for (Iterator<BattleField> iterator = major.fields.iterator(); iterator.hasNext();) {
+			BattleField field = iterator.next();
+			List<BattleItemSoilder> fieldA = new ArrayList<BattleItemSoilder>();
+			List<BattleItemSoilder> fieldB = new ArrayList<BattleItemSoilder>();
+			for (BattleItemSoilder soilder : field.soilders) {
+				if (soilder.owner == major.owner) {
+					fieldA.add(soilder);
+				} else {
+					fieldB.add(soilder);
+				}
+			}
+			int min = Math.min(fieldA.size(), fieldB.size());
+			if (min > 0) {
+				restingSoildersA.addAll(fieldA.subList(1, fieldA.size() - 1));
+				restingSoildersB.addAll(fieldB.subList(1, fieldB.size() - 1));
 			} else {
-				enemies.add(soilder);
+				restingSoildersA.addAll(fieldA);
+				restingSoildersB.addAll(fieldB);
+				iterator.remove();
 			}
 		}
-		int min = Math.max(1, defenders.size() > enemies.size() ? enemies.size() : defenders.size());
-		for (int j = 0; j < defenders.size(); j++) {
-			BattleItemSoilder defender = defenders.get(j);
-			if (defender.getTask() == null && enemies.size() > 0) {
-				BattleItemSoilder enemy = enemies.get(j % min);
-				defender.focusTarget = defender;
-				defender.setTask(new TaskArrive(battle, now + 2100, now, defender.x, defender.y
-						, enemy.x + GMathUtil.random(13, 7), enemy.y + GMathUtil.random(7, -7), defender, major, enemy));
-				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, defender));
-				if (enemy.getTask() == null) {
-					enemy.focusTarget = defender;
-					enemy.setTask(new TaskAttack(battle, now + 3000, 2100, enemy, defender, major));
-					battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, enemy));
-				}
-			}
-		}
-		for (int j = 0; j < enemies.size(); j++) {
-			BattleItemSoilder enemy = enemies.get(j);
-			if (enemy.getTask() == null && defenders.size() > 0) {
-				BattleItemSoilder defender = defenders.get(j % min);
-				enemy.focusTarget = enemy;
-				enemy.setTask(new TaskArrive(battle, now + 2100, now, enemy.x, enemy.y
-						, defender.x + GMathUtil.random(13, 7), defender.y + GMathUtil.random(7, -7), enemy, major, defender));
-				battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, enemy));
-				if (defender.getTask() == null) {
-					defender.focusTarget = enemy;
-					defender.setTask(new TaskAttack(battle, now + 3000, 2100, defender, enemy, major));
-					battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, defender));
-				}
-			}
-		}
-		
-		major.defense = null;
-=======
-import com.gearbrother.mushroomWar.util.GMathUtil;
+		int min = Math.min(restingSoildersA.size(), restingSoildersB.size());
+		for (int i = 0; i < min; i++) {
+			BattleField field = new BattleField(major.x + GMathUtil.random(50, -50), major.y + GMathUtil.random(17), major);
+			
+			BattleItemSoilder soilderA = restingSoildersA.get(i);
+			major.restingSoilders.remove(soilderA);
+			if (soilderA.inField != null)
+				soilderA.inField.soilders.remove(soilderA);
+			if (soilderA.getTask() != null)
+				soilderA.getTask().halt();
+			soilderA.setTask(new TaskArriveField(battle, now + 100, now, soilderA.x, soilderA.y, field.x - 10, field.y, soilderA, field));
+			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderA, "forward"));
 
-public class TaskDefense extends Task {
-	public BattleItemBuilding major;
-
-	public TaskDefense(Battle battle, long executeTime, BattleItemBuilding major) {
-		super(battle, executeTime);
-		
-		this.major = major;
-	}
-
-	@Override
-	public void execute(long now) {
-		List<BattleItemSoilder> defenders = new ArrayList<BattleItemSoilder>();
-		List<BattleItemSoilder> enemies = new ArrayList<BattleItemSoilder>();
-		for (BattleItemSoilder soilder : major.settledTroops) {
-			if (soilder.owner == major.owner) {
-				defenders.add(soilder);
-			} else {
-				enemies.add(soilder);
-			}
+			BattleItemSoilder soilderB = restingSoildersB.get(i);
+			major.restingSoilders.remove(soilderB);
+			if (soilderB.inField != null)
+				soilderB.inField.soilders.remove(soilderB);
+			if (soilderB.getTask() != null)
+				soilderB.getTask().halt();
+			soilderB.setTask(new TaskArriveField(battle, now + 100, now, soilderB.x, soilderB.y, field.x + 10, field.y, soilderB, field));
+			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderB, "forward"));
 		}
-		while (defenders.size() > 0) {
-			BattleItemSoilder defender = defenders.remove(0);
-			if (defender.task == null && (defender.focusTarget == null || defender.focusTarget.hp == 0)) {
-				if (enemies.size() > 0) {
-					BattleItemSoilder enemy = enemies.remove(0);
-					defender.task = new TaskArrive(battle, now + 100, now, defender.x, defender.y, enemy.x + GMathUtil.random(20, -20)
-							, enemy.y + GMathUtil.random(7, -7), defender, major, enemy);
-					battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, enemy));
-					defender.focusTarget = enemy;
-					enemy.focusTarget = defender;
-				}
-			}
-		}
-//		for (int i = 0; i < enemies.size(); i++) {
-//			BattleItemSoilder enemy = enemies.get(i % defenders.size());
-//			if (defenders.size() > 0) {
-//				BattleItemSoilder defender = defenders.remove(0);
-//				defender.task = new TaskArrive(battle, now + 100, now, defender.x, defender.y, enemy.x + GMathUtil.random(20, -20)
-//						, enemy.y + GMathUtil.random(7, -7), defender, major, enemy);
-//				defender.focusTarget = enemy;
-//				enemy.focusTarget = defender;
-//			} else {
-//				return;
-//			}
-//		}
->>>>>>> branch 'master' of https://github.com/342141332/thirty.git
 	}
 }

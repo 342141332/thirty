@@ -10,27 +10,29 @@ abstract public class Task extends RpcBean {
 		return executeTime;
 	}
 	public void setExecuteTime(long value) {
-		if (isInQueue) {
+		if (_isInQueue) {
 			halt();
-			executeTime = value;
-			battle.taskQueue.add(this);
-			isInQueue = true;
-		} else if (executeTime != value) {
-			executeTime = value;
-			battle.taskQueue.add(this);
-			isInQueue = true;
 		}
+		executeTime = value;
+		battle.taskQueue.add(this);
+		_isInQueue = true;
 	}
 	public void halt() {
-		if (isInQueue) {
+		if (_isInQueue) {
 			if (battle.taskQueue.remove(this))
-				isInQueue = false;
+				_isInQueue = false;
 			else
 				throw new Error("");
 		}
 	}
 	
-	boolean isInQueue;
+	private boolean _isInQueue;
+	public boolean getIsInQueue() {
+		return _isInQueue;
+	}
+	public void setIsInQueue(boolean value) {
+		_isInQueue = value;
+	}
 
 	final public Battle battle;
 

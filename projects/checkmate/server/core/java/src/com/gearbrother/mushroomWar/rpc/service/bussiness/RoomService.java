@@ -160,14 +160,13 @@ public class RoomService {
 	}
 
 	@RpcServiceMethod(desc = "开启房间(只有房主可以)")
-	public void startRoom(ISession session, @RpcServiceMethodParameter(name = "roomUuid", desc = "房间ID") String roomUuid) {
+	public void startRoom(ISession session
+			, @RpcServiceMethodParameter(name = "roomUuid", desc = "房间ID") String roomUuid) {
 		BattleRoom room = session.getSeat().room;
 		room.hall.rooms.remove(room.uuid);
 		room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, room));
 		room.play();
+		room.observer.notifySessions(new BattleSignalBegin(room.battle));
 		World.instance.runningBattles.put(room.uuid, room);
-		BattleSignalBegin beginSignal = new BattleSignalBegin();
-		beginSignal.battle = room.battle;
-		room.observer.notifySessions(beginSignal);
 	}
 }

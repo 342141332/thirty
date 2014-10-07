@@ -7,7 +7,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.glash.util.display.GPen;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
 	import com.gearbrother.mushroomWar.model.BattleItemBuildingModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;

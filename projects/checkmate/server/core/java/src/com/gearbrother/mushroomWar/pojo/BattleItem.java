@@ -63,7 +63,7 @@ public class BattleItem extends RpcBean {
 	}
 	@RpcBeanProperty(desc = "当前行为")
 	public void setTask(Task value) {
-		if (this._task != null && value != null)
+		if (this._task != null && this._task.getIsInQueue())
 			throw new Error("f");
 		this._task = value;
 	}
@@ -75,8 +75,6 @@ public class BattleItem extends RpcBean {
 		return owner != null ? owner.user.uuid : null;
 	}
 	
-	public BattleItemSoilder focusTarget;
-
 	public Object controller;
 
 	public BattleItem(JsonNode json) {

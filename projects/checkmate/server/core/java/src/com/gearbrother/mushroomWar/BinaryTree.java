@@ -31,6 +31,8 @@ public class BinaryTree {
 			for (int i = 0; i < 300; i++) {
 				instance.tree.add(new Node(GMathUtil.random(Integer.MAX_VALUE >> 8, Integer.MIN_VALUE >> 8)));
 			}
+			System.out.println("fff");
+			instance.tree.pollFirst();
 			instances.add(instance);
 		}
 		System.out.println("initialize 2000 instance cause "+ (System.currentTimeMillis() - initialize) + " milliseconds");

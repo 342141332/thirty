@@ -21,7 +21,8 @@ public class TaskProduce extends TaskInterval {
 
 	public int num;
 
-	public TaskProduce(Battle battle, long executeTime, long interval, BattleItemBuilding building, String itemConfId, int num) {
+	public TaskProduce(Battle battle, long executeTime, long interval
+			, BattleItemBuilding building, String itemConfId, int num) {
 		super(battle, executeTime, interval);
 
 		this.building = building;
@@ -31,9 +32,9 @@ public class TaskProduce extends TaskInterval {
 
 	@Override
 	public void execute(long now) {
-		logger.debug("{} produce {}:{} > {}:{}", building.instanceId, itemConfId);
+		logger.debug("{} produce {}:{}", building.instanceId, itemConfId, 1);
 		int total = 0;
-		for (BattleItemSoilder troop : building.settledTroops) {
+		for (BattleItemSoilder troop : building.restingSoilders) {
 			if (troop.owner == building.owner)
 				total++;
 		}
@@ -48,10 +49,12 @@ public class TaskProduce extends TaskInterval {
 			dispatchedTroop.layer = "over";
 			dispatchedTroop.setBattle(building.getBattle());
 			dispatchedTroop.owner = building.owner;
-			building.settledTroops.add(dispatchedTroop);
+			building.restingSoilders.add(dispatchedTroop);
 			building.getBattle().observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
 			if (building.defense == null)
-				building.defense = new TaskDefense(battle, now + 500, building);
+				building.defense = new TaskDefense(battle, now + 100, building);
+			else if (!building.defense.getIsInQueue())
+				building.defense.setExecuteTime(now + 100);
 		}
 		setExecuteTime(now + interval);
 	}

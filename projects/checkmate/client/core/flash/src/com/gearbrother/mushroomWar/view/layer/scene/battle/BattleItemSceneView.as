@@ -17,9 +17,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.model.BattleItemSoilderModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.IBattleItemModel;
-	import com.gearbrother.mushroomWar.model.TaskArriveModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemBuildingProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskArriveBuildingProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskArriveFieldProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskAttackProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskProduceProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarView;
@@ -117,9 +118,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			if (events && (events.hasOwnProperty(BattleItemProtocol.HP) || events.hasOwnProperty(BattleItemProtocol.MAX_HP))) {
 				var changedHp:int = model.hp - _oldProperties[BattleItemProtocol.HP];
 				if (changedHp > 0) {
-					popup("+ " + changedHp + " HP", 0x66cc00);
+					popup("+ " + changedHp + " HP", 0x66cc00, 11);
 				} else if (changedHp < 0) {
-					popup(changedHp + " HP", 0xff3333);
+					popup(changedHp + " HP", 0xff3333, 11);
 				}
 				if (hp) {
 					hp.value = model.hp;
@@ -161,12 +162,19 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			if (!events
 				|| events.hasOwnProperty(BattleItemProtocol.TASK)
 				|| events.hasOwnProperty(BattleItemProtocol.CARTOON)) {
-				if (model.task is TaskArriveModel) {
-					var move:TaskArriveModel = model.task as TaskArriveModel;
+				if (model.task is TaskArriveFieldProtocol) {
+					var move:TaskArriveFieldProtocol = model.task as TaskArriveFieldProtocol;
 					_avatar.setCartoon(model.cartoon, AvatarView.running);
 					if (move.targetX > x)
 						_avatar.scaleX = 1;
 					else if (move.targetX < x)
+						_avatar.scaleX = -1;
+				} else if (model.task is TaskArriveBuildingProtocol) {
+					var arrive:TaskArriveBuildingProtocol = model.task as TaskArriveBuildingProtocol;
+					_avatar.setCartoon(model.cartoon, AvatarView.running);
+					if (arrive.targetX > x)
+						_avatar.scaleX = 1;
+					else if (arrive.targetX < x)
 						_avatar.scaleX = -1;
 				} else if (model.task is TaskAttackProtocol) {
 					var attack:TaskAttackProtocol = model.task as TaskAttackProtocol;
@@ -215,15 +223,18 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 //			_texts.push({"text": text, "fontColor": fontColor, "fontSize": fontSize});
 		}
 		
-		static public const RADIAN:Array = [-20, -16, -12, -8, -2, 2, 8, 12, 16, 20];
-		
 		override public function tick(interval:int):void {
 			var model:IBattleItemModel = bindData;
-			if (model.task is TaskArriveModel) {
-				var move:TaskArriveModel = model.task as TaskArriveModel;
-				var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
-				x = move.startX + (move.targetX - move.startX) * progress;
-				y = move.startY + (move.targetY - move.startY) * progress;
+			if (model.task is TaskArriveFieldProtocol) {
+				var arriveField:TaskArriveFieldProtocol = model.task as TaskArriveFieldProtocol;
+				var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - arriveField.startTime) / (arriveField.endTime - arriveField.startTime));
+				x = arriveField.startX + (arriveField.targetX - arriveField.startX) * progress;
+				y = arriveField.startY + (arriveField.targetY - arriveField.startY) * progress;
+			} else if (model.task is TaskArriveBuildingProtocol) {
+				var arriveBuilding:TaskArriveBuildingProtocol = model.task as TaskArriveBuildingProtocol;
+				progress = Math.min(1, (GameModel.instance.application.serverTime - arriveBuilding.startTime) / (arriveBuilding.endTime - arriveBuilding.startTime));
+				x = arriveBuilding.startX + (arriveBuilding.targetX - arriveBuilding.startX) * progress;
+				y = arriveBuilding.startY + (arriveBuilding.targetY - arriveBuilding.startY) * progress;
 			}
 			_avatar.tick(interval);
 			if (settledAvatar)

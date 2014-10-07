@@ -4,7 +4,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.slf4j.Logger;
@@ -49,7 +48,7 @@ public class Battle extends RpcBean {
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriod;
 
-	public SortedSet<Task> taskQueue;
+	public TreeSet<Task> taskQueue;
 
 	public SessionObserver observer;
 	
@@ -92,10 +91,10 @@ public class Battle extends RpcBean {
 		while (taskQueue.size() > 0) {
 			Task task = taskQueue.first();
 			if (now >= task.getExecuteTime()) {
-				boolean res = taskQueue.remove(task);
-				if (!res)
-					throw new Error("remove fail");
-				task.isInQueue = false;
+				Task polledFirst = taskQueue.pollFirst();
+				if (polledFirst != task)
+					throw new Error("polledFirst != task");
+				task.setIsInQueue(false);
 				task.execute(now);
 			} else {
 				break;
