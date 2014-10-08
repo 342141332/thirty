@@ -5,7 +5,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.common.oper.ext.GFile;
 	import com.gearbrother.glash.display.GMovieBitmap;
 	import com.gearbrother.glash.display.propertyHandler.GPropertyPoolOperHandler;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.view.common.AvatarFile;
 
 
@@ -110,7 +110,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		}
 
 		override public function handleModelChanged(events:Object = null):void {
-			var model:AvatarModel = bindData;
+			var model:CharacterModel = bindData;
 			if (model) {
 				setCartoon(model.cartoon, STATE_STOP_DOWN);
 			} else {

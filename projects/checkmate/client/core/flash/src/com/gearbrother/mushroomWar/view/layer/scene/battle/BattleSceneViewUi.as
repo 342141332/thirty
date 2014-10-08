@@ -9,7 +9,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.display.propertyHandler.GPropertyBindDataHandler;
 	import com.gearbrother.glash.util.lang.GDateUtil;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
@@ -109,7 +109,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		private function _handleMouseEvent(event:MouseEvent):void {
 			if (event.target is AvatarUiView) {
 				var avatarUiView:AvatarUiView = event.target as AvatarUiView;
-				_canvas.dispatchAvatar = avatarUiView.bindData as AvatarModel;
+				_canvas.dispatchAvatar = avatarUiView.bindData as CharacterModel;
 			}
 		}
 

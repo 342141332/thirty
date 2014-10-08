@@ -60,6 +60,13 @@ public class TaskFoward extends TaskInterval {
 		}
 		if (collision != null && collision.owner != behavior.owner) {
 			//attack
+			BattleItemProtocol soilderProto = new BattleItemProtocol();
+			soilderProto.setInstanceId(behavior.instanceId);
+			soilderProto.setX(behavior.getX());
+			soilderProto.setY(behavior.getY());
+			soilderProto.setAction(new TaskAttack(behavior, collision));
+			battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, soilderProto));
+
 			collision.hp -= behavior.attackDamage;
 			BattleItemProtocol targetProto = new BattleItemProtocol();
 			targetProto.setInstanceId(collision.instanceId);

@@ -19,7 +19,7 @@ package com.gearbrother.mushroomWar {
 	import com.gearbrother.glash.manager.browser.BrowerManager;
 	import com.gearbrother.glash.net.GChannelEvent;
 	import com.gearbrother.mushroomWar.model.ApplicationModel;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.ModelRegister;
 	import com.gearbrother.mushroomWar.rpc.channel.RpcSocketChannel;
@@ -306,10 +306,10 @@ package com.gearbrother.mushroomWar {
 			addChild(cursorLayer);
 			addChild(tipLayer);
 			tipLayer.getTipView = function(data:*):DisplayObject {
-				if (data is AvatarModel) {
+				if (data is CharacterModel) {
 					var tip:StringTip = new StringTip();
-					tip.bindData = "<font color=\"#92D050\">" + (data as AvatarModel).name + " Lv." + ((data as AvatarModel).level.id + 1) + "</font>\n"
-						+ "<font color=\"#ffffff\">" + (data as AvatarModel).describe + "</font>";
+					tip.bindData = "<font color=\"#92D050\">" + (data as CharacterModel).name + " Lv." + ((data as CharacterModel).level.id + 1) + "</font>\n"
+						+ "<font color=\"#ffffff\">" + (data as CharacterModel).describe + "</font>";
 					return tip;
 				} else if (data is String) {
 					tip = new StringTip();

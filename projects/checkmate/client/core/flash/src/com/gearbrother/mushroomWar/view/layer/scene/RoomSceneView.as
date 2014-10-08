@@ -6,7 +6,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import com.gearbrother.glash.display.event.GDndEvent;
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
@@ -195,8 +195,8 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		
 		private function _handleMouseEvent(event:MouseEvent):void {
 			if (event.currentTarget is AvatarUiView) {
-				if ((event.currentTarget as AvatarUiView).bindData is AvatarModel) {
-					var seatModel:AvatarModel = (event.currentTarget as AvatarUiView).bindData;
+				if ((event.currentTarget as AvatarUiView).bindData is CharacterModel) {
+					var seatModel:CharacterModel = (event.currentTarget as AvatarUiView).bindData;
 					var avatarKeys:Array = ObjectUtils.getKeys(GameModel.instance.loginedUser.heroes);
 					if (GameModel.instance.loginedUser.heroes.hasOwnProperty(seatModel.uuid)) {
 						var at:int = avatarKeys.indexOf(seatModel.uuid);
@@ -217,8 +217,8 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		}
 		
 		private function _handleDndEvent(event:GDndEvent):void {
-			if (event.target is AvatarUiView && event.data is AvatarModel) {
-				var avatarModel:AvatarModel = event.data as AvatarModel;
+			if (event.target is AvatarUiView && event.data is CharacterModel) {
+				var avatarModel:CharacterModel = event.data as CharacterModel;
 				var target:DisplayObject = event.target as DisplayObject;
 				var seatUiView:RoomSeatUiView = event.currentTarget as RoomSeatUiView;
 				if (seatUiView.bindData is BattleRoomSeatModel) {
@@ -228,7 +228,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 					}
 					at = seatUiView.toolViews.indexOf(target);
 					if (at > -1) {
-						GameMain.instance.roomService.setTool((seatUiView.bindData as AvatarModel).uuid, avatarModel.uuid, at);
+						GameMain.instance.roomService.setTool((seatUiView.bindData as CharacterModel).uuid, avatarModel.uuid, at);
 					}
 				}
 			}

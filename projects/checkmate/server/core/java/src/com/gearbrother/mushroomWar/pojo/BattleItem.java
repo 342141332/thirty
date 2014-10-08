@@ -45,7 +45,7 @@ public class BattleItem extends RpcBean {
 
 	private int _y;
 
-	@RpcBeanProperty(desc = "")
+	@RpcBeanProperty(desc = "") 
 	public int getY() {
 		return _y;
 	}
@@ -61,6 +61,8 @@ public class BattleItem extends RpcBean {
 			_battle.collisions[_y][_x] = this;
 		}
 	}
+	
+	public int[][] collision;
 
 	@RpcBeanProperty(desc = "")
 	public int hp;

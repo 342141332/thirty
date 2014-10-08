@@ -8,7 +8,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.display.filter.GFilter;
 	import com.gearbrother.glash.display.flixel.input.GAscCode;
 	import com.gearbrother.mushroomWar.conf.ExplorerConf;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.SkillLevelProtocol;
@@ -155,8 +155,8 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 				if (icon)
 					icon.source = new GAliasFile(model.icon);
-			} else if (bindData is AvatarModel) {
-				var avatarModel:AvatarModel = bindData;
+			} else if (bindData is CharacterModel) {
+				var avatarModel:CharacterModel = bindData;
 				if (nameLabel) {
 					nameLabel.text = avatarModel.name;
 				}

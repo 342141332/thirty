@@ -11,7 +11,6 @@ import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
 import com.gearbrother.mushroomWar.pojo.BattleItem;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
-import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.PropertyEvent;
 import com.gearbrother.mushroomWar.pojo.TaskFoward;
 import com.gearbrother.mushroomWar.pojo.World;

@@ -6,10 +6,10 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.display.control.GProgress;
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.util.display.GDisplayUtil;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.AvatarLevelProtocol;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.AvatarProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.Character2Protocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.EquipProtocol;
 	
 	import flash.display.DisplayObject;
@@ -126,7 +126,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		}
 
 		override public function handleModelChanged(events:Object = null):void {
-			var model:AvatarModel = bindData as AvatarModel;
+			var model:CharacterModel = bindData as CharacterModel;
 			tipData = model;
 			if (model) {
 				if (avatar) {
@@ -153,7 +153,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 					armorLabel.text = String(model.level.armor);
 				if (speedLabel)
 					speedLabel.text = String(model.level.move);
-				if (!events || events.hasOwnProperty(AvatarProtocol.EQUIPS)) {
+				if (!events || events.hasOwnProperty(Character2Protocol.EQUIPS)) {
 					for (var i:int = 0; i < equipIcons.length; i++) {
 						var equipView:SkillUiView = equipIcons[i];
 						if (model.equips && model.equips.length > i) {
@@ -164,7 +164,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 						}
 					}
 				}
-				if (!events || events.hasOwnProperty(AvatarProtocol.SKILLS)) {
+				if (!events || events.hasOwnProperty(Character2Protocol.SKILLS)) {
 					for (i = 0; i < toolViews.length; i++) {
 						equipView = toolViews[i];
 						if (model.skills && model.skills.length > i) {

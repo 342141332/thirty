@@ -62,6 +62,7 @@ package com.gearbrother.glash.display.control {
 				if (_loadedDisplay) {
 					manualPreferredSize = new GDimension(_loadedDisplay.width, _loadedDisplay.height);
 					addChild(_loadedDisplay);
+					repaint();
 					revalidateLayout();
 				}
 			}
@@ -118,11 +119,7 @@ package com.gearbrother.glash.display.control {
 			mouseChildren = false;
 		}
 		
-		override protected function doValidateLayout():void {
-			/*graphics.clear();
-			graphics.beginFill(0x00ff00, .3);
-			graphics.drawRect(0, 0, width, height);
-			graphics.endFill();*/
+		override public function paintNow():void {
 			if (loadedDisplay) {
 				switch (scalePolicy) {
 					case SCALE_POLICY_FILL:

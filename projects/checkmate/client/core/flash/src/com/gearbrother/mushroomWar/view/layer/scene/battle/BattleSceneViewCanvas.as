@@ -7,7 +7,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.glash.util.display.GPen;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
@@ -56,7 +56,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			return data as BattleModel;
 		}
 		
-		public var dispatchAvatar:AvatarModel;
+		public var dispatchAvatar:CharacterModel;
 
 		/**
 		 * 

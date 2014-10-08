@@ -176,12 +176,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
 					var target:IBattleItemModel = model.battle.items[attack.targetId] as IBattleItemModel;
 					if (target) {
-						if (target.x > x)
-							_avatar.scaleX = 1;
-						else if (target.x < x)
-							_avatar.scaleX = -1;
+						if (target.x > model.x)
+							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_RIGHT);
+						else if (target.x < model.x)
+							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_LEFT);
+						else if (target.y > model.y)
+							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_DOWN);
+						else if (target.y < model.y)
+							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
 					}
-					_avatar.enableTick = true;
 				} else {
 					_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
 				}

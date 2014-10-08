@@ -12,7 +12,7 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
  * @create on 2014-2-17
  */
 @RpcBeanPartTransportable(isPartTransport = true)
-public class Avatar extends RpcBean {
+public class Character2 extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public String uuid;
 
@@ -82,7 +82,7 @@ public class Avatar extends RpcBean {
 
 	private JsonNode json;
 
-	public Avatar(JsonNode json) {
+	public Character2(JsonNode json) {
 		this.json = json;
 		this.name = json.get("name").asText();
 		this.headPortraint = json.get("head").asText();
@@ -104,8 +104,8 @@ public class Avatar extends RpcBean {
 	}
 
 	@Override
-	public Avatar clone() {
-		Avatar clone = new Avatar(json);
+	public Character2 clone() {
+		Character2 clone = new Character2(json);
 		clone.confId = confId;
 		return clone;
 	}

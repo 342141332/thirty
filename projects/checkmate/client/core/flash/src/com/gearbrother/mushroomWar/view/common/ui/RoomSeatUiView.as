@@ -5,10 +5,9 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.display.control.GLoader;
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.util.display.GDisplayUtil;
-	import com.gearbrother.mushroomWar.model.AvatarModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.AvatarProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.EquipProtocol;
 	
 	import flash.display.DisplayObject;

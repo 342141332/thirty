@@ -39,9 +39,9 @@ public class GameConf implements ApplicationContextAware {
 	
 	public Skill attack;
 	
-	public Map<String, Avatar> soilders = new HashMap<String, Avatar>();
+	public Map<String, Character2> soilders = new HashMap<String, Character2>();
 	
-	public Map<String, Avatar> heroes = new HashMap<String, Avatar>();
+	public Map<String, Character2> heroes = new HashMap<String, Character2>();
 	
 	public Map<String, Battle> battles = new HashMap<String, Battle>();
 	
@@ -80,7 +80,7 @@ public class GameConf implements ApplicationContextAware {
 					JsonNode avatarRoot = Constant.mapper.readTree(fileInputStream);
 					for (Iterator<Entry<String, JsonNode>> iterator = avatarRoot.fields(); iterator.hasNext();) {
 						Entry<String, JsonNode> avatarNode = (Entry<String, JsonNode>) iterator.next();
-						Avatar avatar = new Avatar(avatarNode.getValue());
+						Character2 avatar = new Character2(avatarNode.getValue());
 						avatar.confId = avatarNode.getKey();
 						soilders.put(avatar.confId, avatar);
 					}
@@ -95,7 +95,7 @@ public class GameConf implements ApplicationContextAware {
 					JsonNode avatarRoot = Constant.mapper.readTree(fileInputStream);
 					for (Iterator<Entry<String, JsonNode>> iterator = avatarRoot.fields(); iterator.hasNext();) {
 						Entry<String, JsonNode> avatarNode = (Entry<String, JsonNode>) iterator.next();
-						Avatar avatar = new Avatar(avatarNode.getValue());
+						Character2 avatar = new Character2(avatarNode.getValue());
 						avatar.confId = avatarNode.getKey();
 						heroes.put(avatar.confId, avatar);
 					}

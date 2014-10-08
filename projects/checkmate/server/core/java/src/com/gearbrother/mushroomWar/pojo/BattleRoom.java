@@ -3,7 +3,6 @@ package com.gearbrother.mushroomWar.pojo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class BattleRoom extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	final public BattleRoomSeat[] seats;
-	
+
 	final public SessionObserver observer;
 
 	final public Hall hall;
@@ -56,24 +55,28 @@ public class BattleRoom extends RpcBean {
 	public void play() {
 		battle.startTime = System.currentTimeMillis();
 		battle.observer = this.observer;
-//		for (Iterator<String> iterator = buildings.keySet().iterator(); iterator.hasNext();) {
-//			String buildingId = (String) iterator.next();
-//			BattleItemBuilding building = (BattleItemBuilding) buildings.get(buildingId);
-//			building.produce = new TaskProduce(battle, battle.startTime, 3000, building, "A0", 2);
-//			if (building.host) {
-//				hostBuildings.add(building);
-//			}
-//		}
-//		for (int i = 0; i < seats.length; i++) {
-//			BattleRoomSeat seat = seats[i];
-//			if (seat != null) {
-//				BattleItemBuilding home = (BattleItemBuilding) GMathUtil.random(hostBuildings);
-//				hostBuildings.remove(home);
-//				home.owner = seat;
-//			}
-//		}
+		// for (Iterator<String> iterator = buildings.keySet().iterator();
+		// iterator.hasNext();) {
+		// String buildingId = (String) iterator.next();
+		// BattleItemBuilding building = (BattleItemBuilding)
+		// buildings.get(buildingId);
+		// building.produce = new TaskProduce(battle, battle.startTime, 3000,
+		// building, "A0", 2);
+		// if (building.host) {
+		// hostBuildings.add(building);
+		// }
+		// }
+		// for (int i = 0; i < seats.length; i++) {
+		// BattleRoomSeat seat = seats[i];
+		// if (seat != null) {
+		// BattleItemBuilding home = (BattleItemBuilding)
+		// GMathUtil.random(hostBuildings);
+		// hostBuildings.remove(home);
+		// home.owner = seat;
+		// }
+		// }
 	}
-	
+
 	public static void main(String[] args) {
 		final List<BattleRoom> rooms = new ArrayList<BattleRoom>();
 		for (int i = 0; i < 2000; i++) {

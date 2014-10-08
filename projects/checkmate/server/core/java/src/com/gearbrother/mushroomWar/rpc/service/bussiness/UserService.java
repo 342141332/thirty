@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Application;
-import com.gearbrother.mushroomWar.pojo.Avatar;
+import com.gearbrother.mushroomWar.pojo.Character2;
 import com.gearbrother.mushroomWar.pojo.GameConf;
 import com.gearbrother.mushroomWar.pojo.IBagItem;
 import com.gearbrother.mushroomWar.pojo.Skill;
@@ -65,10 +65,10 @@ public class UserService {
 		for (Skill skill : gameConfs.tools.values()) {
 			user.bagItems.put(skill.confId, skill.clone());
 		}
-		user.heroes = new HashMap<String, Avatar>();
+		user.heroes = new HashMap<String, Character2>();
 		for (Iterator<String> iterator = gameConfs.heroes.keySet().iterator(); iterator.hasNext();) {
 			String confId = (String) iterator.next();
-			Avatar avatar = gameConfs.heroes.get(confId).clone();
+			Character2 avatar = gameConfs.heroes.get(confId).clone();
 			avatar.uuid = UUID.randomUUID().toString();
 			user.heroes.put(avatar.uuid, avatar);
 		}
