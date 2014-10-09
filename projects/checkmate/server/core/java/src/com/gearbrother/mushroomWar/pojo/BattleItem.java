@@ -63,6 +63,7 @@ public class BattleItem extends RpcBean {
 	}
 	
 	public int[][] collision;
+	
 
 	@RpcBeanProperty(desc = "")
 	public int hp;
