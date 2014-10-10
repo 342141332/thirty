@@ -77,7 +77,7 @@ public class BattleService {
 		}
 		BattleItem dispatchedTroop = new BattleItem();
 		dispatchedTroop.instanceId = UUID.randomUUID().toString();
-		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).cartoon;
+		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).character.cartoon;
 		dispatchedTroop.setXY(x, y);
 		dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
 		dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
