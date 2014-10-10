@@ -125,7 +125,6 @@ public class RoomService {
 			@RpcServiceMethodParameter(name = "heroInstanceUuid", desc = "") String heroInstanceUuid,
 			@RpcServiceMethodParameter(name = "index") int index) {
 		BattleRoomSeat seat = session.getSeat();
-		seat.choosedHeroes[index] = session.getLogined().heroes.get(heroInstanceUuid);
 		session.getSeat().room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, seat));
 	}
 

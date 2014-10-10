@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 
@@ -20,46 +21,58 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 @RpcBeanPartTransportable(isPartTransport = true)
 public class Battle extends RpcBean {
 	static Logger logger = LoggerFactory.getLogger(Battle.class);
-	
+
+	static public final int STATE_NONE = 0;
+
+	static public final int STATE_PREPARING = 1;
+
+	static public final int STATE_PLAYING = 2;
+
 	@RpcBeanProperty(desc = "身份唯一ID")
 	public String instanceUuid;
 
 	@RpcBeanProperty(desc = "地图配置ID")
 	public String confId;
-	
-	@RpcBeanProperty(desc = "row")
-	public int height;
+
+	@RpcBeanProperty(desc = "游戏持续毫秒")
+	public long expiredPeriodMinutes;
 
 	@RpcBeanProperty(desc = "col")
 	public int width;
-	
+
+	@RpcBeanProperty(desc = "row")
+	public int height;
+
 	@RpcBeanProperty(desc = "")
 	public int cellPixel;
+
+	@RpcBeanProperty(desc = "势力")
+	public BattleForce[] forces;
 	
 	public BattleItem[][] collisions;
 
 	Map<Class<?>, Map<String, BattleItem>> sortItems;
+
 	public Map<String, BattleItem> getItems(Class<?> clazz) {
 		return sortItems.get(clazz);
 	}
 
 	@RpcBeanProperty(desc = "地图上非碰撞逻辑物体")
 	public Map<String, BattleItem> items;
-	
+
 	@RpcBeanProperty(desc = "游戏开始GMT时间")
 	public long startTime;
-	
-	@RpcBeanProperty(desc = "游戏持续毫秒")
-	public long expiredPeriod;
+
+	public int state;
 
 	public TreeSet<Task> taskQueue;
 
 	public SessionObserver observer;
-	
+
 	private JsonNode json;
 
 	public Battle() {
-		this.sortItems = new HashMap<Class<?>, Map<String,BattleItem>>();
+		this.sortItems = new HashMap<Class<?>, Map<String, BattleItem>>();
 		this.items = new HashMap<String, BattleItem>();
 	}
 
@@ -74,26 +87,29 @@ public class Battle extends RpcBean {
 		for (int r = 0; r < height; r++) {
 			this.collisions[r] = new BattleItem[width];
 		}
-		this.taskQueue = new TreeSet<Task>(
-				new Comparator<Task>() {
-					
-					@Override
-					public int compare(Task o1, Task o2) {
-						long offset = o1.getExecuteTime() - o2.getExecuteTime();
-						if (offset > 0)
-							return 1;
-						else if (offset < 0)
-							return -1;
-						else
-							return o1.instanceId.compareTo(o2.instanceId);
-					}
-				}
-			);
+		ArrayNode forcesNode = (ArrayNode) json.get("forces");
+		this.forces = new BattleForce[forcesNode.size()];
+		for (int i = 0; i < forcesNode.size(); i++) {
+			this.forces[i] = new BattleForce(forcesNode.get(i));
+		}
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
 			BattleItem battleItemBuilding = new BattleItem(itemsNode.get(i));
 			battleItemBuilding.setBattle(this);
 		}
+		this.taskQueue = new TreeSet<Task>(new Comparator<Task>() {
+			
+			@Override
+			public int compare(Task o1, Task o2) {
+				long offset = o1.getExecuteTime() - o2.getExecuteTime();
+				if (offset > 0)
+					return 1;
+				else if (offset < 0)
+					return -1;
+				else
+					return o1.instanceId.compareTo(o2.instanceId);
+			}
+		});
 	}
 
 	public void execute(long now) {
@@ -110,7 +126,7 @@ public class Battle extends RpcBean {
 			}
 		}
 	}
-	
+
 	public Battle clone() {
 		return new Battle(json);
 	}

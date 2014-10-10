@@ -62,9 +62,9 @@ public class BattleItem extends RpcBean {
 		}
 	}
 	
+	@RpcBeanProperty(desc = "碰撞体积相对左上角坐标")
 	public int[][] collision;
 	
-
 	@RpcBeanProperty(desc = "")
 	public int hp;
 
@@ -109,7 +109,11 @@ public class BattleItem extends RpcBean {
 	public int coin;
 
 	public int attackDamage;
+	
+	@RpcBeanProperty(desc = "攻击范围")
+	public int[][] attackRange;
 
+	@RpcBeanProperty(desc = "移动距离")
 	public int moveRange;
 
 	public BattleItem(JsonNode json) {

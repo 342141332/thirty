@@ -1,8 +1,22 @@
 {
 	"items": [
 	],
+	"expiredMinutes": 5,
 	"cellPixel": 50,
 	"width": 10,
 	"height": 16,
-	"top": 8
+	"force": [
+		{
+			"maxPlayer": 1,
+			"born": [0, 0, 9, 1],
+			"forward": [0, 1],
+			"border": [0, 7, 9, 8]
+		},
+		{
+			"maxPlayer": 1,
+			"born": [0, 0, 9, 1],
+			"forward": [0, 1],
+			"border": [0, 7, 9, 8]
+		}
+	]
 }

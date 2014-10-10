@@ -64,28 +64,24 @@ public class BattleService {
 			, @RpcServiceMethodParameter(name = "x") int x
 			, @RpcServiceMethodParameter(name = "y") int y
 			, @RpcServiceMethodParameter(name = "instanceUuid") String instanceUuid) {
-		BattleRoom room = session.getSeat().room;
+		Battle battle = session.getSeat().room.battle;
 		long current = System.currentTimeMillis();
-		int forwardX = 0;
-		int forwardY = 0;
-		if (session.getSeat().room.blueMax > session.getSeat().index) {
-			y = forwardX;
-			forwardY = 1;
-		} else {
-			y = room.battle.height - 1;
-			forwardY = -1;
-		}
+		int[] forward = session.getSeat().force.forward;
+		//"born": [0, 0, 9, 1],
+		//"forward": [0, 1],
+		int[] bornRect = session.getSeat().force.born;
+		int[] born = new int[] {bornRect[0] * forward[0] + x * forward[0], forward[1] * bornRect[1] + forward[1] * y};
 		BattleItem dispatchedTroop = new BattleItem();
 		dispatchedTroop.instanceId = UUID.randomUUID().toString();
-		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).cartoon;
+		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).character.cartoon;
 		dispatchedTroop.setXY(x, y);
 		dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
 		dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
 		dispatchedTroop.layer = "over";
-		dispatchedTroop.setBattle(room.battle);
+		dispatchedTroop.setBattle(battle);
 		dispatchedTroop.owner = session.getSeat();
-		dispatchedTroop.setTask(new TaskFoward(room.battle, current + 1000, 3000L, forwardX, forwardY, dispatchedTroop));
-		room.battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
+		dispatchedTroop.setTask(new TaskFoward(battle, current + 1000, 3000L, forwardX, forwardY, dispatchedTroop));
+		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
 	}
 
 	@RpcServiceMethod(desc = "")
