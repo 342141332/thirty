@@ -14,11 +14,11 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.GameMain;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
-	import com.gearbrother.mushroomWar.model.IBattleItemModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleItemProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskAttackProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskMoveProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskProduceProtocol;
+	import com.gearbrother.mushroomWar.view.common.AvatarFile;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarView;
 	import com.greensock.TweenLite;
 	
@@ -63,7 +63,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		
 		protected var _oldProperties:Object;
 
-		public function BattleItemSceneView(model:IBattleItemModel) {
+		public function BattleItemSceneView(model:BattleItemModel) {
 			super();
 
 			bindData = model;
@@ -73,6 +73,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			this.graphics.endFill();*/
 			
 			addChild(_avatar = new AvatarView());
+			_avatar.enableTick = false;
 
 			/*if (model is BattleItemBuildingModel) {
 				var progressSkin:Shape = new Shape();
@@ -98,7 +99,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 		
 		private function _handleMouseEvent(event:MouseEvent):void {
-			var model:IBattleItemModel = bindData;
+			var model:BattleItemModel = bindData;
 			switch (event.target) {
 				case upgradeBtn:
 					GameMain.instance.battleService.upgrade(model.instanceId);
@@ -107,7 +108,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 
 		override public function handleModelChanged(events:Object=null):void {
-			var model:IBattleItemModel = bindData;
+			var model:BattleItemModel = bindData;
 			if (!events
 				|| events.hasOwnProperty(BattleItemProtocol.HP)
 				|| events.hasOwnProperty(BattleItemProtocol.MAX_HP)) {
@@ -162,31 +163,38 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				|| events.hasOwnProperty(BattleItemProtocol.CARTOON)) {
 				if (model.action is TaskMoveProtocol) {
 					var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
-					if (move.targetX > model.x)
+					if (model.forward[0] == 1) {
 						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_RIGHT);
-					else if (move.targetX < model.x)
+					} else if (model.forward[0] == -1) {
 						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_LEFT);
-					else if (move.targetY > model.y)
+					} else if (model.forward[1] == 1) {
 						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_DOWN);
-					else if (move.targetY < model.y)
+					} else if (model.forward[1] == -1) {
 						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_UP);
-					_avatar.enableTick = true;
+					}
 				} else if (model.action is TaskAttackProtocol) {
 					var attack:TaskAttackProtocol = model.action as TaskAttackProtocol;
 					_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
-					var target:IBattleItemModel = model.battle.items[attack.targetId] as IBattleItemModel;
-					if (target) {
-						if (target.x > model.x)
-							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_RIGHT);
-						else if (target.x < model.x)
-							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_LEFT);
-						else if (target.y > model.y)
-							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_DOWN);
-						else if (target.y < model.y)
-							_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
+					var target:BattleItemModel = model.battle.items[attack.targetId] as BattleItemModel;
+					if (model.forward[0] == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_RIGHT);
+					} else if (model.forward[0] == -1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_LEFT);
+					} else if (model.forward[1] == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_DOWN);
+					} else if (model.forward[1] == -1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
 					}
 				} else {
-					_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
+					if (model.forward[0] == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_RIGHT);
+					} else if (model.forward[0] == -1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_LEFT);
+					} else if (model.forward[1] == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
+					} else if (model.forward[1] == -1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_UP);
+					}
 				}
 			}
 		}
@@ -209,7 +217,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 		
 		override public function tick(interval:int):void {
-			var model:IBattleItemModel = bindData;
+			var model:BattleItemModel = bindData;
 			if (model.action is TaskMoveProtocol) {
 				var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
 				var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
@@ -217,6 +225,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					x = ((move.startX + .5) + (move.targetX - move.startX) * progress) * model.battle.cellPixel;
 					y = ((move.startY + .5) + (move.targetY - move.startY) * progress) * model.battle.cellPixel;
 				}
+				if (move.endTime < GameModel.instance.application.serverTime) {
+					_avatar.enableTick = false;
+				} else {
+					_avatar.enableTick = true;
+				}
+			} else if (model.action == null) {
+				_avatar.enableTick = false;
+			} else {
+				_avatar.enableTick = true;
 			}
 		}
 	}

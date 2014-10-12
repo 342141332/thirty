@@ -17,13 +17,13 @@ package com.gearbrother.mushroomWar.model {
 		}
 
 		public var _collisions:Object;
-		public function getCollision(row:int, col:int):IBattleItemModel {
+		public function getCollision(row:int, col:int):BattleItemModel {
 			if (this._collisions.hasOwnProperty(row))
 				return this._collisions[row][col];
 			else
 				return null;
 		}
-		public function setCollision(row:int, col:int, newValue:IBattleItemModel):void {
+		public function setCollision(row:int, col:int, newValue:BattleItemModel):void {
 			_collisions[row] ||= {};
 			this._collisions[row][col] = newValue;
 		}
@@ -32,10 +32,9 @@ package com.gearbrother.mushroomWar.model {
 			super(prototype);
 			
 			_collisions = {};
-			for each (var item:IBattleItemModel in items) {
+			for each (var item:BattleItemModel in items) {
 				item.battle = this;
 			}
-			expiredPeriod = 5 * 60 * 1000;
 		}
 
 		public function decode(prototype:Object):BattleModel {
@@ -44,15 +43,15 @@ package com.gearbrother.mushroomWar.model {
 				var item:BattleItemModel = new BattleItemModel().decode(itemObj);
 				item.battle = this;
 			}
-			width = prototype.width;
-			height = prototype.height;
+			col = prototype.width;
+			row = prototype.height;
 			cellPixel = prototype.cellPixel;
 			return this;
 		}
 
 		public function encode():String {
 			var itemsObj:Array = [];
-			for each (var itemModel:IBattleItemModel in this.items) {
+			for each (var itemModel:BattleItemModel in this.items) {
 				itemsObj.push(itemModel.encode());
 			}
 			return JSON.stringify(

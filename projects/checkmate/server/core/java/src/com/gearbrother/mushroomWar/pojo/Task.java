@@ -14,12 +14,12 @@ abstract public class Task extends RpcBean {
 			halt();
 		}
 		executeTime = value;
-		battle.taskQueue.add(this);
+		battle.tasks.add(this);
 		_isInQueue = true;
 	}
 	public void halt() {
 		if (_isInQueue) {
-			if (battle.taskQueue.remove(this))
+			if (battle.tasks.remove(this))
 				_isInQueue = false;
 			else
 				throw new Error("");

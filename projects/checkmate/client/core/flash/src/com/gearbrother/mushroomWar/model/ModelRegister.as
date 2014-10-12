@@ -7,7 +7,7 @@ package com.gearbrother.mushroomWar.model {
 	 */
 	public class ModelRegister {
 		{
-			Protocol.protocols[Protocol.Character2] = CharacterModel;
+			Protocol.protocols[Protocol.CharacterModel] = CharacterModel;
 			Protocol.protocols[Protocol.Skill] = SkillModel;
 			Protocol.protocols[Protocol.Application] = ApplicationModel;
 			Protocol.protocols[Protocol.Battle] = BattleModel;

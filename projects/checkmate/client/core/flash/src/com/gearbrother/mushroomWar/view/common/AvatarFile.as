@@ -11,7 +11,7 @@ package com.gearbrother.mushroomWar.view.common {
 	import com.gearbrother.glash.display.GBitmapFrame;
 	import com.gearbrother.glash.display.GBmdMovieInfo;
 	import com.gearbrother.glash.manager.RootManager;
-
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
@@ -26,7 +26,7 @@ package com.gearbrother.mushroomWar.view.common {
 	import flash.utils.Timer;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
-
+	
 	import org.as3commons.lang.StringUtils;
 
 
@@ -38,6 +38,8 @@ package com.gearbrother.mushroomWar.view.common {
 	 *
 	 */
 	public class AvatarFile extends GBmdDefinition {
+		public var preiod:Array;
+		
 		private var _frame:int;
 
 		private var _offsetX:int;

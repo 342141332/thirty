@@ -1,7 +1,9 @@
 package com.gearbrother.mushroomWar.pojo;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -36,20 +38,30 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriodMinutes;
+	
+	@RpcBeanProperty(desc = "势力")
+	public BattleForce[] forces;
 
 	@RpcBeanProperty(desc = "col")
-	public int width;
+	public int col;
 
 	@RpcBeanProperty(desc = "row")
-	public int height;
+	public int row;
 
 	@RpcBeanProperty(desc = "")
 	public int cellPixel;
-
-	@RpcBeanProperty(desc = "势力")
-	public BattleForce[] forces;
 	
 	public BattleItem[][] collisions;
+	public List<BattleItem> getCollision(int[] collisionRect) {
+		List<BattleItem> res = new ArrayList<BattleItem>();
+		for (int left = collisionRect[0]; left < collisionRect[2]; left++) {
+			for (int top = collisionRect[1]; top < collisionRect[3]; top++) {
+				if (collisions[left][top] != null)
+					res.add(collisions[left][top]);
+			}
+		}
+		return res;
+	}
 
 	Map<Class<?>, Map<String, BattleItem>> sortItems;
 
@@ -59,13 +71,69 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "地图上非碰撞逻辑物体")
 	public Map<String, BattleItem> items;
+	public void addItem(BattleItem item) {
+		items.put(item.instanceId, item);
+		if (!sortItems.containsKey(item.getClass()))
+			sortItems.put(item.getClass(), new HashMap<String, BattleItem>());
+		sortItems.get(item.getClass()).put(item.instanceId, item);
+		for (int left = item.left; left < item.left + item.collisionRect[0]; left++) {
+			for (int top = item.top; top < item.top + item.collisionRect[1]; top++) {
+				if (collisions[left][top] != null)
+					throw new Error("collision is already used");
+				collisions[left][top] = item;
+			}
+		}
+	}
+	public void removeItem(BattleItem item) {
+		items.remove(item.instanceId);
+		sortItems.get(item.getClass()).remove(item.instanceId);
+		for (int left = 0; left < item.collisionRect[1]; left++) {
+			for (int top = 0; top < item.collisionRect[0]; top++) {
+				collisions[item.left + left][item.top + top] = null;
+			}
+		}
+	}
+	public boolean moveItem(BattleItem item, int newLeft, int newTop) {
+		for (int oldLeft = item.left; oldLeft < item.left + item.collisionRect[0]; oldLeft++) {
+			for (int oldTop = item.top; oldTop < item.top + item.collisionRect[1]; oldTop++) {
+				if (collisions[oldLeft][oldTop] == item) {
+				} else {
+					throw new Error();
+				}
+			}
+		}
+		for (int left = newLeft; left < newLeft + item.collisionRect[0]; left++) {
+			for (int top = newTop; top < newTop + item.collisionRect[1]; top++) {
+				if (collisions[left][top] != null) {
+					return false;
+				}
+			}
+		}
+		for (int oldLeft = item.left; oldLeft < item.left + item.collisionRect[0]; oldLeft++) {
+			for (int oldTop = item.top; oldTop < item.top + item.collisionRect[1]; oldTop++) {
+				if (collisions[oldLeft][oldTop] == item) {
+					collisions[oldLeft][oldTop] = null;
+				}
+			}
+		}
+		for (int left = newLeft; left < newLeft + item.collisionRect[0]; left++) {
+			for (int top = newTop; top < newTop + item.collisionRect[1]; top++) {
+				if (collisions[left][top] == null) {
+					collisions[left][top] = item;
+				}
+			}
+		}
+		item.left = newLeft;
+		item.top = newTop;
+		return true;
+	}
 
 	@RpcBeanProperty(desc = "游戏开始GMT时间")
 	public long startTime;
 
 	public int state;
 
-	public TreeSet<Task> taskQueue;
+	public TreeSet<Task> tasks;
 
 	public SessionObserver observer;
 
@@ -80,25 +148,24 @@ public class Battle extends RpcBean {
 		this();
 
 		this.json = json;
-		this.width = json.get("width").asInt();
-		this.height = json.get("height").asInt();
-		this.cellPixel = json.get("cellPixel").asInt();
-		this.collisions = new BattleItem[height][width];
-		for (int r = 0; r < height; r++) {
-			this.collisions[r] = new BattleItem[width];
-		}
-		ArrayNode forcesNode = (ArrayNode) json.get("forces");
+		ArrayNode forcesNode = (ArrayNode) json.get("force");
 		this.forces = new BattleForce[forcesNode.size()];
 		for (int i = 0; i < forcesNode.size(); i++) {
 			this.forces[i] = new BattleForce(forcesNode.get(i));
 		}
+		this.cellPixel = json.get("cellPixel").asInt();
+		this.col = json.get("col").asInt();
+		this.row = json.get("row").asInt();
+		this.collisions = new BattleItem[col][row];
+		for (int c = 0; c < collisions.length; c++) {
+			this.collisions[c] = new BattleItem[row];
+		}
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
-			BattleItem battleItemBuilding = new BattleItem(itemsNode.get(i));
-			battleItemBuilding.setBattle(this);
+			addItem(new BattleItem(itemsNode.get(i)));
 		}
-		this.taskQueue = new TreeSet<Task>(new Comparator<Task>() {
-			
+		this.tasks = new TreeSet<Task>(new Comparator<Task>() {
+
 			@Override
 			public int compare(Task o1, Task o2) {
 				long offset = o1.getExecuteTime() - o2.getExecuteTime();
@@ -113,10 +180,10 @@ public class Battle extends RpcBean {
 	}
 
 	public void execute(long now) {
-		while (taskQueue.size() > 0) {
-			Task task = taskQueue.first();
+		while (tasks.size() > 0) {
+			Task task = tasks.first();
 			if (now >= task.getExecuteTime()) {
-				Task polledFirst = taskQueue.pollFirst();
+				Task polledFirst = tasks.pollFirst();
 				if (polledFirst != task)
 					throw new Error("polledFirst != task");
 				task.setIsInQueue(false);
@@ -126,7 +193,7 @@ public class Battle extends RpcBean {
 			}
 		}
 	}
-
+	
 	public Battle clone() {
 		return new Battle(json);
 	}

@@ -7,7 +7,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.util.display.GDisplayUtil;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
-	import com.gearbrother.mushroomWar.model.IBattleItemModel;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

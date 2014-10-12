@@ -1,6 +1,5 @@
 package com.gearbrother.mushroomWar.pojo;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -12,59 +11,19 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "uuid")
 	public String instanceId;
 
-	protected Battle _battle;
-
-	public Battle getBattle() {
-		return _battle;
-	}
-
-	public void setBattle(Battle newValue) {
-		if (_battle != null) {
-			_battle.collisions[_y][_x] = null;
-			_battle.sortItems.get(getClass()).remove(instanceId);
-			_battle.items.remove(instanceId);
-			_battle = null;
-		}
-		_battle = newValue;
-		if (_battle != null) {
-			_battle.collisions[_y][_x] = this;
-			if (!_battle.sortItems.containsKey(getClass())) {
-				_battle.sortItems.put(getClass(), new HashMap<String, BattleItem>());
-			}
-			_battle.sortItems.get(getClass()).put(instanceId, this);
-			_battle.items.put(instanceId, this);
-		}
-	}
-
-	private int _x;
+	@RpcBeanProperty(desc = "碰撞体积相对左上角坐标")
+	final public int[] collisionRect;
 
 	@RpcBeanProperty(desc = "")
-	public int getX() {
-		return _x;
-	}
+	public int left;
 
-	private int _y;
+	@RpcBeanProperty(desc = "")
+	public int top;
 
-	@RpcBeanProperty(desc = "") 
-	public int getY() {
-		return _y;
-	}
+	public int width;
 
-	public void setXY(int x, int y) {
-		if (_battle != null)
-			_battle.collisions[_y][_x] = null;
-		_x = x;
-		_y = y;
-		if (_battle != null) {
-			if (_battle.collisions[_y][_x] != null)
-				throw new Error("position has element");
-			_battle.collisions[_y][_x] = this;
-		}
-	}
-	
-	@RpcBeanProperty(desc = "碰撞体积相对左上角坐标")
-	public int[][] collision;
-	
+	public int height;
+
 	@RpcBeanProperty(desc = "")
 	public int hp;
 
@@ -109,25 +68,39 @@ public class BattleItem extends RpcBean {
 	public int coin;
 
 	public int attackDamage;
-	
-	@RpcBeanProperty(desc = "攻击范围")
-	public int[][] attackRange;
 
-	@RpcBeanProperty(desc = "移动距离")
-	public int moveRange;
+	@RpcBeanProperty(desc = "攻击范围")
+	public int[][] attackRects;
+
+	@RpcBeanProperty(desc = "")
+	public int[] forward;
+
+	public CharacterModel character;
 
 	public BattleItem(JsonNode json) {
 		this();
 
 		instanceId = json.get("instanceId").asText();
-		setXY(json.get("x").asInt(), json.get("y").asInt());
 		cartoon = json.get("cartoon").asText();
 		layer = json.get("layer").asText();
 		coin = json.get("coin").asInt();
+		left = json.get("left").asInt();
+		top = json.get("top").asInt();
 	}
 
 	public BattleItem() {
 		instanceId = UUID.randomUUID().toString();
-		moveRange = 1;
+		collisionRect = new int[] { 1, 1 };
+		width = height = 1;
+		attackRects = new int[1][];
+		attackRects[0] = new int[] { 0, -1, 1, 0 };
+	}
+
+	public void updateCollision(Battle battle) {
+		for (int w = 0; w < collisionRect[0]; w++) {
+			for (int h = 0; h < collisionRect[1]; h++) {
+				battle.collisions[this.left + w][this.top + h] = this;
+			}
+		}
 	}
 }

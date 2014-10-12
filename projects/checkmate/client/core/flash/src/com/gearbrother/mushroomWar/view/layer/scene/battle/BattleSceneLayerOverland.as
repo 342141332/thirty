@@ -2,9 +2,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.flixel.GPaperLayer;
 	import com.gearbrother.glash.display.flixel.sort.SortYManager;
 	import com.gearbrother.glash.util.camera.Camera;
+	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
-	import com.gearbrother.mushroomWar.model.IBattleItemModel;
-	import com.gearbrother.mushroomWar.model.IBattleItemThrowable;
 	import com.gearbrother.mushroomWar.model.PointBeanModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleProtocol;
 	import com.greensock.TweenLite;
@@ -54,14 +53,14 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			}
 		}
 
-		public function addItem(item:IBattleItemModel):DisplayObject {
+		public function addItem(item:BattleItemModel):DisplayObject {
 			if (item.layer != id)
 				return null;
 
 			var battleModel:BattleModel = bindData;
 			var itemView:DisplayObject = new BattleItemSceneView(item);
-			var throwToX:int = itemView.x = (item.x + .5) * battleModel.cellPixel;
-			var throwToY:int = itemView.y = (item.y + .5) * battleModel.cellPixel;
+			var throwToX:int = itemView.x = (item.left + .5) * battleModel.cellPixel;
+			var throwToY:int = itemView.y = (item.top + .5) * battleModel.cellPixel;
 			if (!itemViews.hasOwnProperty(item.instanceId)) {
 				itemViews[item.instanceId] = addChild(itemView);
 			} else {
@@ -70,7 +69,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			return itemView;
 		}
 
-		public function removeItem(item:IBattleItemModel, duration:Number = .0):BattleItemSceneView {
+		public function removeItem(item:BattleItemModel, duration:Number = .0):BattleItemSceneView {
 			var view:BattleItemSceneView = itemViews[item.instanceId];
 			delete itemViews[item.instanceId];
 			if (view) {

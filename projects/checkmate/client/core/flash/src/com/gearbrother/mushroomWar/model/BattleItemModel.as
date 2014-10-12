@@ -12,7 +12,7 @@ package com.gearbrother.mushroomWar.model {
 	 * @create 	2014-8-20 下午7:01:59
 	 *
 	 */
-	public class BattleItemModel extends BattleItemProtocol implements IBattleItemModel {
+	public class BattleItemModel extends BattleItemProtocol {
 		private var _battle:BattleModel;
 
 		public function get battle():BattleModel {
@@ -36,8 +36,8 @@ package com.gearbrother.mushroomWar.model {
 		public function encode():Object {
 			var obj:Object = {};
 			obj.uuid = instanceId;
-			obj.x = x;
-			obj.y = y;
+			obj.top = top;
+			obj.left = left;
 			obj.layer = layer;
 			obj.cartoon = cartoon;
 			return obj;

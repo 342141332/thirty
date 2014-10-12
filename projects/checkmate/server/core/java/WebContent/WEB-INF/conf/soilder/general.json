@@ -6,7 +6,8 @@
 		"nation": 2,
 		"describe": "",
 		"armsType": "骑将",
-		"coin": 1
+		"coin": 1,
+		"collision": [1, 1]
 	},
 	"91061C8F-82CE-25D3-41D7-D97253798406-2": {
 		"name": "蔡琰",
@@ -15,7 +16,8 @@
 		"nation": 1,
 		"describe": "",
 		"armsType": "术士",
-		"coin": 1
+		"coin": 1,
+		"collision": [1, 1]
 	},
 	"910B6C73-82CF-E532-41C2-1FC8AF68772D-3": {
 		"name": "郭嘉",
@@ -24,7 +26,8 @@
 		"nation": 1,
 		"describe": "",
 		"armsType": "术士",
-		"coin": 1
+		"coin": 1,
+		"collision": [1, 1]
 	},
 	"91007644-82CE-2555-41D5-F2401CDAA815-4": {
 		"name": "郭淮",
@@ -33,6 +36,7 @@
 		"nation": 1,
 		"describe": "",
 		"armsType": "骑将",
-		"coin": 1
+		"coin": 1,
+		"collision": [1, 1]
 	}
 }

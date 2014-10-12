@@ -34,13 +34,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				_shape.graphics.clear();
 				_shape.graphics.beginFill(0x0000ff, .7);
 				_shape.graphics.lineStyle(1, 0x000000, .3);
-				for (var r:int = 1; r < model.height; r++) {
+				for (var r:int = 1; r < model.row; r++) {
 					_shape.graphics.moveTo(0, r * model.cellPixel);
-					_shape.graphics.lineTo(model.width * model.cellPixel, r * model.cellPixel);
+					_shape.graphics.lineTo(model.col * model.cellPixel, r * model.cellPixel);
 				}
-				for (var c:int = 1; c < model.width; c++) {
+				for (var c:int = 1; c < model.col; c++) {
 					_shape.graphics.moveTo(c * model.cellPixel, 0);
-					_shape.graphics.lineTo(c * model.cellPixel, model.height * model.cellPixel);					
+					_shape.graphics.lineTo(c * model.cellPixel, model.row * model.cellPixel);					
 				}
 				for (var uuid:String in model.items) {
 					var item:IBattleItemModel = model.items[uuid];

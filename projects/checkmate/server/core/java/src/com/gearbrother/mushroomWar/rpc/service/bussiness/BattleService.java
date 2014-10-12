@@ -1,7 +1,6 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
 import java.util.Map;
-import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,14 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
-import com.gearbrother.mushroomWar.pojo.BattleItem;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
-import com.gearbrother.mushroomWar.pojo.PropertyEvent;
-import com.gearbrother.mushroomWar.pojo.TaskFoward;
+import com.gearbrother.mushroomWar.pojo.TaskDispatch;
 import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
-import com.gearbrother.mushroomWar.util.GMathUtil;
 
 /**
  * @author feng.lee
@@ -61,27 +57,10 @@ public class BattleService {
 
 	@RpcServiceMethod(desc = "派遣")
 	public void dispatch(ISession session
-			, @RpcServiceMethodParameter(name = "x") int x
-			, @RpcServiceMethodParameter(name = "y") int y
-			, @RpcServiceMethodParameter(name = "instanceUuid") String instanceUuid) {
-		Battle battle = session.getSeat().room.battle;
-		long current = System.currentTimeMillis();
-		int[] forward = session.getSeat().force.forward;
-		//"born": [0, 0, 9, 1],
-		//"forward": [0, 1],
-		int[] bornRect = session.getSeat().force.born;
-		int[] born = new int[] {bornRect[0] * forward[0] + x * forward[0], forward[1] * bornRect[1] + forward[1] * y};
-		BattleItem dispatchedTroop = new BattleItem();
-		dispatchedTroop.instanceId = UUID.randomUUID().toString();
-		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).character.cartoon;
-		dispatchedTroop.setXY(x, y);
-		dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
-		dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
-		dispatchedTroop.layer = "over";
-		dispatchedTroop.setBattle(battle);
-		dispatchedTroop.owner = session.getSeat();
-		dispatchedTroop.setTask(new TaskFoward(battle, current + 1000, 3000L, forwardX, forwardY, dispatchedTroop));
-		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, dispatchedTroop));
+			, @RpcServiceMethodParameter(name = "confId") String confId
+			, @RpcServiceMethodParameter(name = "left") int left
+			, @RpcServiceMethodParameter(name = "top") int top) {
+		new TaskDispatch(session.getSeat(), System.currentTimeMillis(), confId,  left, top);
 	}
 
 	@RpcServiceMethod(desc = "")

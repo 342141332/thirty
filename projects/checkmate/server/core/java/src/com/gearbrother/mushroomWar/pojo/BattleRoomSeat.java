@@ -33,7 +33,7 @@ public class BattleRoomSeat extends RpcBean {
 	public Map<String, BattleRoomSeatCharacter> choosedSoilders;
 
 	@RpcBeanProperty(desc = "选择的英雄")
-	public Map<String, Character2> choosedHeroes;
+	public Map<String, CharacterModel> choosedHeroes;
 
 	@RpcBeanProperty(desc = "是否是房主")
 	public boolean isHost;
@@ -50,9 +50,9 @@ public class BattleRoomSeat extends RpcBean {
 		this.choosedSoilders = new HashMap<String, BattleRoomSeatCharacter>();
 		for (Iterator<String> iterator = GameConf.instance.soilders.keySet().iterator(); iterator.hasNext();) {
 			String avatarId = (String) iterator.next();
-			this.choosedSoilders.put(avatarId, new BattleRoomSeatCharacter(GameConf.instance.soilders.get(avatarId).clone(), 0));
+			this.choosedSoilders.put(avatarId, new BattleRoomSeatCharacter(GameConf.instance.soilders.get(avatarId).clone(), 10));
 		}
-		this.choosedHeroes = new HashMap<String, Character2>();
+		this.choosedHeroes = new HashMap<String, CharacterModel>();
 	}
 
 	public BattleRoomSeat(BattleRoom room, int index, User user) {

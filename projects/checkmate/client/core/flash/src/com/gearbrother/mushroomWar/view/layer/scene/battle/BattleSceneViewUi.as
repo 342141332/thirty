@@ -9,12 +9,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.display.propertyHandler.GPropertyBindDataHandler;
 	import com.gearbrother.glash.util.lang.GDateUtil;
-	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.AvatarLevelProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
+	import com.gearbrother.mushroomWar.rpc.service.bussiness.BattleService;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 	import com.gearbrother.mushroomWar.view.common.ui.ProgressView;
 	import com.gearbrother.mushroomWar.view.common.ui.SkillUiView;
@@ -98,7 +99,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					var skillIcon:AvatarUiView = new AvatarUiView(s);
 					skillIcon.mouseChildren = false;
 					skillIcon.avatar.enableTick = false;
-					skillIcon.bindData = model.choosedSoilders[characterId];
+					skillIcon.bindData = (model.choosedSoilders[characterId] as BattleRoomSeatCharacterProtocol).character;
 					addChild(skillIcon);
 					skillIcons.addChild(skillIcon);
 				}
@@ -120,11 +121,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			topCenter.height = topCenter.preferredSize.height;
 			topCenter.x = (topCenter.preferredSize.width + width) >> 1;
 			topCenter.y = 30;
+			topCenter.validateLayoutNow();
 
 			bottomBox.x = width - bottomBox.preferredSize.width - 100;
 			bottomBox.y = height - bottomBox.preferredSize.height - 30;
 			bottomBox.width = bottomBox.preferredSize.width;
 			bottomBox.height = bottomBox.preferredSize.height;
+			bottomBox.validateLayoutNow();
 		}
 	}
 }

@@ -11,7 +11,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
-	import com.gearbrother.mushroomWar.model.IBattleItemModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalEndProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalMethodDoProtocol;
@@ -66,8 +65,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super();
 
 			data = battle;
-			camera.bound.width = battle.width * battle.cellPixel;
-			camera.bound.height = battle.height * battle.cellPixel;
+			camera.bound.width = battle.col * battle.cellPixel;
+			camera.bound.height = battle.row * battle.cellPixel;
 			
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
 			layers = {};
@@ -79,7 +78,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			pen = new GPen(arrow.graphics);
 			
 			keyboard = new Keyboard2();
-			_quadTree = new GQuadtree(new Rectangle(0, 0, model.width, model.height));
+			_quadTree = new GQuadtree(new Rectangle(0, 0, model.col, model.row));
 		}
 		
 		override protected function doInit():void {
@@ -97,7 +96,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			switch (event.type) {
 				case MouseEvent.MOUSE_DOWN:
 					if (dispatchAvatar)
-						GameMain.instance.battleService.dispatch(int(mouseX / model.cellPixel), int(mouseY / model.cellPixel), dispatchAvatar.confId);
+						GameMain.instance.battleService.dispatch(dispatchAvatar.confId, int(mouseX / model.cellPixel), int(mouseY / model.cellPixel));
 					break;
 			}
 		}
@@ -118,14 +117,14 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				var skillUsing:BattleSignalSkillUseProtocol = event.response as BattleSignalSkillUseProtocol;
 			} else if (event.response is PropertyEventProtocol) {
 				var change:PropertyEventProtocol = event.response as PropertyEventProtocol;
-				if (change.item is IBattleItemModel) {
-					var battleItem:IBattleItemModel = change.item as IBattleItemModel;
+				if (change.item is BattleItemModel) {
+					var battleItem:BattleItemModel = change.item as BattleItemModel;
 					switch (change.type) {
 						case 1:
-							if (change.item is IBattleItemModel) {
+							if (change.item is BattleItemModel) {
 								battleItem.battle = model;
 								for each (var layer:BattleSceneLayerOverland in layers) {
-									layer.addItem(change.item as IBattleItemModel);
+									layer.addItem(change.item as BattleItemModel);
 								}
 							}
 							break;

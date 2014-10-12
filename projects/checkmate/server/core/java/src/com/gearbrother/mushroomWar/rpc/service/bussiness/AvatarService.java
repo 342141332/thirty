@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.gearbrother.mushroomWar.model.ISession;
-import com.gearbrother.mushroomWar.pojo.Character2;
+import com.gearbrother.mushroomWar.pojo.CharacterModel;
 import com.gearbrother.mushroomWar.pojo.IBagItem;
 import com.gearbrother.mushroomWar.pojo.Skill;
 import com.gearbrother.mushroomWar.pojo.User;
@@ -38,7 +38,7 @@ public class AvatarService {
 			, @RpcServiceMethodParameter(name = "bagUuid", desc = "背包实例ID") String bagUuid
 			, @RpcServiceMethodParameter(name = "index") int weaponIndex) {
 		User logined = session.getLogined();
-		Character2 avatar = logined.heroes.get(avatarUuid);
+		CharacterModel avatar = logined.heroes.get(avatarUuid);
 		IBagItem bagItem = logined.bagItems.get(bagUuid);
 		if (bagItem instanceof Skill) {
 			avatar.addSkill((Skill) bagItem);

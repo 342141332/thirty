@@ -8,8 +8,8 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.util.display.GDisplayUtil;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.AvatarLevelProtocol;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.Character2Protocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.CharacterLevelProtocol;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.CharacterModelProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.EquipProtocol;
 	
 	import flash.display.DisplayObject;
@@ -137,7 +137,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				if (levelLabel)
 					levelLabel.text = "Lv." + (model.level.id + 1);
 				if (levelProgress) {
-					var ceil:AvatarLevelProtocol = model.levels.hasOwnProperty(model.level.id + 1) ? model.levels[model.level.id + 1] : model.levels[model.level.id];
+					var ceil:CharacterLevelProtocol = model.levels.hasOwnProperty(model.level.id + 1) ? model.levels[model.level.id + 1] : model.levels[model.level.id];
 					levelProgress.visible = true;
 					levelProgress.maxValue = ceil.exp;
 					levelProgress.minValue = model.level.exp;
@@ -153,7 +153,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 					armorLabel.text = String(model.level.armor);
 				if (speedLabel)
 					speedLabel.text = String(model.level.move);
-				if (!events || events.hasOwnProperty(Character2Protocol.EQUIPS)) {
+				if (!events || events.hasOwnProperty(CharacterModelProtocol.EQUIPS)) {
 					for (var i:int = 0; i < equipIcons.length; i++) {
 						var equipView:SkillUiView = equipIcons[i];
 						if (model.equips && model.equips.length > i) {
@@ -164,7 +164,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 						}
 					}
 				}
-				if (!events || events.hasOwnProperty(Character2Protocol.SKILLS)) {
+				if (!events || events.hasOwnProperty(CharacterModelProtocol.SKILLS)) {
 					for (i = 0; i < toolViews.length; i++) {
 						equipView = toolViews[i];
 						if (model.skills && model.skills.length > i) {

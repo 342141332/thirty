@@ -24,7 +24,7 @@ public class User extends RpcBean {
 	public int silver;
 
 	@RpcBeanProperty(desc = "模型")
-	public Map<String, Character2> heroes;
+	public Map<String, CharacterModel> heroes;
 
 	@RpcBeanProperty(desc = "背包")
 	public Map<String, IBagItem> bagItems;
@@ -34,7 +34,7 @@ public class User extends RpcBean {
 	public Timestamp updateTime;
 
 	public User() {
-		heroes = new HashMap<String, Character2>();
+		heroes = new HashMap<String, CharacterModel>();
 		bagItems = new HashMap<String, IBagItem>();
 	}
 }
