@@ -63,7 +63,7 @@ public class BattleItem extends RpcBean {
 	}
 	
 	@RpcBeanProperty(desc = "碰撞体积相对左上角坐标")
-	public int[][] collision;
+	public int[] collision;
 	
 	@RpcBeanProperty(desc = "")
 	public int hp;
@@ -116,6 +116,8 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "移动距离")
 	public int moveRange;
 
+	public Character2 character;
+	
 	public BattleItem(JsonNode json) {
 		this();
 
@@ -129,5 +131,17 @@ public class BattleItem extends RpcBean {
 	public BattleItem() {
 		instanceId = UUID.randomUUID().toString();
 		moveRange = 1;
+	}
+	
+	public boolean checkCollision(int x, int y, Battle battle) {
+		int right = x + collision[0];
+		int bottom = y + collision[1];
+		for (; x <= right; x++) {
+			for (; y <= bottom; y++) {
+				if (battle.collisions[y][x] != null)
+					return true;
+			}
+		}
+		return false;
 	}
 }

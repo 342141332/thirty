@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
+import com.gearbrother.mushroomWar.pojo.BattleForce;
 import com.gearbrother.mushroomWar.pojo.BattleItem;
 import com.gearbrother.mushroomWar.pojo.BattleRoom;
+import com.gearbrother.mushroomWar.pojo.BattleRoomSeatCharacter;
+import com.gearbrother.mushroomWar.pojo.Character2;
 import com.gearbrother.mushroomWar.pojo.PropertyEvent;
 import com.gearbrother.mushroomWar.pojo.TaskFoward;
 import com.gearbrother.mushroomWar.pojo.World;
@@ -63,18 +66,42 @@ public class BattleService {
 	public void dispatch(ISession session
 			, @RpcServiceMethodParameter(name = "x") int x
 			, @RpcServiceMethodParameter(name = "y") int y
-			, @RpcServiceMethodParameter(name = "instanceUuid") String instanceUuid) {
-		Battle battle = session.getSeat().room.battle;
+			, @RpcServiceMethodParameter(name = "confId") String confId) {
+		BattleRoomSeatCharacter seatCharacter = session.getSeat().choosedSoilders.get(confId);
+		if (seatCharacter.num == 0)
+			return;
+
 		long current = System.currentTimeMillis();
-		int[] forward = session.getSeat().force.forward;
-		//"born": [0, 0, 9, 1],
-		//"forward": [0, 1],
-		int[] bornRect = session.getSeat().force.born;
-		int[] born = new int[] {bornRect[0] * forward[0] + x * forward[0], forward[1] * bornRect[1] + forward[1] * y};
+		Battle battle = session.getSeat().room.battle;
+		BattleForce force = session.getSeat().force;
+		int[] forward = force.forward;
+		//"born"	[0, 0, 9, 1],
+		//"forward"	[0, 1],
+		int[] bornRect = force.born;
+		int[] born = new int[] {
+			forward[0] == 1 ? bornRect[2] : (forward[0] == -1 ? bornRect[0] : Math.max(bornRect[0], Math.min(x, bornRect[2]))),
+			forward[1] == 1 ? bornRect[3] : (forward[1] == -1 ? bornRect[1] : Math.max(bornRect[1], Math.min(y, bornRect[3])))
+		};
 		BattleItem dispatchedTroop = new BattleItem();
 		dispatchedTroop.instanceId = UUID.randomUUID().toString();
-		dispatchedTroop.cartoon = session.getSeat().choosedSoilders.get(instanceUuid).character.cartoon;
+		dispatchedTroop.character = seatCharacter.character.clone();
 		dispatchedTroop.setXY(x, y);
+		if (forward[0] == -1) {
+			for (x = born[0]; x >= bornRect[0]; x--) {
+				boolean isCollisioned = dispatchedTroop.checkCollision(x, born[1], battle);
+				if (x == born[0] && isCollisioned) {
+					return false;
+				} else if (isCollisioned) {
+					//set position
+				}
+			}
+		} else if (forward[0] == 1) {
+			
+		} else if (forward[1] == -1) {
+			
+		} else if (forward[1] == 1) {
+			
+		}
 		dispatchedTroop.hp = dispatchedTroop.maxHp = 7;
 		dispatchedTroop.attackDamage = GMathUtil.random(3, 1);
 		dispatchedTroop.layer = "over";
