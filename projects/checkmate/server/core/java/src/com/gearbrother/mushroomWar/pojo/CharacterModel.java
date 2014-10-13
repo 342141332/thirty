@@ -86,8 +86,14 @@ public class CharacterModel extends RpcBean {
 	@RpcBeanProperty(desc = "金币")
 	public int coin;
 
-	@RpcBeanProperty(desc = "碰撞")
-	public int[] collision;
+	@RpcBeanProperty(desc = "")
+	public int width;
+	
+	@RpcBeanProperty(desc = "")
+	public int height;
+
+	@RpcBeanProperty(desc = "攻击范围数组")
+	public int[][] attackRects;
 
 	public CharacterModel(JsonNode json) {
 		this.json = json;
@@ -95,28 +101,40 @@ public class CharacterModel extends RpcBean {
 		this.headPortraint = json.get("head").asText();
 		this.cartoon = json.get("avatar").asText();
 		this.describe = json.get("describe").asText();
+		if (json.has("attackRects")) {
+			ArrayNode attackRectsNode = (ArrayNode) json.get("attackRects");
+			this.attackRects = new int[attackRectsNode.size()][];
+			for (int i = 0; i < attackRectsNode.size(); i++) {
+				ArrayNode attackRectNode = (ArrayNode) attackRectsNode.get(i);
+				this.attackRects[i] = new int[4];
+				this.attackRects[i][0] = attackRectNode.get(0).asInt();
+				this.attackRects[i][1] = attackRectNode.get(1).asInt();
+				this.attackRects[i][2] = attackRectNode.get(2).asInt();
+				this.attackRects[i][3] = attackRectNode.get(3).asInt();
+			}
+		} else {
+			this.attackRects = new int[1][];
+			this.attackRects[0] = new int[] {0, -1, 1, 0};
+		}
 		this.levels = new ArrayList<CharacterLevel>();
-		/*ArrayNode levelsNode = (ArrayNode) json.get("levels");
-		for (int i = 0; i < levelsNode.size(); i++) {
-			AvatarLevel _level = new AvatarLevel(levelsNode.get(i));
-			_level.id = i;
+		if (json.has("levels")) {
+			ArrayNode levelsNode = (ArrayNode) json.get("levels");
+			for (int i = 0; i < levelsNode.size(); i++) {
+				CharacterLevel _level = new CharacterLevel(levelsNode.get(i));
+				_level.id = i;
+				this.levels.add(_level);
+			}
+		} else {
+			CharacterLevel _level = new CharacterLevel();
+			_level.id = 0;
 			this.levels.add(_level);
-		}*/
-		CharacterLevel _level = new CharacterLevel();
-		_level.id = 0;
-		this.levels.add(_level);
+		}
 		equips = new ArrayList<Equip>();
 		skills = new ArrayList<Skill>();
 		if (json.has("coin")) {
 			this.coin = json.get("coin").asInt();
 		}
-		if (json.has("collision")) {
-			ArrayNode collisionNode = (ArrayNode) json.get("collision");
-			this.collision = new int[collisionNode.size()];
-			for (int i = 0; i < collisionNode.size(); i++) {
-				this.collision[i] = collisionNode.get(i).asInt();
-			}
-		}
+		width = height = 1;
 		setExp(0);
 	}
 

@@ -106,7 +106,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		public function AvatarView() {
 			super();
 
-			frameRate = 10;
+			frameRate = 20;
 		}
 
 		override public function handleModelChanged(events:Object = null):void {

@@ -11,18 +11,20 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "uuid")
 	public String instanceId;
 
-	@RpcBeanProperty(desc = "碰撞体积相对左上角坐标")
-	final public int[] collisionRect;
+	@RpcBeanProperty(desc = "宽度")
+	final public int width;
+	
+	@RpcBeanProperty(desc = "高度")
+	final public int height;
+	
+	@RpcBeanProperty(desc = "是否会碰撞")
+	final public boolean isCollisionable;
 
 	@RpcBeanProperty(desc = "")
 	public int left;
 
 	@RpcBeanProperty(desc = "")
 	public int top;
-
-	public int width;
-
-	public int height;
 
 	@RpcBeanProperty(desc = "")
 	public int hp;
@@ -78,7 +80,9 @@ public class BattleItem extends RpcBean {
 	public CharacterModel character;
 
 	public BattleItem(JsonNode json) {
-		this();
+		this(json.has("collisionable") ? json.get("collisionable").asBoolean() : true
+				, json.has("width") ? json.get("width").asInt() : 1
+				, json.has("height") ? json.get("height").asInt() : 1);
 
 		instanceId = json.get("instanceId").asText();
 		cartoon = json.get("cartoon").asText();
@@ -88,19 +92,10 @@ public class BattleItem extends RpcBean {
 		top = json.get("top").asInt();
 	}
 
-	public BattleItem() {
+	public BattleItem(boolean collisionable, int width, int height) {
 		instanceId = UUID.randomUUID().toString();
-		collisionRect = new int[] { 1, 1 };
-		width = height = 1;
-		attackRects = new int[1][];
-		attackRects[0] = new int[] { 0, -1, 1, 0 };
-	}
-
-	public void updateCollision(Battle battle) {
-		for (int w = 0; w < collisionRect[0]; w++) {
-			for (int h = 0; h < collisionRect[1]; h++) {
-				battle.collisions[this.left + w][this.top + h] = this;
-			}
-		}
+		this.isCollisionable = collisionable;
+		this.width = width;
+		this.height = height;
 	}
 }

@@ -40,6 +40,18 @@ public class BattleRoomSeat extends RpcBean {
 
 	@RpcBeanProperty(desc = "联盟颜色")
 	public int color;
+	
+	@RpcBeanProperty(desc = "血量")
+	public int hp;
+	
+	@RpcBeanProperty(desc = "血量")
+	public int maxHp;
+	
+	@RpcBeanProperty(desc = "等级")
+	public int level;
+	
+	@RpcBeanProperty(desc = "")
+	public int coin;
 
 	public BattleRoomSeat(BattleRoom room, int index) {
 		super();
@@ -53,6 +65,9 @@ public class BattleRoomSeat extends RpcBean {
 			this.choosedSoilders.put(avatarId, new BattleRoomSeatCharacter(GameConf.instance.soilders.get(avatarId).clone(), 10));
 		}
 		this.choosedHeroes = new HashMap<String, CharacterModel>();
+		maxHp = hp = 30;
+		name = "neo.zhang";
+		level = 1;
 	}
 
 	public BattleRoomSeat(BattleRoom room, int index, User user) {

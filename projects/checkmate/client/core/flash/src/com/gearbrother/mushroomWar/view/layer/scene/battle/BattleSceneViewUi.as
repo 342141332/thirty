@@ -28,18 +28,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	 * @create on 2014-2-27
 	 */
 	public class BattleSceneViewUi extends GContainer {
-		public var topCenter:GVBox;
-
 		public var clockText:GText;
+		
+		public var topPlayerUi:PlayerUi;
+		
+		public var bottomPlayerUi:PlayerUi;
 
-		public var coinView:Coin;
-
-		private var hp:GProgress;
-		
-		public var bottomBox:GHBox;
-		
-		public var skillIcons:GHBox;
-		
 		public var battle:BattleModel;
 		
 		private var _bindDataHandler2:GPropertyBindDataHandler;
@@ -59,6 +53,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			this.battle = battle;
 			_canvas = canvas;
 			libs = [new GAliasFile("static/asset/skin/battle.swf")];
+			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 		}
 
 		override protected function _handleLibsSuccess(res:*):void {
@@ -70,41 +65,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 //			clockText.fontSize = 14;
 //			clockText.fontBold = true;
 //			clockText.text = "00:00:00";
-			topCenter = new GVBox();
-			topCenter.addChild(hbox);
-			addChild(topCenter);
-			addChild(bottomBox = new GHBox());
-			bottomBox.addChild(skillIcons = new GHBox());
-			skillIcons.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
-			bottomBox.addChild(coinView = new Coin(skinFile.getInstance("BattleCoin")));
-			bottomBox.addChild(hp = new GProgress(skinFile.getInstance("ProgressSkin")));
-			
+			addChild(topPlayerUi = new PlayerUi(skinFile.getInstance("PlayerTopSkin")));
+			topPlayerUi.bindData = battle.seats[0];
+			addChild(bottomPlayerUi = new PlayerUi(skinFile.getInstance("PlayerBottomSkin")));
+			bottomPlayerUi.bindData = battle.seats[1];
 			enableTick = true;
-			bindData = battle.loginedBattleUser;
-			bindData2 = battle;
 		}
 
 		override public function tick(interval:int):void {
 //			clockText.text = GDateUtil.formatSeconds(Math.max(0, GameModel.instance.application.serverTime - battle.startTime) / 1000);
-		}
-
-		override public function handleModelChanged(events:Object = null):void {
-			var model:BattleRoomSeatModel = bindData as BattleRoomSeatModel;
-			if (!events) {
-				//update shortCut
-				skillIcons.removeAllChildren();
-				var skinFile:GFile = libsHandler.cachedOper[libs[0]] as GFile;
-				for (var characterId:String in model.choosedSoilders) {
-					var s:* = skinFile.getInstance("CharacterUiSkin");
-					var skillIcon:AvatarUiView = new AvatarUiView(s);
-					skillIcon.mouseChildren = false;
-					skillIcon.avatar.enableTick = false;
-					skillIcon.bindData = (model.choosedSoilders[characterId] as BattleRoomSeatCharacterProtocol).character;
-					addChild(skillIcon);
-					skillIcons.addChild(skillIcon);
-				}
-				coinView.textLabel.text = 44;
-			}
 		}
 		
 		private function _handleMouseEvent(event:MouseEvent):void {
@@ -117,32 +86,84 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		override protected function doValidateLayout():void {
 			super.doValidateLayout();
 
-			topCenter.width = topCenter.preferredSize.width;
-			topCenter.height = topCenter.preferredSize.height;
-			topCenter.x = (topCenter.preferredSize.width + width) >> 1;
-			topCenter.y = 30;
-			topCenter.validateLayoutNow();
-
-			bottomBox.x = width - bottomBox.preferredSize.width - 100;
-			bottomBox.y = height - bottomBox.preferredSize.height - 30;
-			bottomBox.width = bottomBox.preferredSize.width;
-			bottomBox.height = bottomBox.preferredSize.height;
-			bottomBox.validateLayoutNow();
+			if (topPlayerUi) {
+				topPlayerUi.x = ((width - topPlayerUi.width) >> 1) + 100;
+				topPlayerUi.y = 10;
+			}
+			if (bottomPlayerUi) {
+				bottomPlayerUi.x = ((width - topPlayerUi.width) >> 1) - 100;
+				bottomPlayerUi.y = height - bottomPlayerUi.height - 10;
+			}
 		}
 	}
 }
 import com.gearbrother.glash.display.GNoScale;
 import com.gearbrother.glash.display.GSkinSprite;
+import com.gearbrother.glash.display.control.GProgress;
 import com.gearbrother.glash.display.control.text.GText;
+import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatProtocol;
+import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 
+import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
 
-class Coin extends GNoScale {
-	public var textLabel:GText;
-	
-	public function Coin(skin:DisplayObjectContainer) {
+import org.as3commons.lang.ObjectUtils;
+
+class PlayerUi extends GNoScale {
+	public var nameLabel:GText;
+
+	public var hpLabel:GText;
+
+	public var hpProgress:GProgress;
+
+	public var soilders:Array;
+
+	public var coinLabel:GText;
+
+	public function PlayerUi(skin:DisplayObjectContainer) {
 		super(skin);
-		
-		textLabel = new GText(skin["textLabel"]);
+
+		nameLabel = new GText(skin["textLabel"]);
+		hpLabel = new GText(skin["hpLabel"]);
+		hpProgress = new GProgress(skin["hpProgress"]);
+		soilders = [];
+		for (var i:int = 0; ; i++) {
+			var child:DisplayObject = skin["soilder" + i];
+			if (child)
+				soilders.push(new AvatarUiView(child as DisplayObjectContainer));
+			else
+				break;
+		}
+		coinLabel = new GText(skin["coinLabel"]);
+	}
+	
+	override public function handleModelChanged(events:Object=null):void {
+		var model:BattleRoomSeatModel = bindData;
+		if (!events) {
+			nameLabel.text = "Lv." + model.level + " " + model.name;
+			hpLabel.text = model.hp + "/" + model.maxHp;
+		}
+		if (!events
+			|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)
+			|| events.hasOwnProperty(BattleRoomSeatProtocol.MAX_HP)) {
+			hpProgress.minValue = 0;
+			hpProgress.maxValue = model.maxHp;
+			hpProgress.value = model.hp;
+		}
+		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.COIN)) {
+			coinLabel.text = model.coin;
+		}
+		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_SOILDERS)) {
+			var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
+			for (var i:int = 0; i < soilders.length; i++) {
+				var avatarUiView:AvatarUiView = soilders[i];
+				avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
+			}
+		}
+		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_HEROES)) {
+			
+		}
 	}
 }

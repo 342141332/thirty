@@ -38,7 +38,7 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "游戏持续毫秒")
 	public long expiredPeriodMinutes;
-	
+
 	@RpcBeanProperty(desc = "势力")
 	public BattleForce[] forces;
 
@@ -51,13 +51,21 @@ public class Battle extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public int cellPixel;
 	
-	public BattleItem[][] collisions;
+	@RpcBeanProperty(desc = "")
+	public BattleRoomSeat[] seats;
+
+	private Grid[] collisions;
+
 	public List<BattleItem> getCollision(int[] collisionRect) {
 		List<BattleItem> res = new ArrayList<BattleItem>();
-		for (int left = collisionRect[0]; left < collisionRect[2]; left++) {
-			for (int top = collisionRect[1]; top < collisionRect[3]; top++) {
-				if (collisions[left][top] != null)
-					res.add(collisions[left][top]);
+		int right = Math.min(col, collisionRect[2]);
+		int bottom = Math.min(row, collisionRect[3]);
+		for (int left = collisionRect[0]; left < right; left++) {
+			for (int top = collisionRect[1]; top < bottom; top++) {
+				Grid grid = collisions[left + top * col];
+				if (grid != null && grid.collision != null) {
+					res.add(grid.collision);
+				}
 			}
 		}
 		return res;
@@ -71,56 +79,88 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "地图上非碰撞逻辑物体")
 	public Map<String, BattleItem> items;
+
 	public void addItem(BattleItem item) {
 		items.put(item.instanceId, item);
 		if (!sortItems.containsKey(item.getClass()))
 			sortItems.put(item.getClass(), new HashMap<String, BattleItem>());
 		sortItems.get(item.getClass()).put(item.instanceId, item);
-		for (int left = item.left; left < item.left + item.collisionRect[0]; left++) {
-			for (int top = item.top; top < item.top + item.collisionRect[1]; top++) {
-				if (collisions[left][top] != null)
-					throw new Error("collision is already used");
-				collisions[left][top] = item;
+		for (int left = item.left; left < item.left + item.width; left++) {
+			for (int top = item.top; top < item.top + item.height; top++) {
+				Grid grid = collisions[left + top * col];
+				if (grid != null) {
+					if (item.isCollisionable) {
+						if (collisions[left + top * col].collision == null) {
+							collisions[left + top * col].collision = item;
+						} else {
+							throw new Error("collision is already used");
+						}
+					}
+					grid.items.add(item);
+				} else {
+					grid = collisions[left + top * col] = new Grid();
+					if (item.isCollisionable)
+						grid.collision = item;
+					grid.items.add(item);
+				}
 			}
 		}
 	}
+
 	public void removeItem(BattleItem item) {
 		items.remove(item.instanceId);
 		sortItems.get(item.getClass()).remove(item.instanceId);
-		for (int left = 0; left < item.collisionRect[1]; left++) {
-			for (int top = 0; top < item.collisionRect[0]; top++) {
-				collisions[item.left + left][item.top + top] = null;
+		for (int left = 0; left < item.width; left++) {
+			for (int top = 0; top < item.height; top++) {
+				Grid grid = collisions[item.left + item.top * col];
+				if (item.isCollisionable) {
+					if (grid.collision == item)
+						grid.collision = null;
+					else
+						throw new Error();
+				}
+				if (!grid.items.remove(item))
+					throw new Error();
 			}
 		}
 	}
+
 	public boolean moveItem(BattleItem item, int newLeft, int newTop) {
-		for (int oldLeft = item.left; oldLeft < item.left + item.collisionRect[0]; oldLeft++) {
-			for (int oldTop = item.top; oldTop < item.top + item.collisionRect[1]; oldTop++) {
-				if (collisions[oldLeft][oldTop] == item) {
-				} else {
+		if (newLeft < 0 || newLeft + item.width > col || newTop < 0 || newTop + item.height > row)
+			return false;
+
+		for (int oldLeft = item.left; oldLeft < item.left + item.width; oldLeft++) {
+			for (int oldTop = item.top; oldTop < item.top + item.height; oldTop++) {
+				if (!collisions[oldLeft + oldTop * col].items.contains(item)
+						|| (item.isCollisionable && collisions[oldLeft + oldTop * col].collision != item)) {
 					throw new Error();
 				}
 			}
 		}
-		for (int left = newLeft; left < newLeft + item.collisionRect[0]; left++) {
-			for (int top = newTop; top < newTop + item.collisionRect[1]; top++) {
-				if (collisions[left][top] != null) {
-					return false;
+		if (item.isCollisionable) {
+			for (int left = newLeft; left < newLeft + item.width; left++) {
+				for (int top = newTop; top < newTop + item.height; top++) {
+					if (collisions[left + top * col] != null && collisions[left + top * col].collision != null && collisions[left + top * col].collision != item) {
+						return false;
+					}
 				}
 			}
 		}
-		for (int oldLeft = item.left; oldLeft < item.left + item.collisionRect[0]; oldLeft++) {
-			for (int oldTop = item.top; oldTop < item.top + item.collisionRect[1]; oldTop++) {
-				if (collisions[oldLeft][oldTop] == item) {
-					collisions[oldLeft][oldTop] = null;
-				}
+		for (int oldLeft = item.left; oldLeft < item.left + item.width; oldLeft++) {
+			for (int oldTop = item.top; oldTop < item.top + item.height; oldTop++) {
+				if (item.isCollisionable)
+					collisions[oldLeft + oldTop * col].collision = null;
+				collisions[oldLeft + oldTop * col].items.remove(item);
 			}
 		}
-		for (int left = newLeft; left < newLeft + item.collisionRect[0]; left++) {
-			for (int top = newTop; top < newTop + item.collisionRect[1]; top++) {
-				if (collisions[left][top] == null) {
-					collisions[left][top] = item;
-				}
+		for (int left = newLeft; left < newLeft + item.width; left++) {
+			for (int top = newTop; top < newTop + item.height; top++) {
+				Grid grid = collisions[left + top * col];
+				if (grid == null)
+					grid = collisions[left + top * col] = new Grid();
+				if (item.isCollisionable)
+					grid.collision = item;
+				grid.items.add(item);
 			}
 		}
 		item.left = newLeft;
@@ -156,10 +196,7 @@ public class Battle extends RpcBean {
 		this.cellPixel = json.get("cellPixel").asInt();
 		this.col = json.get("col").asInt();
 		this.row = json.get("row").asInt();
-		this.collisions = new BattleItem[col][row];
-		for (int c = 0; c < collisions.length; c++) {
-			this.collisions[c] = new BattleItem[row];
-		}
+		this.collisions = new Grid[col * row];
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
 			addItem(new BattleItem(itemsNode.get(i)));
@@ -193,8 +230,17 @@ public class Battle extends RpcBean {
 			}
 		}
 	}
-	
+
 	public Battle clone() {
 		return new Battle(json);
+	}
+}
+class Grid {
+	public BattleItem collision;
+
+	public List<BattleItem> items;
+
+	public Grid() {
+		items = new ArrayList<BattleItem>();
 	}
 }

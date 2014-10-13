@@ -53,8 +53,10 @@ public class BattleRoom extends RpcBean {
 	}
 
 	public void play() {
+		battle.state = Battle.STATE_PREPARING;
 		battle.startTime = System.currentTimeMillis();
 		battle.observer = this.observer;
+		battle.seats = seats;
 		for (int i = 0; i < seats.length; i++) {
 			BattleRoomSeat seat = seats[i];
 			if (seat != null)

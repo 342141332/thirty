@@ -3,13 +3,14 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.IGTickable;
 	import com.gearbrother.glash.display.flixel.GPaper;
 	import com.gearbrother.glash.display.flixel.GPaperLayer;
+	import com.gearbrother.glash.display.flixel.GPaperLayerDebug;
 	import com.gearbrother.glash.display.flixel.input.Keyboard;
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.glash.util.display.GPen;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalEndProtocol;
@@ -17,7 +18,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalSkillUseProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PropertyEventProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.TextAlert;
+	import com.greensock.TweenLite;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
@@ -39,9 +42,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		
 		public var layers:Object;
 		
-		public var layerFlag:GPaperLayer;
-		
-		public var arrow:Shape;
+		public var layerDebug:BattleSceneLayerDebug;
 		
 		public var pen:GPen;
 		
@@ -55,7 +56,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			return data as BattleModel;
 		}
 		
-		public var dispatchAvatar:CharacterModel;
+		private var _dispatchAvatar:CharacterModel;
+		public function set dispatchAvatar(newValue:CharacterModel):void {
+			_dispatchAvatar = newValue;
+			if (_dispatchAvatar) {
+				layerDebug.visible = _dispatchAvatar != null;
+			} else {
+				layerDebug.removeAllChildren();
+			}
+		}
 
 		/**
 		 * 
@@ -69,13 +78,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			camera.bound.height = battle.row * battle.cellPixel;
 			
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
+			addChild(layerDebug = new BattleSceneLayerDebug(battle, camera));
 			layers = {};
 			layers["floor"] = addChild(new BattleSceneLayerOverland("floor", battle, camera)),
 			layers["over"] = addChild(new BattleSceneLayerOverland("over", battle, camera));
-			addChild(layerFlag = new GPaperLayer(camera));
-			layerFlag.addChild(arrow = new Shape());
-			layerFlag.mouseChildren = layerFlag.mouseEnabled = false;
-			pen = new GPen(arrow.graphics);
 			
 			keyboard = new Keyboard2();
 			_quadTree = new GQuadtree(new Rectangle(0, 0, model.col, model.row));
@@ -88,15 +94,28 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			addEventListener(KeyboardEvent.KEY_DOWN, _handleKeyEvent);
 			addEventListener(KeyboardEvent.KEY_UP, _handleKeyEvent);
 			addEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
+			addEventListener(MouseEvent.MOUSE_MOVE, _handleMouseEvent);
 			GameMain.instance.gameChannel.addEventListener(RpcEvent.DATA, _handleGameChannelEvent);
 			enableTick = true;
 		}
 
 		private function _handleMouseEvent(event:MouseEvent):void {
 			switch (event.type) {
+				case MouseEvent.MOUSE_MOVE:
+					if (_dispatchAvatar) {
+						if (layerDebug.numChildren == 0) {
+							var shape:DisplayObject = new LineShape(model);
+							shape.y = 0;//int(mouseY / model.cellPixel) * model.cellPixel;
+							layerDebug.addChild(shape);
+						} else {
+							shape = layerDebug.getChildAt(0);
+						}
+						shape.x = int(mouseX / model.cellPixel) * model.cellPixel;
+					}
+					break;
 				case MouseEvent.MOUSE_DOWN:
-					if (dispatchAvatar)
-						GameMain.instance.battleService.dispatch(dispatchAvatar.confId, int(mouseX / model.cellPixel), int(mouseY / model.cellPixel));
+					if (_dispatchAvatar)
+						GameMain.instance.battleService.dispatch(_dispatchAvatar.confId, int(mouseX / model.cellPixel), int(mouseY / model.cellPixel));
 					break;
 			}
 		}
@@ -276,8 +295,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 	}
 }
+import com.gearbrother.glash.display.GDisplaySprite;
 import com.gearbrother.glash.display.flixel.input.Keyboard;
+import com.gearbrother.mushroomWar.model.BattleModel;
+import com.greensock.TweenLite;
+import com.greensock.TweenMax;
 
+import flash.display.Shape;
 import flash.events.KeyboardEvent;
 import flash.utils.getTimer;
 
@@ -324,3 +348,23 @@ class Keyboard2 extends Keyboard {
 	}
 }
 
+class LineShape extends GDisplaySprite {
+	private var tween:TweenMax;
+
+	public function LineShape(model:BattleModel) {
+		graphics.beginFill(0x00ff33, 1);
+		graphics.drawRect(0, 0, model.cellPixel, model.row * model.cellPixel);
+		graphics.endFill();
+	}
+
+	override protected function doInit():void {
+		super.doInit();
+
+		this.alpha = .1;
+		this.tween = TweenMax.to(this, 1, {colorTransform: {brightness: 1.3}, "alpha": .5, yoyo: true, repeat: -1});
+	}
+	
+	override protected function doDispose():void {
+		this.tween.kill();
+	}
+}

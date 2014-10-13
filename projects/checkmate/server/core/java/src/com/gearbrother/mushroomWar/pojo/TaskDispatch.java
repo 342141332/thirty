@@ -34,15 +34,22 @@ public class TaskDispatch extends Task {
 
 		//slide to born rect
 		int[] bornRect = force.born;	//"born"	[0, 0, 9, 1]
-		left = forward[0] == 1 ? bornRect[2] - 1 : (forward[0] == -1 ? bornRect[0] : Math.max(bornRect[0], Math.min(left, bornRect[2] - 1)));
-		top = forward[1] == 1 ? bornRect[3] - 1 : (forward[1] == -1 ? bornRect[1] : Math.max(bornRect[1], Math.min(top, bornRect[3] - 1)));
+		if (Battle.STATE_PREPARING == battle.state) {
+			left = forward[0] == 1 ? bornRect[2] - 1 : (forward[0] == -1 ? bornRect[0] : Math.max(bornRect[0], Math.min(left, bornRect[2] - 1)));
+			top = forward[1] == 1 ? bornRect[3] - 1 : (forward[1] == -1 ? bornRect[1] : Math.max(bornRect[1], Math.min(top, bornRect[3] - 1)));
+		} else if (Battle.STATE_PLAYING == battle.state) {
+			left = forward[0] == 1 ? bornRect[2] - 1 : (forward[0] == -1 ? bornRect[0] : Math.max(bornRect[0], Math.min(left, bornRect[2] - 1)));
+			top = forward[1] == 1 ? bornRect[3] - 1 : (forward[1] == -1 ? bornRect[1] : Math.max(bornRect[1], Math.min(top, bornRect[3] - 1)));
+		} else {
+			throw new Error();
+		}
 
 		//slide to border
 		if (forward[0] == 0 && forward[1] == 0) {
 			throw new Error("forward can't be zero");
 		} else {
-			if (battle.getCollision(new int[] {left, top, left + seatCharacter.character.collision[0], top + seatCharacter.character.collision[1]}).size() == 0) {
-				BattleItem item = new BattleItem();
+			if (battle.getCollision(new int[] {left, top, left + seatCharacter.character.width, top + seatCharacter.character.height}).size() == 0) {
+				BattleItem item = new BattleItem(true, 1, 1);
 				item.instanceId = UUID.randomUUID().toString();
 				item.character = seatCharacter.character.clone();
 				item.forward = force.forward;
@@ -51,6 +58,7 @@ public class TaskDispatch extends Task {
 				item.top = top;
 				item.hp = item.maxHp = 7;
 				item.attackDamage = GMathUtil.random(3, 1);
+				item.attackRects = item.character.attackRects;
 				item.layer = "over";
 				item.owner = seat;
 				battle.addItem(item);

@@ -1,5 +1,6 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -32,8 +33,9 @@ public class BattleService {
 			public void run() {
 				while (true) {
 					long now = System.currentTimeMillis();
-					for (BattleRoom room : _runningBattles.values()) {
-						room.battle.execute(now);
+					for (Iterator<String> iterator = _runningBattles.keySet().iterator(); iterator.hasNext();) {
+						String id = (String) iterator.next();
+						_runningBattles.get(id).battle.execute(now);
 					}
 				}
 			}
@@ -54,7 +56,7 @@ public class BattleService {
 	public Battle reload(ISession session) {
 		return null;
 	}
-
+	
 	@RpcServiceMethod(desc = "派遣")
 	public void dispatch(ISession session
 			, @RpcServiceMethodParameter(name = "confId") String confId

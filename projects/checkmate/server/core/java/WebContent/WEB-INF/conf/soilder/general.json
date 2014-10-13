@@ -1,42 +1,86 @@
 {
 	"9105A467-82CE-2553-41DD-583CB47F95D3-1": {
-		"name": "神武张飞",
+		"name": "枪兵",
 		"avatar": "static/asset/avatar/enemy_1.swf",
 		"head": "hero2",
 		"nation": 2,
 		"describe": "",
 		"armsType": "骑将",
 		"coin": 1,
-		"collision": [1, 1]
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
 	},
 	"91061C8F-82CE-25D3-41D7-D97253798406-2": {
-		"name": "蔡琰",
+		"name": "弓兵",
 		"avatar": "static/asset/avatar/enemy_2.swf",
 		"head": "hero81",
 		"nation": 1,
 		"describe": "",
 		"armsType": "术士",
 		"coin": 1,
-		"collision": [1, 1]
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -3, 1, 0]]
 	},
 	"910B6C73-82CF-E532-41C2-1FC8AF68772D-3": {
-		"name": "郭嘉",
+		"name": "骑兵",
 		"avatar": "static/asset/avatar/enemy_3.swf",
 		"head": "hero105",
 		"nation": 1,
 		"describe": "",
 		"armsType": "术士",
 		"coin": 1,
-		"collision": [1, 1]
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
 	},
 	"91007644-82CE-2555-41D5-F2401CDAA815-4": {
-		"name": "郭淮",
-		"avatar": "static/asset/avatar/enemy_4.swf",
+		"name": "术士",
+		"avatar": "static/asset/avatar/enemy_5.swf",
 		"head": "hero201",
 		"nation": 1,
 		"describe": "",
 		"armsType": "骑将",
 		"coin": 1,
-		"collision": [1, 1]
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"91007644-82CE-2555-41D5-F2401CDAA815-5": {
+		"name": "刀斧手",
+		"avatar": "static/asset/avatar/enemy_11.swf",
+		"head": "hero201",
+		"nation": 1,
+		"describe": "",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"91007644-82CE-2555-41D5-F2401CDAA815-6": {
+		"name": "弩",
+		"avatar": "static/asset/avatar/enemy_12.swf",
+		"head": "hero201",
+		"nation": 1,
+		"describe": "",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"91007644-82CE-2555-41D5-F2401CDAA815-7": {
+		"name": "工程车",
+		"avatar": "static/asset/avatar/enemy_22.swf",
+		"head": "hero201",
+		"nation": 1,
+		"describe": "",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
 	}
 }
