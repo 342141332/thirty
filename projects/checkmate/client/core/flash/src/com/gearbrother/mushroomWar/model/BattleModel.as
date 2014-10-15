@@ -43,8 +43,13 @@ package com.gearbrother.mushroomWar.model {
 				var item:BattleItemModel = new BattleItemModel().decode(itemObj);
 				item.battle = this;
 			}
-			col = prototype.width;
-			row = prototype.height;
+			width = prototype.width;
+			height = prototype.height;
+			background = prototype.background;
+			left = prototype.left;
+			top = prototype.top;
+			col = prototype.col;
+			row = prototype.row;
 			cellPixel = prototype.cellPixel;
 			return this;
 		}

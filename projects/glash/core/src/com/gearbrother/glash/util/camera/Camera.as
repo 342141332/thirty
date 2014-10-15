@@ -23,6 +23,7 @@ package com.gearbrother.glash.util.camera {
 		public function set screenRect(newValue:Rectangle):void {
 			if (!_screenRect.equals(newValue)) {
 				_screenRect = newValue;
+				_refreshCenter();
 				setChanged();
 			}
 		}
@@ -31,10 +32,17 @@ package com.gearbrother.glash.util.camera {
 			return _screenRect;
 		}
 		
+		private var _center:Point;
 		public function set center(centerTo:Point):void {
+			if (!center || center.equals(centerTo) == false) {
+				_center = centerTo;
+			}
+		}
+		
+		public function _refreshCenter():void {
 			var clone:Rectangle = screenRect.clone();
-			clone.x = centerTo.x - (clone.width >> 1);
-			clone.y = centerTo.y - (clone.height >> 1);
+			clone.x = _center.x - (clone.width >> 1);
+			clone.y = _center.y - (clone.height >> 1);
 			if (_bound) {
 				if (clone.right > _bound.right)
 					clone.x = _bound.right - clone.width;
@@ -61,24 +69,7 @@ package com.gearbrother.glash.util.camera {
 		
 		public function set bound(newValue:Rectangle):void {
 			_bound = newValue;
-		}
-		
-		public var focus:DisplayObject;
-		
-		public function focusTo():void {
-			if (focus) {
-				center = new Point(focus.x, focus.y);
-				/*if (focus.x < screenRect.x + screenRect.width * .45) {
-				x = focus.x - screenRect.width * .45;
-				} else if (focus.x > screenRect.x + screenRect.width * .55) {
-				x = focus.x - screenRect.width * .55;
-				}
-				if (focus.y < screenRect.y + screenRect.height * .45) {
-				y = focus.y - screenRect.height * .45;
-				} else if (focus.y > screenRect.y + screenRect.height * .55) {
-				y = focus.y - screenRect.height * .55;
-				}*/
-			}
+			_refreshCenter();
 		}
 		
 		public function Camera() {

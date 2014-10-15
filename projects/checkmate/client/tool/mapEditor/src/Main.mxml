@@ -23,7 +23,6 @@
 			import com.gearbrother.mushroomWar.model.BattleItemTemplateModel;
 			import com.gearbrother.mushroomWar.model.BattleModel;
 			import com.gearbrother.mushroomWar.model.BoundsModel;
-			import com.gearbrother.mushroomWar.model.IBattleItemModel;
 			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleProtocol;
 			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BoundsProtocol;
 			import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PointBeanProtocol;
@@ -80,8 +79,8 @@
 				newPaper.doubleClickEnabled = true;
 				newPaper.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 				comp.addChild(_paper = newPaper);
-				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.width * _selectedProject.cellPixel;
-				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.height * _selectedProject.cellPixel;
+				comp.width = newPaper.width = newPaper.camera.bound.width = _selectedProject.width;
+				comp.height = newPaper.height = newPaper.camera.bound.height = _selectedProject.height;
 				_terrianLayer = _paper.addChild(new BattleSceneLayerTerrian(_selectedProject, _paper.camera)) as BattleSceneLayerTerrian;
 				_paper.addChild(new BattleSceneLayerOverland("floor", _selectedProject, _paper.camera));
 				_paper.addChild(new BattleSceneLayerOverland("over", _selectedProject, _paper.camera));
@@ -90,9 +89,6 @@
 				col.value = newValue.width;
 				itemToolbarData.removeAll();
 				var templates:Array = [];
-//				var template1:BattleItemTemplateModel = new BattleItemTemplateModel();
-//				template1.cartoon = "static/asset/avatar/house_1.swf";
-//				templates.push(template1);
 				for each (var templateModel:BattleItemTemplateModel in templates) {
 					itemToolbarData.addItem([templateModel, _selectedProject]);
 				}
@@ -121,7 +117,7 @@
 							"click": function():void {
 								mouseMode = new CleanMode(function(target:DisplayObject):void {
 									if (target.hasOwnProperty("bindData")) {
-										var model2:IBattleItemModel = target["bindData"];
+										var model2:BattleItemModel = target["bindData"];
 										if (model2) {
 											model2.battle = null;
 											_selectedProject.setPropertyChanged(BattleProtocol.ITEMS);
@@ -200,8 +196,8 @@
 						function(model:BattleModel, row:int, col:int):void {
 							var itemModel:BattleItemModel = new BattleItemModel();
 							itemModel.instanceId = UUID.getUUID();
-							itemModel.x = col;
-							itemModel.y = row;
+							itemModel.left = col;
+							itemModel.top = row;
 							itemModel.cartoon = d.cartoon;
 							itemModel.layer = "floor";
 							itemModel.battle = _selectedProject;
@@ -226,10 +222,10 @@
 						_selectedProject.width = col.value;
 						//remove item which out of bounds
 						for (var itemUuid:String in _selectedProject.items) {
-							var itemModel:IBattleItemModel = _selectedProject.items[itemUuid];
-							if (itemModel.x > _selectedProject.width)
+							var itemModel:BattleItemModel = _selectedProject.items[itemUuid];
+							if (itemModel.left > _selectedProject.width)
 								delete _selectedProject.items[itemUuid];
-							else if (itemModel.y > _selectedProject.height)
+							else if (itemModel.top > _selectedProject.height)
 								delete _selectedProject.items[itemUuid];
 							//format collision item's xy to int
 //							if (itemModel.isCollisionable) {
@@ -300,7 +296,7 @@
 			}
 			
 			private function _handleMouseEvent(event:MouseEvent):void {
-				if (event.target.hasOwnProperty("bindData") && event.target.bindData is IBattleItemModel) {
+				if (event.target.hasOwnProperty("bindData") && event.target.bindData is BattleItemModel) {
 					var item:BattleItemModel = event.target.bindData as BattleItemModel;
 					selectedItem = item;
 				}

@@ -77,7 +77,7 @@ public class TaskFoward extends TaskInterval {
 			}
 		}
 
-		List<BattleItem> collisions = battle.getCollision(
+		List<BattleItem> forwardCollisions = battle.getCollision(
 			new int[] {
 				behavior.left + forward[0],
 				behavior.top + forward[1],
@@ -85,16 +85,11 @@ public class TaskFoward extends TaskInterval {
 				behavior.top + forward[1] + behavior.height
 			}
 		);
-		boolean isMoveable = false;
-		if (collisions.size() > 0) {
-		} else {
-			isMoveable = true;
-		}
-		if (isMoveable) {
+		if (forwardCollisions.size() == 0) {
 			Set<BattleItem> alreadyMoved = new HashSet<BattleItem>();
 			for (int c = behavior.left; c < behavior.left + behavior.width; c++) {
 				if (forward[1] == 1) {
-					for (int r = behavior.top; r > 0; r--) {
+					for (int r = behavior.top; r > -1; r--) {
 						List<BattleItem> follows = battle.getCollision(new int[] {c, r, c + 1, r + 1});
 						for (BattleItem follow : follows) {
 							int oldLeft = follow.left;
