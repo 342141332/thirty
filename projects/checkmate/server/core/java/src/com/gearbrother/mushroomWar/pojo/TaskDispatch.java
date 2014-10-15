@@ -62,7 +62,7 @@ public class TaskDispatch extends Task {
 				item.layer = "over";
 				item.owner = seat;
 				battle.addItem(item);
-				item.setTask(new TaskFoward(battle, now + 1000, 3000L, forward, item));
+				item.setTask(new TaskForward(battle, now + 1000, 3000L, forward, item));
 				while (force.border[0] <= left + forward[0] && left + forward[0] <= force.border[2]
 						&& force.border[1] <= top + forward[1] && top + forward[1] <= force.border[3]
 						&& battle.moveItem(item, left + forward[0], top + forward[1])) {

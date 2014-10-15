@@ -43,12 +43,10 @@ public class BattleItem extends RpcBean {
 
 	private Task _task;
 
-	@RpcBeanProperty(desc = "当前行为")
 	public Task getTask() {
 		return _task;
 	}
 
-	@RpcBeanProperty(desc = "当前行为")
 	public void setTask(Task value) {
 		if (this._task != null && this._task.getIsInQueue())
 			throw new Error("f");

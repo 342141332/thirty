@@ -2,21 +2,26 @@
 	"items": [
 	],
 	"expiredMinutes": 5,
+	"width": 1050,
+	"height": 1000,
+	"background": "static/asset/background/2.swf",
+	"left": 250,
+	"top": 150,
 	"cellPixel": 50,
-	"col": 10,
-	"row": 18,
+	"col": 11,
+	"row": 14,
 	"force": [
 		{
 			"maxPlayer": 1,
-			"born": [0, 0, 10, 1],
+			"born": [0, 0, 11, 1],
 			"forward": [0, 1],
-			"border": [0, 0, 10, 7]
+			"border": [0, 0, 11, 7]
 		},
 		{
 			"maxPlayer": 1,
-			"born": [0, 16, 10, 18],
+			"born": [0, 13, 11, 14],
 			"forward": [0, -1],
-			"border": [0, 8, 10, 18]
+			"border": [0, 7, 11, 14]
 		}
 	]
 }

@@ -45,8 +45,9 @@ public class BattleService {
 //			@Override
 //			public void run() {
 //				long now = System.currentTimeMillis();
-//				for (BattleRoom room : _runningBattles.values()) {
-//					room.battle.execute(now);
+//				for (Iterator<String> iterator = _runningBattles.keySet().iterator(); iterator.hasNext();) {
+//					String id = (String) iterator.next();
+//					_runningBattles.get(id).battle.execute(now);
 //				}
 //			}
 //		}, 0, 100);

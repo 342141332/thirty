@@ -18,12 +18,14 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalSkillUseProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.PropertyEventProtocol;
 	import com.gearbrother.mushroomWar.view.common.ui.TextAlert;
+	import com.gearbrother.mushroomWar.view.layer.scene.SceneLayer;
 	import com.greensock.TweenLite;
 	
 	import flash.display.DisplayObject;
 	import flash.display.Shape;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	
@@ -40,9 +42,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 		public var layerTerrian:BattleSceneLayerTerrian;
 		
+		public var layerDebug:BattleSceneLayerDebug;
+		
 		public var layers:Object;
 		
-		public var layerDebug:BattleSceneLayerDebug;
+		public var layerDispatch:GPaperLayer;
+		
+		public var lineShape:DisplayObject;
 		
 		public var pen:GPen;
 		
@@ -60,9 +66,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		public function set dispatchAvatar(newValue:CharacterModel):void {
 			_dispatchAvatar = newValue;
 			if (_dispatchAvatar) {
-				layerDebug.visible = _dispatchAvatar != null;
 			} else {
-				layerDebug.removeAllChildren();
+				layerDispatch.removeAllChildren();
 			}
 		}
 
@@ -74,17 +79,23 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super();
 
 			data = battle;
-			camera.bound.width = battle.col * battle.cellPixel;
-			camera.bound.height = battle.row * battle.cellPixel;
-			
+			camera.bound.x = -battle.width;
+			camera.bound.y = -battle.height;
+			camera.bound.width = battle.width * 3;
+			camera.bound.height = battle.height * 3;
+			camera.center = new Point(battle.left + ((battle.col * battle.cellPixel) >> 1), battle.top + ((battle.row * battle.cellPixel) >> 1));
+
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
-			addChild(layerDebug = new BattleSceneLayerDebug(battle, camera));
+//			addChild(layerDebug = new BattleSceneLayerDebug(battle, camera));
 			layers = {};
 			layers["floor"] = addChild(new BattleSceneLayerOverland("floor", battle, camera)),
 			layers["over"] = addChild(new BattleSceneLayerOverland("over", battle, camera));
-			
+			addChild(layerDispatch = new GPaperLayer(camera));
+			lineShape = new LineShape(model);
+
 			keyboard = new Keyboard2();
 			_quadTree = new GQuadtree(new Rectangle(0, 0, model.col, model.row));
+			dispatchAvatar = null;
 		}
 		
 		override protected function doInit():void {
@@ -100,22 +111,24 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 
 		private function _handleMouseEvent(event:MouseEvent):void {
+			var c:int = (camera.screenRect.x + mouseX - model.left) / model.cellPixel;
+			var r:int = (camera.screenRect.y + mouseY - model.top) / model.cellPixel;
 			switch (event.type) {
 				case MouseEvent.MOUSE_MOVE:
 					if (_dispatchAvatar) {
-						if (layerDebug.numChildren == 0) {
-							var shape:DisplayObject = new LineShape(model);
-							shape.y = 0;//int(mouseY / model.cellPixel) * model.cellPixel;
-							layerDebug.addChild(shape);
+						if (c < 0 || c >= model.col) {
+							if (lineShape.parent)
+								lineShape.parent.removeChild(lineShape);
 						} else {
-							shape = layerDebug.getChildAt(0);
+							lineShape.x = model.left + c * model.cellPixel;
+							lineShape.y = model.top;
+							layerDispatch.addChild(lineShape);
 						}
-						shape.x = int(mouseX / model.cellPixel) * model.cellPixel;
 					}
 					break;
 				case MouseEvent.MOUSE_DOWN:
-					if (_dispatchAvatar)
-						GameMain.instance.battleService.dispatch(_dispatchAvatar.confId, int(mouseX / model.cellPixel), int(mouseY / model.cellPixel));
+					if (_dispatchAvatar && c >= 0 && c < model.col)
+						GameMain.instance.battleService.dispatch(_dispatchAvatar.confId, c, r);
 					break;
 			}
 		}
@@ -159,7 +172,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							break;
 						case 4:
 							battleItem = model.items[battleItem.instanceId];
-							(battleItem as BattleItemModel).task = "skill";
 							break;
 						case 5:
 							battleItem = model.items[battleItem.instanceId];
@@ -214,7 +226,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				}
 				layer.tick(interval);
 			}
-			camera.focusTo();
 
 			//handle keyboard
 			/*var skillKeys:Object = {};
@@ -287,9 +298,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		}
 		
 		override protected function doValidateLayout():void {
-			camera.screenRect.width = width;
-			camera.screenRect.height = height;
-			camera.setChanged();
+			camera.screenRect = new Rectangle(camera.screenRect.x, camera.screenRect.y, width, height);
+			camera._refreshCenter();
 			
 			super.doValidateLayout();
 		}
@@ -360,8 +370,8 @@ class LineShape extends GDisplaySprite {
 	override protected function doInit():void {
 		super.doInit();
 
-		this.alpha = .1;
-		this.tween = TweenMax.to(this, 1, {colorTransform: {brightness: 1.3}, "alpha": .5, yoyo: true, repeat: -1});
+		this.alpha = .2;
+		this.tween = TweenMax.to(this, .7, {colorTransform: {brightness: 1.3}, "alpha": .3, yoyo: true, repeat: -1});
 	}
 	
 	override protected function doDispose():void {

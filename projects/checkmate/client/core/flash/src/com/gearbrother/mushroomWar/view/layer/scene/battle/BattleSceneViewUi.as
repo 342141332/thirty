@@ -67,6 +67,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 //			clockText.text = "00:00:00";
 			addChild(topPlayerUi = new PlayerUi(skinFile.getInstance("PlayerTopSkin")));
 			topPlayerUi.bindData = battle.seats[0];
+			topPlayerUi.hpProgress.policy = GProgress.POLICY_RIGHT_TO_LEFT;
 			addChild(bottomPlayerUi = new PlayerUi(skinFile.getInstance("PlayerBottomSkin")));
 			bottomPlayerUi.bindData = battle.seats[1];
 			enableTick = true;
@@ -86,13 +87,16 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		override protected function doValidateLayout():void {
 			super.doValidateLayout();
 
-			if (topPlayerUi) {
-				topPlayerUi.x = ((width - topPlayerUi.width) >> 1) + 100;
-				topPlayerUi.y = 10;
-			}
-			if (bottomPlayerUi) {
-				bottomPlayerUi.x = ((width - topPlayerUi.width) >> 1) - 100;
-				bottomPlayerUi.y = height - bottomPlayerUi.height - 10;
+			if (topPlayerUi && bottomPlayerUi) {
+				var offset:Number = Math.min((width - Math.max(topPlayerUi.width, bottomPlayerUi.width)) >> 1, 70); 
+				if (topPlayerUi) {
+					topPlayerUi.x = ((width - topPlayerUi.width) >> 1) + offset;
+					topPlayerUi.y = 10;
+				}
+				if (bottomPlayerUi) {
+					bottomPlayerUi.x = ((width - topPlayerUi.width) >> 1) - offset;
+					bottomPlayerUi.y = height - bottomPlayerUi.height - 10;
+				}
 			}
 		}
 	}
@@ -105,6 +109,8 @@ import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatProtocol;
 import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
+import com.greensock.TweenLite;
+import com.greensock.easing.Linear;
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
@@ -125,8 +131,9 @@ class PlayerUi extends GNoScale {
 	public function PlayerUi(skin:DisplayObjectContainer) {
 		super(skin);
 
-		nameLabel = new GText(skin["textLabel"]);
+		nameLabel = new GText(skin["nameLabel"]);
 		hpLabel = new GText(skin["hpLabel"]);
+		hpLabel.useHtml = true;
 		hpProgress = new GProgress(skin["hpProgress"]);
 		soilders = [];
 		for (var i:int = 0; ; i++) {
@@ -143,14 +150,17 @@ class PlayerUi extends GNoScale {
 		var model:BattleRoomSeatModel = bindData;
 		if (!events) {
 			nameLabel.text = "Lv." + model.level + " " + model.name;
-			hpLabel.text = model.hp + "/" + model.maxHp;
-		}
-		if (!events
-			|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)
-			|| events.hasOwnProperty(BattleRoomSeatProtocol.MAX_HP)) {
+			hpLabel.valueFormater = function(value:*):String {
+				return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
+			};
+			hpLabel.text = 0;
 			hpProgress.minValue = 0;
 			hpProgress.maxValue = model.maxHp;
-			hpProgress.value = model.hp;
+		}
+		if (!events
+			|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)) {
+			TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
+			TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
 		}
 		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.COIN)) {
 			coinLabel.text = model.coin;

@@ -59,8 +59,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			var battleModel:BattleModel = bindData;
 			var itemView:DisplayObject = new BattleItemSceneView(item);
-			var throwToX:int = itemView.x = (item.left + .5) * battleModel.cellPixel;
-			var throwToY:int = itemView.y = (item.top + .5) * battleModel.cellPixel;
+			var throwToX:int = itemView.x = battleModel.left + (item.left + .5) * battleModel.cellPixel;
+			var throwToY:int = itemView.y = battleModel.top + (item.top + .5) * battleModel.cellPixel;
 			if (!itemViews.hasOwnProperty(item.instanceId)) {
 				itemViews[item.instanceId] = addChild(itemView);
 			} else {

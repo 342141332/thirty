@@ -295,12 +295,11 @@ package com.gearbrother.glash.display.control.text {
 				if (useHtml || str.indexOf("<html>") != -1) {
 					if (ubb)
 						str = UBB.decode(str);
-
 					textField.htmlText = str;
 				} else {
 					textField.text = str;
 				}
-				return _cachedPreferredSize = new GDimension(textField.textWidth + 4, textField.textHeight + 4);
+				return _cachedPreferredSize = new GDimension(textField.textWidth + 5, textField.textHeight + 4);
 			}
 		}
 
@@ -339,7 +338,7 @@ package com.gearbrother.glash.display.control.text {
 			/**
 			 * 我现在在做图文混排，也遇到了这个问题。
 			 * 我的做法是先计算TextField的高度，因为我用了TextFormat，所以都是按照格式计算的。
-			 * textfield.height = (int(textformat.size) + int(textformat.leading))* textfield.numLines + 4;
+			 * textfield.height = (int(textformat.size) + int(textformat.leading)) * textfield.numLines + 4;
 			 * 然后处理getCharBoundaries(index)，最后按上述公式重新调整高度。现在即使是有中文字符，也不会有null的情况了。
 			 */
 			textField.height = textField.textHeight + 4;

@@ -41,7 +41,22 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "势力")
 	public BattleForce[] forces;
+	
+	@RpcBeanProperty(desc = "像素宽")
+	public int width;
+	
+	@RpcBeanProperty(desc = "像素高")
+	public int height;
+	
+	@RpcBeanProperty(desc = "背景")
+	public String background;
+	
+	@RpcBeanProperty(desc = "矩阵x初始像素点")
+	public int left;
 
+	@RpcBeanProperty(desc = "矩阵y初始像素点")
+	public int top;
+	
 	@RpcBeanProperty(desc = "col")
 	public int col;
 
@@ -60,8 +75,8 @@ public class Battle extends RpcBean {
 		List<BattleItem> res = new ArrayList<BattleItem>();
 		int right = Math.min(col, collisionRect[2]);
 		int bottom = Math.min(row, collisionRect[3]);
-		for (int left = collisionRect[0]; left < right; left++) {
-			for (int top = collisionRect[1]; top < bottom; top++) {
+		for (int left = Math.max(0, collisionRect[0]); left < right; left++) {
+			for (int top = Math.max(0, collisionRect[1]); top < bottom; top++) {
 				Grid grid = collisions[left + top * col];
 				if (grid != null && grid.collision != null) {
 					res.add(grid.collision);
@@ -81,6 +96,9 @@ public class Battle extends RpcBean {
 	public Map<String, BattleItem> items;
 
 	public void addItem(BattleItem item) {
+		if (item.left < 0 || item.left >= col || item.top < 0 || item.top >= row)
+			throw new Error("invalid position");
+
 		items.put(item.instanceId, item);
 		if (!sortItems.containsKey(item.getClass()))
 			sortItems.put(item.getClass(), new HashMap<String, BattleItem>());
@@ -193,6 +211,11 @@ public class Battle extends RpcBean {
 		for (int i = 0; i < forcesNode.size(); i++) {
 			this.forces[i] = new BattleForce(forcesNode.get(i));
 		}
+		this.width = json.get("width").asInt();
+		this.height = json.get("height").asInt();
+		this.background = json.get("background").asText();
+		this.left = json.get("left").asInt();
+		this.top = json.get("top").asInt();
 		this.cellPixel = json.get("cellPixel").asInt();
 		this.col = json.get("col").asInt();
 		this.row = json.get("row").asInt();

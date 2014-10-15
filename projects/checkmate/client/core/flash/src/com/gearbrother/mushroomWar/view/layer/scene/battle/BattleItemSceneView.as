@@ -222,8 +222,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 				var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
 				var progress:Number = Math.min(1, (GameModel.instance.application.serverTime - move.startTime) / (move.endTime - move.startTime));
 				if (model.battle) {
-					x = ((move.startX + .5) + (move.targetX - move.startX) * progress) * model.battle.cellPixel;
-					y = ((move.startY + .5) + (move.targetY - move.startY) * progress) * model.battle.cellPixel;
+					x = model.battle.left + ((move.startX + .5) + (move.targetX - move.startX) * progress) * model.battle.cellPixel;
+					y = model.battle.top + ((move.startY + .5) + (move.targetY - move.startY) * progress) * model.battle.cellPixel;
 				}
 				if (move.endTime < GameModel.instance.application.serverTime) {
 					_avatar.enableTick = false;
