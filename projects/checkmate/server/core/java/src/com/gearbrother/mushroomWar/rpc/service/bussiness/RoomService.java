@@ -58,7 +58,8 @@ public class RoomService {
 	}
 
 	@RpcServiceMethod(desc = "创建房间")
-	public BattleRoom createRoom(ISession session, @RpcServiceMethodParameter(name = "battleConfId") String battleConfId) {
+	public BattleRoom createRoom(ISession session
+			, @RpcServiceMethodParameter(name = "battleConfId") String battleConfId) {
 		session.getEnteredHall().observer.deleteObserver(session);
 		session.setEnteredHall(null);
 
@@ -68,7 +69,7 @@ public class RoomService {
 		session.setSeat(new BattleRoomSeat(room, 0, logined));
 		room.name = logined.name;
 		room.battle = gameConfs.battles.get(battleConfId).clone();
-		room.seats[0] = session.getSeat();
+		room.leftPlayers.add(session.getSeat());
 		hall.rooms.put(room.uuid, room);
 		room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, room));
 		return room;
@@ -83,15 +84,16 @@ public class RoomService {
 		User logined = session.getLogined();
 		BattleRoom room = hall.rooms.get(roomUuid);
 		room.observer.addObserver(session);
-		for (int i = 0; i < room.blueMax + room.redMax; i++) {
-			if (room.seats[i] == null) {
-				BattleRoomSeat seat = room.seats[i] = new BattleRoomSeat(room, i, logined);
-				session.setSeat(seat);
-				room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, seat));
-				break;
-			}
-		}
-		return room;
+		throw new Error("implement");
+//		for (int i = 0; i < room.blueMax + room.redMax; i++) {
+//			if (room.leftPlayers[i] == null) {
+//				BattleRoomSeat seat = room.leftPlayers[i] = new BattleRoomSeat(room, i, logined);
+//				session.setSeat(seat);
+//				room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, seat));
+//				break;
+//			}
+//		}
+//		return room;
 	}
 
 	@RpcServiceMethod(desc = "离开房间")
@@ -107,16 +109,16 @@ public class RoomService {
 			, @RpcServiceMethodParameter(name = "newSeatId") int newSeatId) {
 		BattleRoomSeat seat = session.getSeat();
 		BattleRoom room = session.getSeat().room;
-		if (room.seats[newSeatId] == null && seat != null) {
-			for (int i = 0; i < room.seats.length; i++) {
-				if (room.seats[i] == seat) {
-					room.seats[i] = null;
-					break;
-				}
-			}
-			seat.index = newSeatId;
-			room.seats[newSeatId] = seat;
-		}
+//		if (room.leftPlayers[newSeatId] == null && seat != null) {
+//			for (int i = 0; i < room.leftPlayers.length; i++) {
+//				if (room.leftPlayers[i] == seat) {
+//					room.leftPlayers[i] = null;
+//					break;
+//				}
+//			}
+//			seat.index = newSeatId;
+//			room.leftPlayers[newSeatId] = seat;
+//		}
 		room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_UPDATE, room));
 	}
 

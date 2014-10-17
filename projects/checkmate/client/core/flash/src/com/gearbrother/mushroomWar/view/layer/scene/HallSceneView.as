@@ -54,7 +54,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				GameMain.instance.roomService.createRoom(_mapId.text
 					, function(res:*):void {
 						var room:BattleRoomModel = res;
-						GameMain.instance.scenelayer.addChild(new RoomSceneView2(room));
+						GameMain.instance.scenelayer.addChild(new RoomSceneView(room));
 					}
 				);
 			} else if (event.target == _mapId) {
@@ -68,7 +68,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				var room:BattleRoomModel = (event.target as GButton).data;
 				GameMain.instance.roomService.enterRoom(room.uuid
 					, function(res:*):void {
-						GameMain.instance.scenelayer.addChild(new RoomSceneView2(res as BattleRoomModel));
+						GameMain.instance.scenelayer.addChild(new RoomSceneView(res as BattleRoomModel));
 					}
 				);
 			}

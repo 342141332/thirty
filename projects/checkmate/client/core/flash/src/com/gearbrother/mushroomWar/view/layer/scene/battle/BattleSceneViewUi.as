@@ -105,6 +105,7 @@ import com.gearbrother.glash.display.GNoScale;
 import com.gearbrother.glash.display.GSkinSprite;
 import com.gearbrother.glash.display.control.GProgress;
 import com.gearbrother.glash.display.control.text.GText;
+import com.gearbrother.mushroomWar.model.BattleRoomModel;
 import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatProtocol;
@@ -147,33 +148,37 @@ class PlayerUi extends GNoScale {
 	}
 	
 	override public function handleModelChanged(events:Object=null):void {
-		var model:BattleRoomSeatModel = bindData;
-		if (!events) {
-			nameLabel.text = "Lv." + model.level + " " + model.name;
-			hpLabel.valueFormater = function(value:*):String {
-				return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
-			};
-			hpLabel.text = 0;
-			hpProgress.minValue = 0;
-			hpProgress.maxValue = model.maxHp;
-		}
-		if (!events
-			|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)) {
-			TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
-			TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
-		}
-		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.COIN)) {
-			coinLabel.text = model.coin;
-		}
-		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_SOILDERS)) {
-			var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
-			for (var i:int = 0; i < soilders.length; i++) {
-				var avatarUiView:AvatarUiView = soilders[i];
-				avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
+		if (bindData is BattleRoomSeatModel) {
+			var model:BattleRoomSeatModel = bindData;
+			if (!events) {
+				nameLabel.text = "Lv." + model.level + " " + model.name;
+				hpLabel.valueFormater = function(value:*):String {
+					return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
+				};
+				hpLabel.text = 0;
+				hpProgress.minValue = 0;
+				hpProgress.maxValue = model.maxHp;
 			}
-		}
-		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_HEROES)) {
-			
+			if (!events
+				|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)) {
+				TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
+				TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
+			}
+			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.COIN)) {
+				coinLabel.text = model.coin;
+			}
+			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_SOILDERS)) {
+				var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
+				for (var i:int = 0; i < soilders.length; i++) {
+					var avatarUiView:AvatarUiView = soilders[i];
+					if (choosedSoilders.hasOwnProperty(i)) {
+						avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
+					}
+				}
+			}
+			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_HEROES)) {
+				
+			}
 		}
 	}
 }

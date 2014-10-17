@@ -34,7 +34,10 @@ public class BattleRoom extends RpcBean {
 	public int redMax;
 
 	@RpcBeanProperty(desc = "")
-	final public BattleRoomSeat[] seats;
+	final public List<BattleRoomSeat> leftPlayers;
+	
+	@RpcBeanProperty(desc = "")
+	final public List<BattleRoomSeat> rightPlayers;
 
 	final public SessionObserver observer;
 
@@ -48,24 +51,24 @@ public class BattleRoom extends RpcBean {
 		this.hall.rooms.put(uuid, this);
 		this.blueMax = blueMax;
 		this.redMax = redMax;
-		this.seats = new BattleRoomSeat[blueMax + redMax];
+		this.leftPlayers = new ArrayList<BattleRoomSeat>();
+		this.rightPlayers = new ArrayList<BattleRoomSeat>();
 		this.observer = new SessionObserver();
 	}
 
 	public void play() {
-		battle.state = Battle.STATE_PREPARING;
+		battle.state = Battle.STATE_PLAYING;
 		battle.startTime = System.currentTimeMillis();
 		battle.observer = this.observer;
-		battle.seats = seats;
-		for (int i = 0; i < seats.length; i++) {
-			BattleRoomSeat seat = seats[i];
+		for (int i = 0; i < leftPlayers.size(); i++) {
+			BattleRoomSeat seat = leftPlayers.get(i);
 			if (seat != null)
 				seat.force = battle.forces[blueMax > seat.index ? 0 : 1];
 		}
 	}
 
 	public static void main(String[] args) {
-		final List<BattleRoom> rooms = new ArrayList<BattleRoom>();
+		final List<BattleRoom> rooms = new ArrayList<BattleRoom>(); 
 		for (int i = 0; i < 2000; i++) {
 			long currentTime = System.currentTimeMillis();
 			final BattleRoom room = new BattleRoom(World.instance.hall, 4, 4);

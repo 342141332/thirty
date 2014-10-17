@@ -17,7 +17,7 @@ public class BattleForce extends RpcBean {
 	public int[] forward;
 
 	@RpcBeanProperty(desc = "边界")
-	public int[] border;
+	public int border;
 
 	public BattleForce(JsonNode jsonNode) {
 		this.maxPlayer = jsonNode.get("maxPlayer").asInt();
@@ -31,10 +31,6 @@ public class BattleForce extends RpcBean {
 		for (int i = 0; i < forwardNode.size(); i++) {
 			forward[i] = forwardNode.get(i).asInt();
 		}
-		ArrayNode borderNode = (ArrayNode) jsonNode.get("border");
-		border = new int[borderNode.size()];
-		for (int i = 0; i < borderNode.size(); i++) {
-			border[i] = borderNode.get(i).asInt();
-		}
+		border = jsonNode.get("border").asInt();
 	}
 }

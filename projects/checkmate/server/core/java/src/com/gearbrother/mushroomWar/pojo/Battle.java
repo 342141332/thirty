@@ -24,8 +24,6 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 public class Battle extends RpcBean {
 	static Logger logger = LoggerFactory.getLogger(Battle.class);
 
-	static public final int STATE_NONE = 0;
-
 	static public final int STATE_PREPARING = 1;
 
 	static public final int STATE_PLAYING = 2;
@@ -65,9 +63,6 @@ public class Battle extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	public int cellPixel;
-	
-	@RpcBeanProperty(desc = "")
-	public BattleRoomSeat[] seats;
 
 	private Grid[] collisions;
 
@@ -200,6 +195,7 @@ public class Battle extends RpcBean {
 	public Battle() {
 		this.sortItems = new HashMap<Class<?>, Map<String, BattleItem>>();
 		this.items = new HashMap<String, BattleItem>();
+		this.state = STATE_PREPARING;
 	}
 
 	public Battle(JsonNode json) {

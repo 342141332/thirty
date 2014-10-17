@@ -2,14 +2,18 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import com.gearbrother.glash.common.oper.ext.GAliasFile;
 	import com.gearbrother.glash.common.oper.ext.GFile;
 	import com.gearbrother.glash.display.GNoScale;
+	import com.gearbrother.glash.display.container.GContainer;
 	import com.gearbrother.glash.display.control.GButton;
+	import com.gearbrother.glash.display.control.GButtonLite;
+	import com.gearbrother.glash.display.control.GSelectGroup;
 	import com.gearbrother.glash.display.event.GDndEvent;
+	import com.gearbrother.glash.display.layout.impl.FlowLayout;
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomModel;
 	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
@@ -25,6 +29,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.MouseEvent;
 	
 	import org.as3commons.lang.ObjectUtils;
@@ -35,9 +40,17 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	 * @create on 2013-12-6
 	 */
 	public class RoomSceneView extends GNoScale {
-		public var seatViews:Array;
+		public var seatLeftViews:Array;
 		
-		public var myHeroViews:Array;
+		public var seatRightViews:Array;
+		
+		public var sortAll:GButton;
+		public var sort1:GButton;
+		public var sort2:GButton;
+		public var sort3:GButton;
+		public var filterGroup:GSelectGroup;
+		
+		public var myHeroPane:GContainer;
 		
 		public var myToolViews:Array;
 		
@@ -48,26 +61,49 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		override public function set skin(newValue:DisplayObject):void {
 			super.skin = newValue;
 
-			seatViews = [];
+			seatLeftViews = [];
 			for (var i:int = 0;;i++) {
-				var child:Sprite = (skin as DisplayObjectContainer).getChildByName("seat" + i) as Sprite;
+				var child:Sprite = (skin as DisplayObjectContainer).getChildByName("leftSeat" + i) as Sprite;
 				if (child) {
 					var seatView:RoomSeatUiView = new RoomSeatUiView(child);
 					seatView.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 					seatView.addEventListener(GDndEvent.Drop, _handleDndEvent);
-					seatViews.push(seatView);
+					seatLeftViews.push(seatView);
 				} else {
 					break;
 				}
 			}
-			myHeroViews = [];
+			seatRightViews = [];
 			for (i = 0;;i++) {
-				child = (skin as DisplayObjectContainer).getChildByName("hero" + i) as Sprite;
-				if (child)
-					myHeroViews.push(new AvatarUiView(child));
-				else
+				child = (skin as DisplayObjectContainer).getChildByName("rightSeat" + i) as Sprite;
+				if (child) {
+					seatView = new RoomSeatUiView(child);
+					seatView.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
+					seatView.addEventListener(GDndEvent.Drop, _handleDndEvent);
+					seatRightViews.push(seatView);
+				} else {
 					break;
+				}
 			}
+			sortAll = new GButton(skin["sortAll"]);
+			sortAll.bindData = [1, 2, 3];
+			sortAll.text = "所有";
+			sort1 = new GButton(skin["sort1"]);
+			sort1.bindData = [1];
+			sort1.text = "魏";
+			sort2 = new GButton(skin["sort2"]);
+			sort2.bindData = [2];
+			sort2.text = "蜀";
+			sort3 = new GButton(skin["sort3"]);
+			sort3.text = "吴";
+			sort3.bindData = [3];
+			filterGroup = sortAll.selectedGroup = sort1.selectedGroup = sort2.selectedGroup = sort3.selectedGroup = new GSelectGroup();
+			filterGroup.addEventListener(Event.CHANGE, _handleFilterChanged);
+			myHeroPane = new GContainer();
+			myHeroPane.layout = new FlowLayout();
+			myHeroPane.wheelScroll = true;
+			myHeroPane.replace((skin as DisplayObjectContainer).getChildByName("myHeroPane"));
+			myHeroPane.addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 			myToolViews = [];
 			for (i = 0;;i++) {
 				child = (skin as DisplayObjectContainer).getChildByName("skill" + i) as Sprite;
@@ -104,28 +140,34 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 			GameMain.instance.gameChannel.addEventListener(RpcEvent.DATA, _handleGameChannel);
 		}
 		
+		private function _handleFilterChanged(event:Event = null):void {
+			var filteredCountry:Array = filterGroup.selectedItem.bindData;
+			myHeroPane.removeAllChildren();
+			var heroes:Array = ObjectUtils.getProperties(GameModel.instance.loginedUser.heroes);
+			var file:GFile = libsHandler.cachedOper[libs[0]];
+			for (var i:int = 0; i < heroes.length; i++) {
+				var hero:CharacterModel = heroes[i];
+				if (filteredCountry.indexOf(hero.country) > -1) {
+					var avatarUiView:AvatarUiView = new AvatarUiView(file.getInstance("CharacterUiSkin"));//myHeroViews[i] as AvatarUiView;
+					avatarUiView.dndData = avatarUiView.bindData = hero;
+					avatarUiView.dndable = true;
+					myHeroPane.addChild(avatarUiView);
+				}
+			}
+		}
+
 		override public function handleModelChanged(events:Object=null):void {
 			var model:BattleRoomModel = bindData as BattleRoomModel;
 			if (skin) {
-				for (var i:int = 0; i < seatViews.length; i++) {
+				for (var i:int = 0; i < seatLeftViews.length; i++) {
 					if (model.seats.hasOwnProperty(i) && model.seats[i]) {
-						(seatViews[i] as RoomSeatUiView).bindData = model.seats[i];
+						(seatLeftViews[i] as RoomSeatUiView).bindData = model.seats[i];
 					} else {
-						(seatViews[i] as RoomSeatUiView).bindData = null;
+						(seatLeftViews[i] as RoomSeatUiView).bindData = null;
 					}
 				}
 				if (!events) {
-					var heroes:Array = ObjectUtils.getProperties(GameModel.instance.loginedUser.heroes);
-					/*for (i = 0; i < myHeroViews.length; i++) {
-						var avatarUiView:AvatarUiView = myHeroViews[i] as AvatarUiView;
-						if (heroes.hasOwnProperty(i)) {
-							avatarUiView.dndData = avatarUiView.bindData = heroes[i];
-							avatarUiView.dndable = true;
-						} else {
-							avatarUiView.bindData = null;
-							avatarUiView.dndable = false;
-						}
-					}*/
+					_handleFilterChanged();
 					var bagItems:Array = ObjectUtils.getProperties(GameModel.instance.loginedUser.bagItems);
 					var tools:Array = bagItems.filter(
 						function(d:*, ...res):Boolean {
@@ -200,13 +242,13 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 					var avatarKeys:Array = ObjectUtils.getKeys(GameModel.instance.loginedUser.heroes);
 					if (GameModel.instance.loginedUser.heroes.hasOwnProperty(seatModel.uuid)) {
 						var at:int = avatarKeys.indexOf(seatModel.uuid);
-//						GameMain.instance.roomService.switchAvatar(avatarKeys[(at + 1) % avatarKeys.length]);
-						return;
+						var characterModel:CharacterModel = (event.currentTarget as AvatarUiView).bindData is CharacterModel;
+						GameMain.instance.roomService.setHero(characterModel.uuid, 0);
 					}
 				}
 			} else if (event.currentTarget is RoomSeatUiView) {
-				if (seatViews.indexOf(event.currentTarget) > -1) {
-					GameMain.instance.roomService.switchSeat(seatViews.indexOf(event.currentTarget));
+				if (seatLeftViews.indexOf(event.currentTarget) > -1) {
+					GameMain.instance.roomService.switchSeat(seatLeftViews.indexOf(event.currentTarget));
 				}
 			} else if (event.currentTarget == confirmBtn) {
 				if (confirmBtn.enabled)

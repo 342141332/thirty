@@ -17,7 +17,7 @@ public class BattleRoomSeat extends RpcBean {
 
 	@RpcBeanProperty(desc = "座位索引")
 	public int index;
-	
+
 	@RpcBeanProperty(desc = "势力")
 	public BattleForce force;
 
@@ -26,8 +26,6 @@ public class BattleRoomSeat extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	public String name;
-
-	public User user;
 
 	@RpcBeanProperty(desc = "选择的英雄")
 	public Map<String, BattleRoomSeatCharacter> choosedSoilders;
@@ -40,16 +38,16 @@ public class BattleRoomSeat extends RpcBean {
 
 	@RpcBeanProperty(desc = "联盟颜色")
 	public int color;
-	
+
 	@RpcBeanProperty(desc = "血量")
 	public int hp;
-	
+
 	@RpcBeanProperty(desc = "血量")
 	public int maxHp;
-	
+
 	@RpcBeanProperty(desc = "等级")
 	public int level;
-	
+
 	@RpcBeanProperty(desc = "")
 	public int coin;
 
@@ -66,7 +64,6 @@ public class BattleRoomSeat extends RpcBean {
 		}
 		this.choosedHeroes = new HashMap<String, CharacterModel>();
 		maxHp = hp = 30;
-		name = "neo.zhang";
 		level = 1;
 	}
 
@@ -74,7 +71,6 @@ public class BattleRoomSeat extends RpcBean {
 		this(room, index);
 
 		this.instanceId = user.uuid;
-		this.user = user;
 		this.name = user.name;
 	}
 }

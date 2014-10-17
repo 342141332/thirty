@@ -24,6 +24,9 @@ public class CharacterModel extends RpcBean {
 	public String name;
 
 	public String headPortraint;
+	
+	@RpcBeanProperty(desc = "国家")
+	public String country;
 
 	@RpcBeanProperty(desc = "")
 	public String cartoon;
@@ -98,7 +101,8 @@ public class CharacterModel extends RpcBean {
 	public CharacterModel(JsonNode json) {
 		this.json = json;
 		this.name = json.get("name").asText();
-		this.headPortraint = json.get("head").asText();
+		if (json.has("head"))
+			this.headPortraint = json.get("head").asText();
 		this.cartoon = json.get("avatar").asText();
 		this.describe = json.get("describe").asText();
 		if (json.has("attackRects")) {

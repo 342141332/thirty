@@ -60,7 +60,7 @@ public class BattleItem extends RpcBean {
 
 	@RpcBeanProperty(desc = "")
 	public String getOwnerId() {
-		return owner != null ? owner.user.uuid : null;
+		return owner.instanceId;
 	}
 
 	public Object controller;

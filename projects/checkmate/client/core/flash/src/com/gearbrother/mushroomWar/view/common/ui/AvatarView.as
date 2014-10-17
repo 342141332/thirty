@@ -96,6 +96,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 						default:
 							throw new Error();
 					}
+					def = "General";
 					definition = new AvatarFile(frame, new GDefinition(_cartoonFile, def));
 				}
 			} else {

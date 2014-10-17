@@ -66,19 +66,13 @@ public class MinaSessionImpl implements ISession {
 			if (this.enteredHall != null)
 				this.enteredHall.observer.deleteObserver(this);
 			if (this.seat != null) {
-				for (int i = 0; i < this.seat.room.seats.length; i++) {
-					if (this.seat.room.seats[i] == this.seat) {
-						this.seat.room.seats[i] = null;
-					}
-				}
-				int unemptySeatCount = 0;
-				for (int i = 0; i < this.seat.room.seats.length; i++) {
-					unemptySeatCount += this.seat.room.seats[i] != null ? 1 : 0;
-				}
-				if (unemptySeatCount > 0) {
-					this.seat.room.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat));
+				int at = this.seat.room.leftPlayers.indexOf(this.seat);
+				if (at > -1) {
+					this.seat.room.leftPlayers.set(at, null);
+					this.seat.room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat.room));
 				} else {
-					this.seat.room.hall.rooms.remove(this.seat.room.uuid);
+					at = this.seat.room.rightPlayers.indexOf(this.seat);
+					this.seat.room.rightPlayers.set(at, null);
 					this.seat.room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat.room));
 				}
 			}
