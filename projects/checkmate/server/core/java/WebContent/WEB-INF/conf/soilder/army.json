@@ -1,0 +1,63 @@
+{
+	"0": {
+		"name": "步兵",
+		"damage": [1, 3],
+		"attackRects": [[0, -1, 1, 0]],
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"armsType": "步兵",
+		"avatar": "static/asset/avatar/enemy_11.swf",
+		"describe": "基础攻击单位,攻击正前方一格"
+	},
+	"1": {
+		"name": "骑兵",
+		"avatar": "static/asset/avatar/enemy_3.swf",
+		"describe": "攻击",
+		"armsType": "术士",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"2": {
+		"name": "弓兵",
+		"avatar": "static/asset/avatar/enemy_2.swf",
+		"describe": "攻击",
+		"armsType": "术士",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -3, 1, 0]]
+	},
+	"3": {
+		"name": "术士",
+		"avatar": "static/asset/avatar/enemy_24.swf",
+		"describe": "攻击",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"4": {
+		"name": "军师",
+		"avatar": "static/asset/avatar/enemy_5.swf",
+		"describe": "攻击",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	},
+	"5": {
+		"name": "工程车",
+		"avatar": "static/asset/avatar/enemy_22.swf",
+		"describe": "攻击",
+		"armsType": "骑将",
+		"coin": 1,
+		"width": 1,
+		"height": 1,
+		"attackRects": [[0, -1, 1, 0]]
+	}
+}

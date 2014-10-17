@@ -169,7 +169,9 @@ class PlayerUi extends GNoScale {
 			var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
 			for (var i:int = 0; i < soilders.length; i++) {
 				var avatarUiView:AvatarUiView = soilders[i];
-				avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
+				if (choosedSoilders.hasOwnProperty(i)) {
+					avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
+				}
 			}
 		}
 		if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_HEROES)) {
