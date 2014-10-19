@@ -1,7 +1,5 @@
 package com.gearbrother.mushroomWar.pojo;
 
-import java.util.UUID;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
@@ -13,12 +11,11 @@ public class BattleItem extends RpcBean {
 
 	@RpcBeanProperty(desc = "宽度")
 	final public int width;
-	
+
 	@RpcBeanProperty(desc = "高度")
 	final public int height;
-	
-	@RpcBeanProperty(desc = "是否会碰撞")
-	final public boolean isCollisionable;
+
+	public boolean isHomeBuilding;
 
 	@RpcBeanProperty(desc = "")
 	public int left;
@@ -38,8 +35,20 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "人物动画")
 	public String cartoon;
 
+	@RpcBeanProperty(desc = "")
+	public String def;
+
 	@RpcBeanProperty(desc = "等级")
 	public int level;
+
+	@RpcBeanProperty(desc = "攻击范围数组")
+	public int[][] attackRects;
+
+	@RpcBeanProperty(desc = "攻击力上下限")
+	public int[] attackDamage;
+	
+	@RpcBeanProperty(desc = "攻击间隔")
+	public long interval;
 
 	private Task _task;
 
@@ -56,44 +65,48 @@ public class BattleItem extends RpcBean {
 	@RpcBeanProperty(desc = "行为")
 	public Object action;
 
-	public BattleRoomSeat owner;
-
 	@RpcBeanProperty(desc = "")
-	public String getOwnerId() {
-		return owner.instanceId;
+	public int getForward() {
+		return force.forward;
 	}
 
-	public Object controller;
+	public BattlePlayer player;
 
-	public int coin;
+	public BattleForce force;
 
-	public int attackDamage;
-
-	@RpcBeanProperty(desc = "攻击范围")
-	public int[][] attackRects;
-
-	@RpcBeanProperty(desc = "")
-	public int[] forward;
-
-	public CharacterModel character;
+	public BattleItem(CharacterModel character) {
+		this.width = character.width;
+		this.height = character.height;
+		this.cartoon = character.cartoon;
+		this.def = character.nation == 0 ? "Soldier" : "Generial";
+		this.layer = "over";
+		this.hp = this.maxHp = character.getLevel().hp;
+		this.attackRects = character.getLevel().attackRects;
+		this.attackDamage = character.getLevel().attackDamage;
+		this.interval = character.getLevel().interval;
+	}
 
 	public BattleItem(JsonNode json) {
-		this(json.has("collisionable") ? json.get("collisionable").asBoolean() : true
-				, json.has("width") ? json.get("width").asInt() : 1
-				, json.has("height") ? json.get("height").asInt() : 1);
-
-		instanceId = json.get("instanceId").asText();
-		cartoon = json.get("cartoon").asText();
-		layer = json.get("layer").asText();
-		coin = json.get("coin").asInt();
-		left = json.get("left").asInt();
-		top = json.get("top").asInt();
+		this.width = json.has("width") ? json.get("width").asInt() : 1;
+		this.height = json.has("height") ? json.get("height").asInt() : 1;
+		this.cartoon = json.get("cartoon").asText();
+		this.def = json.get("def").asText();
+		this.layer = json.get("layer").asText();
+		this.left = json.get("left").asInt();
+		this.top = json.get("top").asInt();
+		this.hp = this.maxHp = json.get("hp").asInt();
+		this.isHomeBuilding = json.get("isHome").asBoolean();
 	}
 
-	public BattleItem(boolean collisionable, int width, int height) {
-		instanceId = UUID.randomUUID().toString();
-		this.isCollisionable = collisionable;
-		this.width = width;
-		this.height = height;
+	public boolean isCollision(BattleItem b) {
+		if (isHomeBuilding) {
+			return b.player != player;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean isCollision(CharacterModel character2) {
+		return isHomeBuilding ? false : true;
 	}
 }

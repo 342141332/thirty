@@ -18,7 +18,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskAttackProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskMoveProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.TaskProduceProtocol;
-	import com.gearbrother.mushroomWar.view.common.AvatarFile;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarView;
 	import com.greensock.TweenLite;
 	
@@ -147,7 +146,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					troopText.validateLayoutNow();
 				}
 			}*/
-			if ((!events || events.hasOwnProperty(BattleItemProtocol.OWNER_ID))/* && model is BattleItemBuildingModel*/) {
+			/*if ((!events || events.hasOwnProperty(BattleItemProtocol.FORWARD))) {
 				if (GameModel.instance.loginedUser && model.ownerId) {
 					if (GameModel.instance.loginedUser.uuid == model.ownerId) {
 						enemyFilter.unapply(_avatar);
@@ -157,43 +156,31 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 						ownerFilter.unapply(_avatar);
 					}
 				}
-			}
+			}*/
 			if (!events
 				|| events.hasOwnProperty(BattleItemProtocol.ACTION)
 				|| events.hasOwnProperty(BattleItemProtocol.CARTOON)) {
 				if (model.action is TaskMoveProtocol) {
 					var move:TaskMoveProtocol = model.action as TaskMoveProtocol;
-					if (model.forward[0] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_RIGHT);
-					} else if (model.forward[0] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_LEFT);
-					} else if (model.forward[1] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_DOWN);
-					} else if (model.forward[1] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_UP);
+					if (model.forward == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_RIGHT, model.def);
+					} else {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_MOVE_LEFT, model.def);
 					}
 				} else if (model.action is TaskAttackProtocol) {
 					var attack:TaskAttackProtocol = model.action as TaskAttackProtocol;
 					_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
 					var target:BattleItemModel = model.battle.items[attack.targetId] as BattleItemModel;
-					if (model.forward[0] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_RIGHT);
-					} else if (model.forward[0] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_LEFT);
-					} else if (model.forward[1] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_DOWN);
-					} else if (model.forward[1] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_UP);
+					if (model.forward == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_RIGHT, model.def);
+					} else {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_SKILL_LEFT, model.def);
 					}
 				} else {
-					if (model.forward[0] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_RIGHT);
-					} else if (model.forward[0] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_LEFT);
-					} else if (model.forward[1] == 1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
-					} else if (model.forward[1] == -1) {
-						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_UP);
+					if (model.forward == 1) {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_RIGHT, model.def);
+					} else {
+						_avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_LEFT, model.def);
 					}
 				}
 			}

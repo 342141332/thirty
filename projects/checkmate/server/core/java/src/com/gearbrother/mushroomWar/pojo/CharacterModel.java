@@ -26,7 +26,7 @@ public class CharacterModel extends RpcBean {
 	public String headPortraint;
 	
 	@RpcBeanProperty(desc = "国家")
-	public String country;
+	public int nation;
 
 	@RpcBeanProperty(desc = "")
 	public String cartoon;
@@ -95,31 +95,14 @@ public class CharacterModel extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public int height;
 
-	@RpcBeanProperty(desc = "攻击范围数组")
-	public int[][] attackRects;
-
 	public CharacterModel(JsonNode json) {
 		this.json = json;
 		this.name = json.get("name").asText();
+		this.width = json.has("width") ? json.get("width").asInt() : 1;
+		this.height = json.has("height") ? json.get("height").asInt() : 1;
 		if (json.has("head"))
 			this.headPortraint = json.get("head").asText();
 		this.cartoon = json.get("avatar").asText();
-		this.describe = json.get("describe").asText();
-		if (json.has("attackRects")) {
-			ArrayNode attackRectsNode = (ArrayNode) json.get("attackRects");
-			this.attackRects = new int[attackRectsNode.size()][];
-			for (int i = 0; i < attackRectsNode.size(); i++) {
-				ArrayNode attackRectNode = (ArrayNode) attackRectsNode.get(i);
-				this.attackRects[i] = new int[4];
-				this.attackRects[i][0] = attackRectNode.get(0).asInt();
-				this.attackRects[i][1] = attackRectNode.get(1).asInt();
-				this.attackRects[i][2] = attackRectNode.get(2).asInt();
-				this.attackRects[i][3] = attackRectNode.get(3).asInt();
-			}
-		} else {
-			this.attackRects = new int[1][];
-			this.attackRects[0] = new int[] {0, -1, 1, 0};
-		}
 		this.levels = new ArrayList<CharacterLevel>();
 		if (json.has("levels")) {
 			ArrayNode levelsNode = (ArrayNode) json.get("levels");
@@ -133,13 +116,15 @@ public class CharacterModel extends RpcBean {
 			_level.id = 0;
 			this.levels.add(_level);
 		}
+		setExp(0);
 		equips = new ArrayList<Equip>();
 		skills = new ArrayList<Skill>();
 		if (json.has("coin")) {
 			this.coin = json.get("coin").asInt();
 		}
-		width = height = 1;
-		setExp(0);
+		if (json.has("nation"))
+			nation = json.get("nation").asInt();
+		this.describe = json.get("describe").asText();
 	}
 
 	@Override

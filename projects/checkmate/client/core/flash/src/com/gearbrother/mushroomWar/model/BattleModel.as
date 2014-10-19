@@ -1,5 +1,6 @@
 package com.gearbrother.mushroomWar.model {
 	import com.gearbrother.glash.common.algorithm.GBinaryHeap;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleProtocol;
 
 
@@ -8,14 +9,6 @@ package com.gearbrother.mushroomWar.model {
 	 * @create on 2014-1-7
 	 */
 	public class BattleModel extends BattleProtocol {
-		private var _loginedUser:BattleRoomSeatModel;
-		public function get loginedBattleUser():BattleRoomSeatModel {
-			return _loginedUser;
-		}
-		public function set loginedBattleUser(newValue:BattleRoomSeatModel):void {
-			_loginedUser = newValue;
-		}
-
 		public var _collisions:Object;
 		public function getCollision(row:int, col:int):BattleItemModel {
 			if (this._collisions.hasOwnProperty(row))
@@ -51,6 +44,14 @@ package com.gearbrother.mushroomWar.model {
 			col = prototype.col;
 			row = prototype.row;
 			cellPixel = prototype.cellPixel;
+			forces = [];
+			for each (var forceProto:Object in prototype.force) {
+				var force:BattleForceProtocol = new BattleForceProtocol();
+				force.border = forceProto.border;
+				force.forward = forceProto.forward;
+				force.maxPlayer = forceProto.maxPlayer;
+				forces.push(force);
+			}
 			return this;
 		}
 

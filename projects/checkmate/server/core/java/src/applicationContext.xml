@@ -28,7 +28,6 @@
 	</bean>
 
 	<bean class="com.gearbrother.mushroomWar.pojo.GameConf" />
-	<bean class="com.gearbrother.mushroomWar.pojo.World" />
 	<import resource="classpath:applicationContext-mina.xml" />
 	<import resource="classpath:applicationContext-service.xml" />
 	<!-- 

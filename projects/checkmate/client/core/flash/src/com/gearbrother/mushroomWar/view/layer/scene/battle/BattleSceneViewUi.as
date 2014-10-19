@@ -10,10 +10,11 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.propertyHandler.GPropertyBindDataHandler;
 	import com.gearbrother.glash.util.lang.GDateUtil;
 	import com.gearbrother.mushroomWar.model.BattleModel;
-	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+	import com.gearbrother.mushroomWar.model.BattlePlayerModel;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
 	import com.gearbrother.mushroomWar.rpc.service.bussiness.BattleService;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
@@ -21,6 +22,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.view.common.ui.SkillUiView;
 	
 	import flash.events.MouseEvent;
+	
+	import org.as3commons.lang.ObjectUtils;
 
 
 	/**
@@ -29,10 +32,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	 */
 	public class BattleSceneViewUi extends GContainer {
 		public var clockText:GText;
+
+		public var topPlayerUi:GHBox;
 		
-		public var topPlayerUi:PlayerUi;
-		
-		public var bottomPlayerUi:PlayerUi;
+		public var bottomPlayerUi:GHBox;
 
 		public var battle:BattleModel;
 		
@@ -52,6 +55,8 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			this.battle = battle;
 			_canvas = canvas;
+			addChild(topPlayerUi = new GHBox());
+			addChild(bottomPlayerUi = new GHBox());
 			libs = [new GAliasFile("static/asset/skin/battle.swf")];
 			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 		}
@@ -65,11 +70,28 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 //			clockText.fontSize = 14;
 //			clockText.fontBold = true;
 //			clockText.text = "00:00:00";
-			addChild(topPlayerUi = new PlayerUi(skinFile.getInstance("PlayerTopSkin")));
-			topPlayerUi.bindData = battle.seats[0];
-			topPlayerUi.hpProgress.policy = GProgress.POLICY_RIGHT_TO_LEFT;
-			addChild(bottomPlayerUi = new PlayerUi(skinFile.getInstance("PlayerBottomSkin")));
-			bottomPlayerUi.bindData = battle.seats[1];
+			var forces:Array = ObjectUtils.getKeys(battle.forces);
+			for (var i:int = 0; i < forces.length; i++) {
+				var force:BattleForceProtocol = battle.forces[i];
+				for each (var player:BattlePlayerModel in force.players) {
+					var playerUi:PlayerUi;
+					if (i == 0) {
+						playerUi = topPlayerUi.addChild(new PlayerUi(skinFile.getInstance("PlayerTopSkin"))) as PlayerUi;
+						playerUi.bindData = player;
+					} else if (i == 1) {
+						playerUi = bottomPlayerUi.addChild(new PlayerUi(skinFile.getInstance("PlayerBottomSkin"))) as PlayerUi;
+						playerUi.bindData = player;
+					}
+				}
+				if (i == 0) {
+					var forceUi:ForceUi = topPlayerUi.addChild(new ForceUi(skinFile.getInstance("ForceTopSkin"))) as ForceUi;
+					forceUi.bindData = force;
+				} else {
+					forceUi = bottomPlayerUi.addChild(new ForceUi(skinFile.getInstance("ForceTopSkin"))) as ForceUi;
+					forceUi.hpProgress.policy = GProgress.POLICY_RIGHT_TO_LEFT;
+					forceUi.bindData = force;
+				}
+			}
 			enableTick = true;
 		}
 
@@ -88,6 +110,12 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			super.doValidateLayout();
 
 			if (topPlayerUi && bottomPlayerUi) {
+				topPlayerUi.width = topPlayerUi.preferredSize.width;
+				topPlayerUi.height = topPlayerUi.preferredSize.height;
+				topPlayerUi.validateLayoutNow();
+				bottomPlayerUi.width = bottomPlayerUi.preferredSize.width;
+				bottomPlayerUi.height = bottomPlayerUi.preferredSize.height;
+				bottomPlayerUi.validateLayoutNow();
 				var offset:Number = Math.min((width - Math.max(topPlayerUi.width, bottomPlayerUi.width)) >> 1, 70); 
 				if (topPlayerUi) {
 					topPlayerUi.x = ((width - topPlayerUi.width) >> 1) + offset;
@@ -105,10 +133,10 @@ import com.gearbrother.glash.display.GNoScale;
 import com.gearbrother.glash.display.GSkinSprite;
 import com.gearbrother.glash.display.control.GProgress;
 import com.gearbrother.glash.display.control.text.GText;
-import com.gearbrother.mushroomWar.model.BattleRoomModel;
-import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+import com.gearbrother.mushroomWar.model.BattlePlayerModel;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
+import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattlePlayerProtocol;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
-import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatProtocol;
 import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 import com.greensock.TweenLite;
 import com.greensock.easing.Linear;
@@ -121,11 +149,7 @@ import org.as3commons.lang.ObjectUtils;
 class PlayerUi extends GNoScale {
 	public var nameLabel:GText;
 
-	public var hpLabel:GText;
-
-	public var hpProgress:GProgress;
-
-	public var soilders:Array;
+	public var characterUiViews:Array;
 
 	public var coinLabel:GText;
 
@@ -133,14 +157,11 @@ class PlayerUi extends GNoScale {
 		super(skin);
 
 		nameLabel = new GText(skin["nameLabel"]);
-		hpLabel = new GText(skin["hpLabel"]);
-		hpLabel.useHtml = true;
-		hpProgress = new GProgress(skin["hpProgress"]);
-		soilders = [];
+		characterUiViews = [];
 		for (var i:int = 0; ; i++) {
-			var child:DisplayObject = skin["soilder" + i];
+			var child:DisplayObject = skin["soldier" + i];
 			if (child)
-				soilders.push(new AvatarUiView(child as DisplayObjectContainer));
+				characterUiViews.push(new AvatarUiView(child as DisplayObjectContainer));
 			else
 				break;
 		}
@@ -148,36 +169,56 @@ class PlayerUi extends GNoScale {
 	}
 	
 	override public function handleModelChanged(events:Object=null):void {
-		if (bindData is BattleRoomSeatModel) {
-			var model:BattleRoomSeatModel = bindData;
-			if (!events) {
-				nameLabel.text = "Lv." + model.level + " " + model.name;
-				hpLabel.valueFormater = function(value:*):String {
-					return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
-				};
-				hpLabel.text = 0;
-				hpProgress.minValue = 0;
-				hpProgress.maxValue = model.maxHp;
-			}
-			if (!events
-				|| events.hasOwnProperty(BattleRoomSeatProtocol.HP)) {
-				TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
-				TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
-			}
-			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.COIN)) {
+		if (bindData is BattlePlayerModel) {
+			var model:BattlePlayerModel = bindData;
+			if (!events || events.hasOwnProperty(BattlePlayerProtocol.COIN)) {
 				coinLabel.text = model.coin;
 			}
-			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_SOILDERS)) {
+			if (!events || events.hasOwnProperty(BattlePlayerProtocol.CHOOSED_SOILDERS)) {
 				var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
-				for (var i:int = 0; i < soilders.length; i++) {
-					var avatarUiView:AvatarUiView = soilders[i];
+				for (var i:int = 0; i < characterUiViews.length; i++) {
+					var avatarUiView:AvatarUiView = characterUiViews[i];
 					if (choosedSoilders.hasOwnProperty(i)) {
 						avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
 					}
 				}
 			}
-			if (!events || events.hasOwnProperty(BattleRoomSeatProtocol.CHOOSED_HEROES)) {
+			if (!events || events.hasOwnProperty(BattlePlayerProtocol.CHOOSED_HEROES)) {
 				
+			}
+		}
+	}
+}
+
+class ForceUi extends GNoScale {
+	public var hpLabel:GText;
+	
+	public var hpProgress:GProgress;
+
+	public function ForceUi(skin:DisplayObjectContainer) {
+		super(skin);
+		
+		hpLabel = new GText(skin["hpLabel"]);
+		hpLabel.useHtml = true;
+		hpProgress = new GProgress(skin["hpProgress"]);
+	}
+	
+	override public function handleModelChanged(events:Object=null):void {
+		if (bindData is BattleForceProtocol) {
+			var model:BattleForceProtocol = bindData;
+			if (!events) {
+				hpLabel.valueFormater = function(value:*):String {
+					return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
+				};
+				hpLabel.text = 0;
+				hpProgress.minValue = 0;
+				hpProgress.value = model.hp;
+				hpProgress.maxValue = model.maxHp;
+			}
+			if (!events
+				|| events.hasOwnProperty(BattlePlayerProtocol.HP)) {
+				TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
+				TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
 			}
 		}
 	}

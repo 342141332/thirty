@@ -1,63 +1,127 @@
 {
 	"0": {
 		"name": "步兵",
-		"damage": [1, 3],
-		"attackRects": [[0, -1, 1, 0]],
-		"coin": 1,
+		"cost": 1,
 		"width": 1,
 		"height": 1,
-		"armsType": "步兵",
 		"avatar": "static/asset/avatar/enemy_11.swf",
-		"describe": "基础攻击单位,攻击正前方一格"
+		"armsType": "步兵",
+		"levels": [
+			{
+				"exp": 0,
+				"hp": 25,
+				"attackRects": [[0, 0, 1, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 2]
+			},
+			{
+				"exp": 30,
+				"hp": 30,
+				"attackRects": [[0, 0, 1, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 3]
+			}
+		],
+		"describe": "基础攻击单位"
 	},
 	"1": {
 		"name": "骑兵",
-		"avatar": "static/asset/avatar/enemy_3.swf",
-		"describe": "攻击",
-		"armsType": "术士",
-		"coin": 1,
+		"cost": 1,
 		"width": 1,
 		"height": 1,
-		"attackRects": [[0, -1, 1, 0]]
+		"avatar": "static/asset/avatar/enemy_3.swf",
+		"armsType": "骑兵",
+		"levels": [
+			{
+				"exp": 0,
+				"hp": 30,
+				"attackRects": [[0, 0, 1, 1]],
+				"interval": 400,
+				"attackDamage": [2, 5]
+			},
+			{
+				"exp": 30,
+				"hp": 40,
+				"attackRects": [[0, 0, 1, 1]],
+				"interval": 400,
+				"attackDamage": [3, 6]
+			}
+		],
+		"describe": "高攻，高防单位，攻击正前方<b><font color=\"#00FF00\">一格</font></b>"
 	},
 	"2": {
 		"name": "弓兵",
-		"avatar": "static/asset/avatar/enemy_2.swf",
-		"describe": "攻击",
-		"armsType": "术士",
-		"coin": 1,
+		"cost": 1,
 		"width": 1,
 		"height": 1,
-		"attackRects": [[0, -3, 1, 0]]
+		"avatar": "static/asset/avatar/enemy_2.swf",
+		"armsType": "弓兵",
+		"levels": [
+			{
+				"exp": 0,
+				"hp": 7,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 3]
+			},
+			{
+				"exp": 30,
+				"hp": 8,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 5]
+			}
+		],
+		"describe": "远程单位攻击正前方<b><font color=\"#00FF00\">三格</font></b>，无法攻击面前单位，基础攻击力<b><font color=\"#00FF00\">1-3</font></b>"
 	},
 	"3": {
 		"name": "术士",
-		"avatar": "static/asset/avatar/enemy_24.swf",
-		"describe": "攻击",
-		"armsType": "骑将",
-		"coin": 1,
+		"cost": 1,
 		"width": 1,
 		"height": 1,
-		"attackRects": [[0, -1, 1, 0]]
+		"avatar": "static/asset/avatar/enemy_24.swf",
+		"armsType": "术士",
+		"levels": [
+			{
+				"exp": 0,
+				"hp": 7,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 3]
+			},
+			{
+				"exp": 30,
+				"hp": 8,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 5]
+			}
+		],
+		"describe": "加血单位，给单个目标基础增加"
 	},
 	"4": {
-		"name": "军师",
-		"avatar": "static/asset/avatar/enemy_5.swf",
-		"describe": "攻击",
-		"armsType": "骑将",
-		"coin": 1,
-		"width": 1,
-		"height": 1,
-		"attackRects": [[0, -1, 1, 0]]
-	},
-	"5": {
 		"name": "工程车",
+		"cost": 1,
+		"width": 2,
+		"height": 2,
 		"avatar": "static/asset/avatar/enemy_22.swf",
-		"describe": "攻击",
-		"armsType": "骑将",
-		"coin": 1,
-		"width": 1,
-		"height": 1,
-		"attackRects": [[0, -1, 1, 0]]
+		"armsType": "工程车",
+		"levels": [
+			{
+				"exp": 0,
+				"hp": 7,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 3]
+			},
+			{
+				"exp": 30,
+				"hp": 8,
+				"attackRects": [[1, 0, 3, 1]],
+				"interval": 2000,
+				"attackDamage": [1, 5]
+			}
+		],
+		"describe": "攻击"
 	}
 }

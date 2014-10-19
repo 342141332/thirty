@@ -130,7 +130,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 			tipData = model;
 			if (model) {
 				if (avatar) {
-					avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN);
+					avatar.setCartoon(model.cartoon, AvatarView.STATE_STOP_DOWN, model.nation == 0 ? "Soldier" : "General");
 				}
 				if (nameLabel)
 					nameLabel.text = model.name;
@@ -151,8 +151,6 @@ package com.gearbrother.mushroomWar.view.common.ui {
 					hpLabel.text = String(model.level.hp);
 				if (armorLabel)
 					armorLabel.text = String(model.level.armor);
-				if (speedLabel)
-					speedLabel.text = String(model.level.move);
 				if (!events || events.hasOwnProperty(CharacterModelProtocol.EQUIPS)) {
 					for (var i:int = 0; i < equipIcons.length; i++) {
 						var equipView:SkillUiView = equipIcons[i];
@@ -176,7 +174,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				}
 			} else {
 				if (avatar)
-					avatar.setCartoon(null, AvatarView.STATE_STOP_DOWN);
+					avatar.setCartoon(null, AvatarView.STATE_STOP_DOWN, "General");
 				if (nameLabel)
 					nameLabel.text = "";
 				for (i = 0; i < equipIcons.length; i++) {

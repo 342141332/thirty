@@ -7,7 +7,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import com.gearbrother.glash.display.layout.impl.BorderLayout;
 	import com.gearbrother.glash.mvc.model.GBean;
 	import com.gearbrother.mushroomWar.GameMain;
-	import com.gearbrother.mushroomWar.model.BattleRoomModel;
+	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.HallModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.HallProtocol;
@@ -16,6 +16,8 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import flash.events.MouseEvent;
 	
 	import org.as3commons.lang.ObjectUtils;
+
+
 
 
 	/**
@@ -53,7 +55,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 			if (event.target == _createRoomBtn) {
 				GameMain.instance.roomService.createRoom(_mapId.text
 					, function(res:*):void {
-						var room:BattleRoomModel = res;
+						var room:BattleModel = res;
 						GameMain.instance.scenelayer.addChild(new RoomSceneView(room));
 					}
 				);
@@ -64,11 +66,11 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				at = at % mapIds.length;
 				_mapId.text = mapIds[at];
 				_mapId.revalidateLayout();
-			} else if (event.target is GButton && (event.target as GButton).data is BattleRoomModel) {
-				var room:BattleRoomModel = (event.target as GButton).data;
-				GameMain.instance.roomService.enterRoom(room.uuid
+			} else if (event.target is GButton && (event.target as GButton).data is BattleModel) {
+				var room:BattleModel = (event.target as GButton).data;
+				GameMain.instance.roomService.enterRoom(room.instanceUuid
 					, function(res:*):void {
-						GameMain.instance.scenelayer.addChild(new RoomSceneView(res as BattleRoomModel));
+						GameMain.instance.scenelayer.addChild(new RoomSceneView(res as BattleModel));
 					}
 				);
 			}
@@ -80,24 +82,24 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 				var propertyEvent:PropertyEventProtocol = event.response as PropertyEventProtocol;
 				switch (propertyEvent.type) {
 					case 1:
-						if (propertyEvent.item is BattleRoomModel) {
-							var roomModel:BattleRoomModel = propertyEvent.item as BattleRoomModel;
-							model.rooms[roomModel.uuid] = roomModel;
-							model.setPropertyChanged(HallProtocol.ROOMS);
+						if (propertyEvent.item is BattleModel) {
+							var roomModel:BattleModel = propertyEvent.item as BattleModel;
+							model.preparingBattles[roomModel.instanceUuid] = roomModel;
+							model.setPropertyChanged(HallProtocol.PREPARING_BATTLES);
 						}
 						break;
 					case 2:
-						if (propertyEvent.item is BattleRoomModel) {
-							roomModel = propertyEvent.item as BattleRoomModel;
-							(model.rooms[roomModel.uuid] as GBean).merge(roomModel);
-							model.setPropertyChanged(HallProtocol.ROOMS);
+						if (propertyEvent.item is BattleModel) {
+							roomModel = propertyEvent.item as BattleModel;
+							(model.preparingBattles[roomModel.instanceUuid] as GBean).merge(roomModel);
+							model.setPropertyChanged(HallProtocol.PREPARING_BATTLES);
 						}
 						break;
 					case 3:
-						if (propertyEvent.item is BattleRoomModel) {
-							roomModel = propertyEvent.item as BattleRoomModel;
-							delete model.rooms[roomModel.uuid];
-							model.setPropertyChanged(HallProtocol.ROOMS);
+						if (propertyEvent.item is BattleModel) {
+							roomModel = propertyEvent.item as BattleModel;
+							delete model.preparingBattles[roomModel.instanceUuid];
+							model.setPropertyChanged(HallProtocol.PREPARING_BATTLES);
 						}
 						break;
 				}
@@ -106,14 +108,14 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		
 		override public function handleModelChanged(events:Object=null):void {
 			var hall:HallModel = bindData;
-			if (!events || events.hasOwnProperty(HallProtocol.ROOMS)) {
+			if (!events || events.hasOwnProperty(HallProtocol.PREPARING_BATTLES)) {
 				_roomList.removeAllChildren();
-				for each (var room:BattleRoomModel in hall.rooms) {
+				for each (var room:BattleModel in hall.preparingBattles) {
 					var line:GHBox = new GHBox();
 					var label:GText;
 					line.addChild(label = new GText());
 					label.fontColor = 0xFFFFFF;
-					label.text = room.name + "(" + ObjectUtils.getProperties(room.battle.items).length + ")";
+					label.text = room.name;
 					var enterBtn:GButton;
 					line.addChild(enterBtn = new GButton());
 					enterBtn.text = "enter";
@@ -130,3 +132,4 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 		}
 	}
 }
+

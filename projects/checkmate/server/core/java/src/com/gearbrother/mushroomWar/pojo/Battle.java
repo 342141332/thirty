@@ -1,17 +1,22 @@
 package com.gearbrother.mushroomWar.pojo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 
@@ -27,9 +32,12 @@ public class Battle extends RpcBean {
 	static public final int STATE_PREPARING = 1;
 
 	static public final int STATE_PLAYING = 2;
-
+	
 	@RpcBeanProperty(desc = "身份唯一ID")
 	public String instanceUuid;
+
+	@RpcBeanProperty(desc = "名字")
+	public String name;
 
 	@RpcBeanProperty(desc = "地图配置ID")
 	public String confId;
@@ -38,7 +46,7 @@ public class Battle extends RpcBean {
 	public long expiredPeriodMinutes;
 
 	@RpcBeanProperty(desc = "势力")
-	public BattleForce[] forces;
+	public Map<String, BattleForce> forces;
 	
 	@RpcBeanProperty(desc = "像素宽")
 	public int width;
@@ -64,18 +72,17 @@ public class Battle extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public int cellPixel;
 
-	private Grid[] collisions;
+	private Cell[] cells;
 
-	public List<BattleItem> getCollision(int[] collisionRect) {
-		List<BattleItem> res = new ArrayList<BattleItem>();
+	public Collection<BattleItem> getCollision(int[] collisionRect) {
+		Set<BattleItem> res = new HashSet<BattleItem>();
 		int right = Math.min(col, collisionRect[2]);
 		int bottom = Math.min(row, collisionRect[3]);
 		for (int left = Math.max(0, collisionRect[0]); left < right; left++) {
 			for (int top = Math.max(0, collisionRect[1]); top < bottom; top++) {
-				Grid grid = collisions[left + top * col];
-				if (grid != null && grid.collision != null) {
-					res.add(grid.collision);
-				}
+				Cell grid = cells[left + top * col];
+				if (grid != null)
+					res.addAll(grid.items);
 			}
 		}
 		return res;
@@ -100,20 +107,19 @@ public class Battle extends RpcBean {
 		sortItems.get(item.getClass()).put(item.instanceId, item);
 		for (int left = item.left; left < item.left + item.width; left++) {
 			for (int top = item.top; top < item.top + item.height; top++) {
-				Grid grid = collisions[left + top * col];
+				Cell grid = cells[left + top * col];
 				if (grid != null) {
-					if (item.isCollisionable) {
-						if (collisions[left + top * col].collision == null) {
-							collisions[left + top * col].collision = item;
-						} else {
+					for (BattleItem b : grid.items) {
+						if (item.isCollision(b))
 							throw new Error("collision is already used");
-						}
 					}
 					grid.items.add(item);
 				} else {
-					grid = collisions[left + top * col] = new Grid();
-					if (item.isCollisionable)
-						grid.collision = item;
+					grid = cells[left + top * col] = new Cell();
+					for (BattleItem b : grid.items) {
+						if (item.isCollision(b))
+							throw new Error("collision is already used");
+					}
 					grid.items.add(item);
 				}
 			}
@@ -125,13 +131,7 @@ public class Battle extends RpcBean {
 		sortItems.get(item.getClass()).remove(item.instanceId);
 		for (int left = 0; left < item.width; left++) {
 			for (int top = 0; top < item.height; top++) {
-				Grid grid = collisions[item.left + item.top * col];
-				if (item.isCollisionable) {
-					if (grid.collision == item)
-						grid.collision = null;
-					else
-						throw new Error();
-				}
+				Cell grid = cells[item.left + item.top * col];
 				if (!grid.items.remove(item))
 					throw new Error();
 			}
@@ -144,35 +144,31 @@ public class Battle extends RpcBean {
 
 		for (int oldLeft = item.left; oldLeft < item.left + item.width; oldLeft++) {
 			for (int oldTop = item.top; oldTop < item.top + item.height; oldTop++) {
-				if (!collisions[oldLeft + oldTop * col].items.contains(item)
-						|| (item.isCollisionable && collisions[oldLeft + oldTop * col].collision != item)) {
+				if (!cells[oldLeft + oldTop * col].items.contains(item)) {
 					throw new Error();
 				}
 			}
 		}
-		if (item.isCollisionable) {
-			for (int left = newLeft; left < newLeft + item.width; left++) {
-				for (int top = newTop; top < newTop + item.height; top++) {
-					if (collisions[left + top * col] != null && collisions[left + top * col].collision != null && collisions[left + top * col].collision != item) {
-						return false;
+		for (int left = newLeft; left < newLeft + item.width; left++) {
+			for (int top = newTop; top < newTop + item.height; top++) {
+				if (cells[left + top * col] != null) {
+					for (BattleItem b : cells[left + top * col].items) {
+						if (item.isCollision(b))
+							return false;
 					}
 				}
 			}
 		}
 		for (int oldLeft = item.left; oldLeft < item.left + item.width; oldLeft++) {
 			for (int oldTop = item.top; oldTop < item.top + item.height; oldTop++) {
-				if (item.isCollisionable)
-					collisions[oldLeft + oldTop * col].collision = null;
-				collisions[oldLeft + oldTop * col].items.remove(item);
+				cells[oldLeft + oldTop * col].items.remove(item);
 			}
 		}
 		for (int left = newLeft; left < newLeft + item.width; left++) {
 			for (int top = newTop; top < newTop + item.height; top++) {
-				Grid grid = collisions[left + top * col];
+				Cell grid = cells[left + top * col];
 				if (grid == null)
-					grid = collisions[left + top * col] = new Grid();
-				if (item.isCollisionable)
-					grid.collision = item;
+					grid = cells[left + top * col] = new Cell();
 				grid.items.add(item);
 			}
 		}
@@ -188,24 +184,22 @@ public class Battle extends RpcBean {
 
 	public TreeSet<Task> tasks;
 
-	public SessionObserver observer;
+	final public SessionObserver observer;
 
 	private JsonNode json;
 
-	public Battle() {
+	public Battle(JsonNode json) {
+		this.json = json;
 		this.sortItems = new HashMap<Class<?>, Map<String, BattleItem>>();
 		this.items = new HashMap<String, BattleItem>();
 		this.state = STATE_PREPARING;
-	}
-
-	public Battle(JsonNode json) {
-		this();
-
-		this.json = json;
-		ArrayNode forcesNode = (ArrayNode) json.get("force");
-		this.forces = new BattleForce[forcesNode.size()];
-		for (int i = 0; i < forcesNode.size(); i++) {
-			this.forces[i] = new BattleForce(forcesNode.get(i));
+		JsonNode forcesNode = json.get("force");
+		this.forces = new HashMap<String, BattleForce>();
+		for (Iterator<Entry<String, JsonNode>> iterator = forcesNode.fields(); iterator.hasNext();) {
+			Entry<String, JsonNode> entry = (Entry<String, JsonNode>) iterator.next();
+			BattleForce force = new BattleForce(entry.getValue());
+			force.id = entry.getKey();
+			this.forces.put(force.id, force);
 		}
 		this.width = json.get("width").asInt();
 		this.height = json.get("height").asInt();
@@ -215,10 +209,14 @@ public class Battle extends RpcBean {
 		this.cellPixel = json.get("cellPixel").asInt();
 		this.col = json.get("col").asInt();
 		this.row = json.get("row").asInt();
-		this.collisions = new Grid[col * row];
+		this.cells = new Cell[col * row];
 		JsonNode itemsNode = json.get("items");
 		for (int i = 0; i < itemsNode.size(); i++) {
-			addItem(new BattleItem(itemsNode.get(i)));
+			JsonNode itemNode = itemsNode.get(i);
+			BattleItem item = new BattleItem(itemNode);
+			item.instanceId = UUID.randomUUID().toString();
+			item.force = forces.get(itemNode.get("force").asText());
+			addItem(item);
 		}
 		this.tasks = new TreeSet<Task>(new Comparator<Task>() {
 
@@ -233,6 +231,7 @@ public class Battle extends RpcBean {
 					return o1.instanceId.compareTo(o2.instanceId);
 			}
 		});
+		observer = new SessionObserver();
 	}
 
 	public void execute(long now) {
@@ -254,12 +253,10 @@ public class Battle extends RpcBean {
 		return new Battle(json);
 	}
 }
-class Grid {
-	public BattleItem collision;
-
+class Cell {
 	public List<BattleItem> items;
 
-	public Grid() {
+	public Cell() {
 		items = new ArrayList<BattleItem>();
 	}
 }

@@ -27,7 +27,7 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="default">
-      <airSettings airCertificatePath="E:/job/project_dragon/src/client/com.madbox.dragon.mapReader/b.p12" airTimestamp="true" anePathSet="true" version="1">
+      <airSettings airCertificatePath="E:/job/project_dragon/src/client/com.madbox.dragon.mapReader/b.p12" airTimestamp="true" anePathSet="false" version="1">
         <airExcludes/>
         <anePaths/>
       </airSettings>

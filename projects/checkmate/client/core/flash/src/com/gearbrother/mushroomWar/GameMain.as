@@ -3,6 +3,9 @@ package com.gearbrother.mushroomWar {
 	import com.gearbrother.glash.common.oper.ext.GAliasFile;
 	import com.gearbrother.glash.debug.FPStatus;
 	import com.gearbrother.glash.display.container.GContainer;
+	import com.gearbrother.glash.display.container.GHBox;
+	import com.gearbrother.glash.display.container.GVBox;
+	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.display.layer.GAlertLayer;
 	import com.gearbrother.glash.display.layer.GCursorLayer;
 	import com.gearbrother.glash.display.layer.GDragLayer;
@@ -13,11 +16,13 @@ package com.gearbrother.mushroomWar {
 	import com.gearbrother.glash.display.layer.GWindowLayer;
 	import com.gearbrother.glash.display.layout.impl.BorderLayout;
 	import com.gearbrother.glash.display.layout.impl.FillLayout;
+	import com.gearbrother.glash.display.layout.impl.GridLayout;
 	import com.gearbrother.glash.display.manager.GPaintManager;
 	import com.gearbrother.glash.display.propertyHandler.GPropertyPoolOperHandler;
 	import com.gearbrother.glash.manager.RootManager;
 	import com.gearbrother.glash.manager.browser.BrowerManager;
 	import com.gearbrother.glash.net.GChannelEvent;
+	import com.gearbrother.glash.util.lang.GStringUtils;
 	import com.gearbrother.mushroomWar.model.ApplicationModel;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
@@ -33,6 +38,7 @@ package com.gearbrother.mushroomWar {
 	import com.gearbrother.mushroomWar.view.layer.scene.LoginSceneView;
 	import com.gearbrother.mushroomWar.view.layer.scene.SceneLayer;
 	import com.gearbrother.mushroomWar.view.tip.StringTip;
+	import com.gearbrother.mushroomWar.view.tip.CharacterTip;
 	import com.junkbyte.console.Cc;
 	
 	import flash.display.DisplayObject;
@@ -307,14 +313,13 @@ package com.gearbrother.mushroomWar {
 			addChild(tipLayer);
 			tipLayer.getTipView = function(data:*):DisplayObject {
 				if (data is CharacterModel) {
-					var tip:StringTip = new StringTip();
-					tip.bindData = "<font color=\"#92D050\">" + (data as CharacterModel).name + " Lv." + ((data as CharacterModel).level.id + 1) + "</font>\n"
-						+ "<font color=\"#ffffff\">" + (data as CharacterModel).describe + "</font>";
-					return tip;
+					var t:CharacterTip = new CharacterTip();
+					t.bindData = data;
+					return t;
 				} else if (data is String) {
-					tip = new StringTip();
-					tip.bindData = "<font color=\"#ffffff\">" + data + "</font>";
-					return tip;
+					var stringTip:StringTip = new StringTip();
+					stringTip.bindData = "<font color=\"#ffffff\">" + data + "</font>";
+					return stringTip;
 				} else {
 					return null;
 				}

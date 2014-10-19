@@ -1,0 +1,1242 @@
+{
+	"9105A467-82CE-2553-41DD-583CB47F95D3": {
+		"name": "神武张飞",
+		"avatar": "static/asset/avatar/general_502.swf",
+		"head": "hero2",
+		"nation": 2,
+		"describe": "刘备军三当家，作战勇猛还能写一手好字，和关羽一样不善处理人际关系而被属下杀害。",
+		"armsType": "骑将"
+	},
+	"91061C8F-82CE-25D3-41D7-D97253798406": {
+		"name": "蔡琰",
+		"avatar": "static/asset/avatar/general_81.swf",
+		"head": "hero81",
+		"nation": 1,
+		"describe": "蔡文姬，三国时期著名女诗人。",
+		"armsType": "术士"
+	},
+	"910B6C73-82CF-E532-41C2-1FC8AF68772D": {
+		"name": "郭嘉",
+		"avatar": "static/asset/avatar/general_105.swf",
+		"head": "hero105",
+		"nation": 1,
+		"describe": "曹老板的贴身跟班，智谋过人，但身体太差，后和曹老板去乌丸公干，水土不服病逝。",
+		"armsType": "术士"
+	},
+	"91007644-82CE-2555-41D5-F2401CDAA815": {
+		"name": "郭淮",
+		"avatar": "static/asset/avatar/general_201.swf",
+		"head": "hero201",
+		"nation": 1,
+		"describe": "魏国大将，打败蜀汉追击时没想到被姜维那小人暗箭所伤，血流不止而死。",
+		"armsType": "骑将"
+	},
+	"91018248-82CE-3D5D-41D0-E437936EA9AA": {
+		"name": "孙坚",
+		"avatar": "static/asset/avatar/general_130.swf",
+		"head": "hero130",
+		"nation": 3,
+		"describe": "东吴大当家，十五岁开始创业之路，因一次杀人越货而名震天下，喜欢较真，结果和人玩命玩死了。",
+		"armsType": "步将"
+	},
+	"9104C8A4-82CE-2DD5-41BD-407189B548F9": {
+		"name": "张绣",
+		"avatar": "static/asset/avatar/general_24.swf",
+		"head": "hero24",
+		"nation": 1,
+		"describe": "赵云的师兄，以百鸟朝凤枪威震天下，谋害典韦后投奔曹操反而得到了很好的待遇。",
+		"armsType": "骑将"
+	},
+	"9104D8E7-82CE-2D53-41DC-04C2E0B2BCBA": {
+		"name": "贾诩",
+		"avatar": "static/asset/avatar/general_25.swf",
+		"head": "hero25",
+		"nation": 1,
+		"describe": "三国时期著名谋士，因计谋狠辣而被世人称为毒士，传闻中，计谋成功率100%。",
+		"armsType": "术士"
+	},
+	"910369B4-82CE-2F36-41A7-65B36F62BA39": {
+		"name": "神武黄忠",
+		"avatar": "static/asset/avatar/general_606.swf",
+		"head": "hero106",
+		"nation": 2,
+		"describe": "蜀汉老将，刘表死后无依无靠，这时刘备对他伸出了有爱的双手，因此对刘备特别忠心。",
+		"armsType": "弓将"
+	},
+	"910B9A02-82CF-ECD2-41D5-3367DAC6C93C": {
+		"name": "蔡琰",
+		"avatar": "static/asset/avatar/general_81.swf",
+		"head": "hero81",
+		"nation": 1,
+		"describe": "蔡文姬，三国时期著名女诗人。",
+		"armsType": "术士"
+	},
+	"91065D26-82CE-24D5-41CA-7E13C98A762B": {
+		"name": "潘凤",
+		"avatar": "static/asset/avatar/general_86.swf",
+		"head": "hero86",
+		"nation": 4,
+		"describe": "三国时期有名的无双上将潘凤，传闻战华雄未死，后改名为司马懿投奔曹操。",
+		"armsType": "骑将"
+	},
+	"91075A9F-82CE-2DF3-41AD-8C155ABB31FC": {
+		"name": "文丑",
+		"avatar": "static/asset/avatar/general_50.swf",
+		"head": "hero50",
+		"nation": 4,
+		"describe": "袁绍手下大将，射退张辽、击败徐晃，但心理素质太差，不到三回合就被关羽斩于马下。",
+		"armsType": "骑将"
+	},
+	"9100A75C-82CE-2376-41D5-E0008129F87D": {
+		"name": "孙权",
+		"avatar": "static/asset/avatar/general_229.swf",
+		"head": "hero229",
+		"nation": 3,
+		"describe": "江东孙家老二没老爸老哥会打架，但装傻绝对一流，因此天生就是一个当君主的命。",
+		"armsType": "步将"
+	},
+	"9615A7DB-82CF-E372-41C0-6B483FA8A8B6": {
+		"name": "夏侯惇",
+		"avatar": "static/asset/avatar/general_60.swf",
+		"head": "hero60",
+		"nation": 1,
+		"describe": "曹操帐下潮男之一，因对海盗崇拜至极而戴上了眼罩扮酷，曹操死后如有追随般病死。",
+		"armsType": "骑将"
+	},
+	"910B6B5D-82CF-E376-41D3-95345CCE0697": {
+		"name": "许劭",
+		"avatar": "static/asset/avatar/general_91.swf",
+		"head": "hero91",
+		"nation": 4,
+		"describe": "三国时的著名主持人，每个月都会主持节目对一些风云人物做出评价。",
+		"armsType": "术士"
+	},
+	"9100E871-82CE-2D4E-41D8-B7EB795FA9AF": {
+		"name": "魔化孟获",
+		"avatar": "static/asset/avatar/general_262.swf",
+		"head": "hero196",
+		"nation": 4,
+		"describe": "被诸葛亮抓了七次，后被汉族美食所吸引，留在诸葛亮身边立志吃遍天下美食。",
+		"armsType": "步将"
+	},
+	"9105E56E-82CE-2755-41DA-313D292585AD": {
+		"name": "神武孙尚香",
+		"avatar": "static/asset/avatar/general_626.swf",
+		"head": "hero126",
+		"nation": 3,
+		"describe": "孙权之妹兼刘备之妻，身份尊贵，所以骄纵蛮横，称为枭姬，听闻刘备彝陵战败后投江自杀。",
+		"armsType": "弓将"
+	},
+	"910B4E84-82CF-E5D6-41D3-C10AB2DE3B23": {
+		"name": "孙坚",
+		"avatar": "static/asset/avatar/general_130.swf",
+		"head": "hero130",
+		"nation": 3,
+		"describe": "东吴大当家，十五岁开始创业之路，因一次杀人越货而名震天下，喜欢较真，结果和人玩命玩死了。",
+		"armsType": "步将"
+	},
+	"9615C7A5-82CF-E3D6-41DC-E6286A948146": {
+		"name": "袁绍",
+		"avatar": "static/asset/avatar/general_51.swf",
+		"head": "hero51",
+		"nation": 4,
+		"describe": "联军盟主，为人小气，引起众小弟不服，在官渡谈判中被昔日小弟曹操阴了，在郁闷中病死。",
+		"armsType": "步将"
+	},
+	"91044727-82CE-24D3-41CC-159ACF0D0AA9": {
+		"name": "司马懿",
+		"avatar": "static/asset/avatar/general_6.swf",
+		"head": "hero6",
+		"nation": 1,
+		"describe": "魏国的军师，西晋的奠基者，曾试穿过诸葛亮赠送的女性服饰，是伪娘这一名词的开创者。",
+		"armsType": "术士"
+	},
+	"910B6B8F-82CF-E3D2-41DF-9900F5A37D76": {
+		"name": "庞德",
+		"avatar": "static/asset/avatar/general_95.swf",
+		"head": "hero95",
+		"nation": 1,
+		"describe": "曹操手下诸多有名打手之一，后在樊北十里和关羽打架，由于水性不好败北。",
+		"armsType": "步将"
+	},
+	"910AC0D3-82CE-1D73-41D0-3088A6BFD527": {
+		"name": "蒋琬",
+		"avatar": "static/asset/avatar/general_185.swf",
+		"head": "hero185",
+		"nation": 2,
+		"describe": "诸葛亮死后主持蜀汉朝政，闭关息民取得了很好效果，但后来准备北伐时得急病而亡。",
+		"armsType": "术士"
+	},
+	"9104A831-82CE-2CCF-41DD-311A95483A9D": {
+		"name": "华雄",
+		"avatar": "static/asset/avatar/general_16.swf",
+		"head": "hero16",
+		"nation": 4,
+		"describe": "董卓军大将，在虎牢关被车轮战导致体力不支，又顾着面子没有下场休息，被关羽趁机击败。",
+		"armsType": "骑将"
+	},
+	"910B9991-82CF-EFCE-41DB-25AD4DCEF66C": {
+		"name": "典韦",
+		"avatar": "static/asset/avatar/general_79.swf",
+		"head": "hero79",
+		"nation": 1,
+		"describe": "曹老板著名保镖，为保护老板而被张绣杀死，是三国时期各大老板巨头梦寐以求的敬业保镖。",
+		"armsType": "步将"
+	},
+	"910045FF-82CE-2733-41D7-C6E3FEC09F79": {
+		"name": "孟获",
+		"avatar": "static/asset/avatar/general_196.swf",
+		"head": "hero196",
+		"nation": 4,
+		"describe": "被诸葛亮抓了七次，后被汉族美食所吸引，留在诸葛亮身边立志吃遍天下美食。",
+		"armsType": "步将"
+	},
+	"9105B4AA-82CE-25DD-41D4-59273DC04F9F": {
+		"name": "神武吕布",
+		"avatar": "static/asset/avatar/general_504.swf",
+		"head": "hero4",
+		"nation": 4,
+		"describe": "三国时期第一打手，擅长谋害干爹争夺遗产，还是个顾家的好男人，即使被围城都在家陪老婆。",
+		"armsType": "骑将"
+	},
+	"9615F6D2-82CF-E572-41C7-4FDA7AC559CF": {
+		"name": "甄姬",
+		"avatar": "static/asset/avatar/general_47.swf",
+		"head": "hero47",
+		"nation": 1,
+		"describe": "三国美女之一，原是袁熙之妻，后被曹丕抢做压寨夫人，因曹植为她所著的洛神赋而久负盛名。",
+		"armsType": "军师"
+	},
+	"9104F95F-82CE-2F73-41C7-6B0589699352": {
+		"name": "赵云",
+		"avatar": "static/asset/avatar/general_33.swf",
+		"head": "hero33",
+		"nation": 2,
+		"describe": "刘备帐下第一帅哥保镖，常胜将军，心理素质超好，因带着刘备儿子在长坂打群架而备受器重。",
+		"armsType": "骑将"
+	},
+	"9614D45E-82CF-E572-41C4-DAC361357925": {
+		"name": "张角",
+		"avatar": "static/asset/avatar/general_12.swf",
+		"head": "hero12",
+		"nation": 4,
+		"describe": "黄巾军CEO，喜欢用符术给人治病，在一次法术示范中吃下掺有三聚氰胺的符纸后病亡。",
+		"armsType": "术士"
+	},
+	"91007698-82CE-25FE-417E-45BFA8A81BA2": {
+		"name": "姜维",
+		"avatar": "static/asset/avatar/general_211.swf",
+		"head": "hero211",
+		"nation": 2,
+		"describe": "对孔明崇拜得五体投地，蜀汉倒后还成功忽悠钟会反魏，可惜钟会从小吃三聚氰胺实在太蠢失败被杀。",
+		"armsType": "骑将"
+	},
+	"9107BB38-82CE-233D-419D-61BDCCB17B9A": {
+		"name": "蒯越",
+		"avatar": "static/asset/avatar/general_64.swf",
+		"head": "hero64",
+		"nation": 1,
+		"describe": "带着刘表的次子投靠曹老板，虽然没当成什么高官但也平平安安的度过一生。",
+		"armsType": "术士"
+	},
+	"9106AE51-82CE-254F-41B9-C12675CA13E4": {
+		"name": "庞德",
+		"avatar": "static/asset/avatar/general_95.swf",
+		"head": "hero95",
+		"nation": 1,
+		"describe": "曹操手下诸多有名打手之一，后在樊北十里和关羽打架，由于水性不好败北。",
+		"armsType": "步将"
+	},
+	"910B5E03-82CF-E4D2-41D7-89E3957949EE": {
+		"name": "孙尚香",
+		"avatar": "static/asset/avatar/general_126.swf",
+		"head": "hero126",
+		"nation": 3,
+		"describe": "孙权之妹兼刘备之妻，身份尊贵，所以骄纵蛮横，称为枭姬，听闻刘备彝陵战败后投江自杀。",
+		"armsType": "弓将"
+	},
+	"910436B6-82CE-2535-419D-05A59AAF854B": {
+		"name": "吕布",
+		"avatar": "static/asset/avatar/general_4.swf",
+		"head": "hero4",
+		"nation": 4,
+		"describe": "三国时期第一打手，擅长谋害干爹争夺遗产，还是个顾家的好男人，即使被围城都在家陪老婆。",
+		"armsType": "骑将"
+	},
+	"910B5E44-82CF-E556-41D9-EFA1E3D7722B": {
+		"name": "于吉",
+		"avatar": "static/asset/avatar/general_129.swf",
+		"head": "hero129",
+		"nation": 4,
+		"describe": "道教经典《太平经》作者，经常在吴地进行传销活动，被孙策以打击传销的名字正法。",
+		"armsType": "术士"
+	},
+	"9100F829-82CE-2CDE-41AF-6E04AA6E71BA": {
+		"name": "王元姬",
+		"avatar": "static/asset/avatar/general_261.swf",
+		"head": "hero261",
+		"nation": 1,
+		"describe": "反贼爱好者，丈夫儿子都是历史上著名的反贼。",
+		"armsType": "步将"
+	},
+	"9105634F-82CE-2353-41DB-4EAC5414D761": {
+		"name": "曹操",
+		"avatar": "static/asset/avatar/general_247.swf",
+		"head": "hero247",
+		"nation": 1,
+		"describe": "三国著名投资家，挟天子以令诸侯这种稳赚不赔的买卖让他平步青云。",
+		"armsType": "步将"
+	},
+	"9100C7E1-82CE-234E-41CB-315D09C26D28": {
+		"name": "曹操",
+		"avatar": "static/asset/avatar/general_247.swf",
+		"head": "hero247",
+		"nation": 1,
+		"describe": "三国著名投资家，挟天子以令诸侯这种稳赚不赔的买卖让他平步青云。",
+		"armsType": "步将"
+	},
+	"910B4FD4-82CF-E375-41C5-B19396023EE6": {
+		"name": "马云騄",
+		"avatar": "static/asset/avatar/general_163.swf",
+		"head": "hero163",
+		"nation": 2,
+		"describe": "马腾的女儿，马超的妹妹，和赵云一见钟情，是中国古代自由恋爱的先行者。",
+		"armsType": "骑将"
+	},
+	"91051219-82CE-1CFF-41D8-F21E7753666F": {
+		"name": "姜维",
+		"avatar": "static/asset/avatar/general_211.swf",
+		"head": "hero211",
+		"nation": 2,
+		"describe": "对孔明崇拜得五体投地，蜀汉倒后还成功忽悠钟会反魏，可惜钟会从小吃三聚氰胺实在太蠢失败被杀。",
+		"armsType": "骑将"
+	},
+	"9106AE0B-82CE-24D3-41DD-CF07F8C673DE": {
+		"name": "许劭",
+		"avatar": "static/asset/avatar/general_91.swf",
+		"head": "hero91",
+		"nation": 4,
+		"describe": "三国时的著名主持人，每个月都会主持节目对一些风云人物做出评价。",
+		"armsType": "术士"
+	},
+	"91038A2B-82CE-2CD2-417A-FC871271EB2D": {
+		"name": "神武孙坚",
+		"avatar": "static/asset/avatar/general_630.swf",
+		"head": "hero130",
+		"nation": 3,
+		"describe": "东吴大当家，十五岁开始创业之路，因一次杀人越货而名震天下，喜欢较真，结果和人玩命玩死了。",
+		"armsType": "步将"
+	},
+	"9101E38F-82CE-23D3-41B5-EA574DEF9775": {
+		"name": "孙策",
+		"avatar": "static/asset/avatar/general_139.swf",
+		"head": "hero139",
+		"nation": 3,
+		"describe": "三国时期东吴著名悲剧人物，“小霸王”孙策天生只有打江山的命，被弟弟孙权坐享其成。",
+		"armsType": "步将"
+	},
+	"9101D0CB-82CE-3D53-41C7-76F6A7C11151": {
+		"name": "荀彧",
+		"avatar": "static/asset/avatar/general_119.swf",
+		"head": "hero119",
+		"nation": 1,
+		"describe": "曹老板手下顶级猎头，钟繇，司马懿，郭嘉等曹老板手下大量人才都是被他忽悠来的。",
+		"armsType": "术士"
+	},
+	"910AD108-82CE-1CDD-41DA-69B018B3B83A": {
+		"name": "刘备",
+		"avatar": "static/asset/avatar/general_187.swf",
+		"head": "hero187",
+		"nation": 2,
+		"describe": "刘家军大当家，文武基本上都是半桶水，但是苦练哭功数十载，凭着这招收服了很多高手。",
+		"armsType": "步将"
+	},
+	"910AC063-82CE-1D53-41B3-AAED8FA5FF2A": {
+		"name": "关兴",
+		"avatar": "static/asset/avatar/general_171.swf",
+		"head": "hero171",
+		"nation": 2,
+		"describe": "关羽的儿子，关平的弟弟，从小体弱多病，因一次出征保暖措施不到家而感冒病死。",
+		"armsType": "步将"
+	},
+	"91035944-82CE-2F56-41D8-9531961AFC7E": {
+		"name": "神武吕布",
+		"avatar": "static/asset/avatar/general_504.swf",
+		"head": "hero4",
+		"nation": 4,
+		"describe": "三国时期第一打手，擅长谋害干爹争夺遗产，还是个顾家的好男人，即使被围城都在家陪老婆。",
+		"armsType": "骑将"
+	},
+	"9104163A-82CE-253D-41B6-04EE70B3D11D": {
+		"name": "张飞",
+		"avatar": "static/asset/avatar/general_2.swf",
+		"head": "hero2",
+		"nation": 2,
+		"describe": "刘备军三当家，作战勇猛还能写一手好字，和关羽一样不善处理人际关系而被属下杀害。",
+		"armsType": "骑将"
+	},
+	"91040601-82CE-24CF-41AC-93A5AF24FFBE": {
+		"name": "关羽",
+		"avatar": "static/asset/avatar/general_1.swf",
+		"head": "hero1",
+		"nation": 2,
+		"describe": "刘备军二当家，有着非凡的武力，但由于人际关系处理不好反被小人出卖而英勇就义。",
+		"armsType": "步将"
+	},
+	"910AF17F-82CE-1F33-41D2-FCC0271B1BA4": {
+		"name": "孟获",
+		"avatar": "static/asset/avatar/general_196.swf",
+		"head": "hero196",
+		"nation": 4,
+		"describe": "被诸葛亮抓了七次，后被汉族美食所吸引，留在诸葛亮身边立志吃遍天下美食。",
+		"armsType": "步将"
+	},
+	"9614C499-82CF-E5FE-41CE-16AC19896DA8": {
+		"name": "华雄",
+		"avatar": "static/asset/avatar/general_16.swf",
+		"head": "hero16",
+		"nation": 4,
+		"describe": "董卓军大将，在虎牢关被车轮战导致体力不支，又顾着面子没有下场休息，被关羽趁机击败。",
+		"armsType": "骑将"
+	},
+	"9104F992-82CE-2FCD-41C3-D7D56B34D477": {
+		"name": "公孙瓒",
+		"avatar": "static/asset/avatar/general_34.swf",
+		"head": "hero34",
+		"nation": 4,
+		"describe": "早期潮男领军人物，喜欢骑白马装王子，还喜欢宅家不出门，结果防火没做到位被自焚而死。",
+		"armsType": "骑将"
+	},
+	"910B990F-82CF-ECD2-41C5-FCD3D69E009B": {
+		"name": "曹仁",
+		"avatar": "static/asset/avatar/general_77.swf",
+		"head": "hero77",
+		"nation": 1,
+		"describe": "曹操亲戚加亲信，对曹老板言听计从，拒周瑜、败马超、占襄阳，战功赫赫。",
+		"armsType": "骑将"
+	},
+	"910477F4-82CE-2335-41C4-5B1592472504": {
+		"name": "张角",
+		"avatar": "static/asset/avatar/general_12.swf",
+		"head": "hero12",
+		"nation": 4,
+		"describe": "黄巾军CEO，喜欢用符术给人治病，在一次法术示范中吃下掺有三聚氰胺的符纸后病亡。",
+		"armsType": "术士"
+	},
+	"9107EC44-82CE-2555-41DD-2B0C65BD3050": {
+		"name": "典韦",
+		"avatar": "static/asset/avatar/general_79.swf",
+		"head": "hero79",
+		"nation": 1,
+		"describe": "曹老板著名保镖，为保护老板而被张绣杀死，是三国时期各大老板巨头梦寐以求的敬业保镖。",
+		"armsType": "步将"
+	},
+	"9105E52B-82CE-24D3-41BA-9710F2E0820F": {
+		"name": "神武黄忠",
+		"avatar": "static/asset/avatar/general_606.swf",
+		"head": "hero106",
+		"nation": 2,
+		"describe": "蜀汉老将，刘表死后无依无靠，这时刘备对他伸出了有爱的双手，因此对刘备特别忠心。",
+		"armsType": "弓将"
+	},
+	"910B9AC2-82CF-ED52-41DF-F10553D29FE6": {
+		"name": "王允",
+		"avatar": "static/asset/avatar/general_87.swf",
+		"head": "hero87",
+		"nation": 4,
+		"describe": "大汉时期有名的政客，为了挑拨董卓吕布父子关系，不惜把自己的义女也搭进去。",
+		"armsType": "军师"
+	},
+	"910729FB-82CE-2F33-41CF-F674E9E42F00": {
+		"name": "貂蝉",
+		"avatar": "static/asset/avatar/general_42.swf",
+		"head": "hero42",
+		"nation": 4,
+		"describe": "三国时期的大美女，因成功策反吕布谋害董卓而被世人称为三国时期第一女间谍。",
+		"armsType": "弓将"
+	},
+	"910583D2-82CE-234D-41A6-D3D7BEAA41D2": {
+		"name": "魔化孟获",
+		"avatar": "static/asset/avatar/general_262.swf",
+		"head": "hero196",
+		"nation": 4,
+		"describe": "被诸葛亮抓了七次，后被汉族美食所吸引，留在诸葛亮身边立志吃遍天下美食。",
+		"armsType": "步将"
+	},
+	"910B4EC2-82CF-E552-41D8-F65018716FC0": {
+		"name": "大乔",
+		"avatar": "static/asset/avatar/general_133.swf",
+		"head": "hero133",
+		"nation": 3,
+		"describe": "孙策之妻，东吴著名美女，但是结婚没几年就守了寡，三国时多少青年才俊为之可惜感叹。",
+		"armsType": "军师"
+	},
+	"9106FF03-82CE-24D3-41CC-9A17BB50A2C3": {
+		"name": "吕玲绮",
+		"avatar": "static/asset/avatar/general_99.swf",
+		"head": "hero99",
+		"nation": 4,
+		"describe": "吕布的女儿，继承了吕布的武勇，三国时期母老虎之一。",
+		"armsType": "骑将"
+	},
+	"9101C155-82CE-3F77-41B4-CC54BE290C60": {
+		"name": "夏侯渊",
+		"avatar": "static/asset/avatar/general_121.swf",
+		"head": "hero121",
+		"nation": 1,
+		"describe": "年轻时为曹操替罪坐牢，经常一人单挑数敌，是曹操手下名将，但最后却被黄忠暗箭所杀。",
+		"armsType": "弓将"
+	},
+	"91073A33-82CE-2D33-41B8-CC1588160E5A": {
+		"name": "甄姬",
+		"avatar": "static/asset/avatar/general_47.swf",
+		"head": "hero47",
+		"nation": 1,
+		"describe": "三国美女之一，原是袁熙之妻，后被曹丕抢做压寨夫人，因曹植为她所著的洛神赋而久负盛名。",
+		"armsType": "军师"
+	},
+	"910B9A44-82CF-ED56-41D9-D7CF8370DC9B": {
+		"name": "廖化",
+		"avatar": "static/asset/avatar/general_83.swf",
+		"head": "hero83",
+		"nation": 2,
+		"describe": "黄巾农民军出生，抢了刘备老婆做压寨夫人，后被关二爷一身忠义所感，成其秘书，忠心无二。",
+		"armsType": "步将"
+	},
+	"91062CD2-82CE-254D-41BD-47897EF17DC9": {
+		"name": "廖化",
+		"avatar": "static/asset/avatar/general_83.swf",
+		"head": "hero83",
+		"nation": 2,
+		"describe": "黄巾农民军出生，抢了刘备老婆做压寨夫人，后被关二爷一身忠义所感，成其秘书，忠心无二。",
+		"armsType": "步将"
+	},
+	"9101C467-82CE-2553-41B7-9552012B6F38": {
+		"name": "马超",
+		"avatar": "static/asset/avatar/general_164.swf",
+		"head": "hero164",
+		"nation": 2,
+		"describe": "蜀汉五虎上将之一，因外貌英俊号称锦马超，曾数次激战曹操，战败入蜀后投降刘备。",
+		"armsType": "骑将"
+	},
+	"910161F6-82CE-3F35-41C6-46F4067CCDB0": {
+		"name": "于吉",
+		"avatar": "static/asset/avatar/general_129.swf",
+		"head": "hero129",
+		"nation": 4,
+		"describe": "道教经典《太平经》作者，经常在吴地进行传销活动，被孙策以打击传销的名字正法。",
+		"armsType": "术士"
+	},
+	"96144609-82CF-E4DE-41E0-42372110BA74": {
+		"name": "公孙瓒",
+		"avatar": "static/asset/avatar/general_34.swf",
+		"head": "hero34",
+		"nation": 4,
+		"describe": "早期潮男领军人物，喜欢骑白马装王子，还喜欢宅家不出门，结果防火没做到位被自焚而死。",
+		"armsType": "骑将"
+	},
+	"910B6BC0-82CF-E34E-41D1-706E759D2706": {
+		"name": "太史慈",
+		"avatar": "static/asset/avatar/general_97.swf",
+		"head": "hero97",
+		"nation": 3,
+		"describe": "原是刘繇部下，和孙策单挑后一见如故，从而投奔东吴，帮助孙家扫荡江东。",
+		"armsType": "步将"
+	},
+	"91077AD2-82CE-2D4D-41DA-D33648AC1BBA": {
+		"name": "袁绍",
+		"avatar": "static/asset/avatar/general_51.swf",
+		"head": "hero51",
+		"nation": 4,
+		"describe": "联军盟主，为人小气，引起众小弟不服，在官渡谈判中被昔日小弟曹操阴了，在郁闷中病死。",
+		"armsType": "步将"
+	},
+	"9101F4BA-82CE-253D-41C6-8D72168D4A00": {
+		"name": "关兴",
+		"avatar": "static/asset/avatar/general_171.swf",
+		"head": "hero171",
+		"nation": 2,
+		"describe": "关羽的儿子，关平的弟弟，从小体弱多病，因一次出征保暖措施不到家而感冒病死。",
+		"armsType": "步将"
+	},
+	"9104578B-82CE-23D3-41D7-BFF9339DEBA7": {
+		"name": "张梁",
+		"avatar": "static/asset/avatar/general_10008.swf",
+		"head": "hero10008",
+		"nation": 4,
+		"describe": "黄巾军三当家，由于有严重的夜盲症而被官军夜袭，到死都没看清楚被谁杀了。",
+		"armsType": "弓将"
+	},
+	"9105C4EE-82CE-2555-41CB-25DEA55CF540": {
+		"name": "神武赵云",
+		"avatar": "static/asset/avatar/general_533.swf",
+		"head": "hero533",
+		"nation": 2,
+		"describe": "刘备帐下第一帅哥保镖，常胜将军，心理素质超好，因带着刘备儿子在长坂打群架而倍受器重。",
+		"armsType": "骑将"
+	},
+	"91053295-82CE-1DF7-41E0-3F79A222B5FD": {
+		"name": "小乔",
+		"avatar": "static/asset/avatar/general_220.swf",
+		"head": "hero220",
+		"nation": 3,
+		"describe": "江东美女，用一对双扇让周瑜对他言听计从。",
+		"armsType": "军师"
+	},
+	"91059423-82CE-24D3-41CF-1D3A30A70CD6": {
+		"name": "神武关羽",
+		"avatar": "static/asset/avatar/general_501.swf",
+		"head": "hero501",
+		"nation": 2,
+		"describe": "刘备军二当家，有着非凡的武力，但由于人际关系处理不好反被小人出卖而英勇就义。",
+		"armsType": "步将"
+	},
+	"910B5DBB-82CF-E732-41D5-CA22522B71E0": {
+		"name": "夏侯渊",
+		"avatar": "static/asset/avatar/general_121.swf",
+		"head": "hero121",
+		"nation": 1,
+		"describe": "年轻时为曹操替罪坐牢，经常一人单挑数敌，是曹操手下名将，但最后却被黄忠暗箭所杀。",
+		"armsType": "弓将"
+	},
+	"91074A68-82CE-2D5D-41AE-2FF88383FC8E": {
+		"name": "颜良",
+		"avatar": "static/asset/avatar/general_48.swf",
+		"head": "hero48",
+		"nation": 4,
+		"describe": "袁绍手下猛将，高度近视，在战斗中掉落隐形眼镜后视力严重受损，被关羽偷袭而亡。",
+		"armsType": "骑将"
+	},
+	"910B6BF6-82CF-E332-41D5-84E8AEA60EB6": {
+		"name": "吕玲绮",
+		"avatar": "static/asset/avatar/general_99.swf",
+		"head": "hero99",
+		"nation": 4,
+		"describe": "吕布的女儿，继承了吕布的武勇，三国时期母老虎之一。",
+		"armsType": "骑将"
+	},
+	"91052259-82CE-1D7F-41B2-A0C3BE4EEF7E": {
+		"name": "黄月英",
+		"avatar": "static/asset/avatar/general_219.swf",
+		"head": "hero219",
+		"nation": 2,
+		"describe": "年轻时用计谋把诸葛亮骗的一愣一愣的，最终还是乖乖从了孔明哥。",
+		"armsType": "术士"
+	},
+	"910B9957-82CF-EF72-41B6-36B282F77448": {
+		"name": "简雍",
+		"avatar": "static/asset/avatar/general_78.swf",
+		"head": "hero78",
+		"nation": 2,
+		"describe": "从小就和刘备一起玩泥巴，跟随刘备后由于能说会道而经常作为谈判专家出使各个国家。",
+		"armsType": "军师"
+	},
+	"910014F0-82CE-254D-41DD-1BFB214296B1": {
+		"name": "庞统",
+		"avatar": "static/asset/avatar/general_179.swf",
+		"head": "hero179",
+		"nation": 2,
+		"describe": "刘备谋士，号称凤雏，和诸葛亮其名，一次观看射箭表演，因眼神不好躲闪不及被飞箭射死。",
+		"armsType": "术士"
+	},
+	"9615D762-82CF-E352-41A3-040394C9AD7D": {
+		"name": "文丑",
+		"avatar": "static/asset/avatar/general_50.swf",
+		"head": "hero50",
+		"nation": 4,
+		"describe": "袁绍手下大将，射退张辽、击败徐晃，但心理素质太差，不到三回合就被关羽斩于马下。",
+		"armsType": "骑将"
+	},
+	"9107DC0D-82CE-24D7-41BD-0D1F0AE9DB81": {
+		"name": "简雍",
+		"avatar": "static/asset/avatar/general_78.swf",
+		"head": "hero78",
+		"nation": 2,
+		"describe": "从小就和刘备一起玩泥巴，跟随刘备后由于能说会道而经常作为谈判专家出使各个国家。",
+		"armsType": "军师"
+	},
+	"910B5D18-82CF-E4FE-41DB-221D0BA24BAD": {
+		"name": "曹纯",
+		"avatar": "static/asset/avatar/general_113.swf",
+		"head": "hero113",
+		"nation": 1,
+		"describe": "曹魏武将，曹仁弟弟，也是曹操精锐部队虎豹骑的统领，在多个攻坚战役中颇有功绩。",
+		"armsType": "骑将"
+	},
+	"9104E92A-82CE-2CDD-41DD-D316185B07BA": {
+		"name": "李傕",
+		"avatar": "static/asset/avatar/general_27.swf",
+		"head": "hero27",
+		"nation": 4,
+		"describe": "董卓军精锐飞熊军统领，在董卓遗产争夺战中击败过吕布，和郭汜内讧而被曹操击败。",
+		"armsType": "骑将"
+	},
+	"910467C4-82CE-2355-41D6-66E47CD7A0F1": {
+		"name": "张宝",
+		"avatar": "static/asset/avatar/general_10006.swf",
+		"head": "hero10006",
+		"nation": 4,
+		"describe": "黄巾军二当家，略通妖法又不专精，还经常出来招摇撞骗，结果被破了法术后灭了。",
+		"armsType": "术士"
+	},
+	"91002578-82CE-273D-41A6-BA0D66977122": {
+		"name": "刘备",
+		"avatar": "static/asset/avatar/general_187.swf",
+		"head": "hero187",
+		"nation": 2,
+		"describe": "刘家军大当家，文武基本上都是半桶水，但是苦练哭功数十载，凭着这招收服了很多高手。",
+		"armsType": "步将"
+	},
+	"961B4325-82CF-FCD6-41CB-3A8246783BA4": {
+		"name": "许褚",
+		"avatar": "static/asset/avatar/general_5.swf",
+		"head": "hero5",
+		"nation": 1,
+		"describe": "曹操的警卫队队长，征战英勇，由于在和马超的战斗中脱衣展示自己的曲线而闻名于世。",
+		"armsType": "步将"
+	},
+	"91019031-82CE-3CCF-41D0-EF796C5FF590": {
+		"name": "司马徽",
+		"avatar": "static/asset/avatar/general_109.swf",
+		"head": "hero109",
+		"nation": 2,
+		"describe": "三国时期最好的猎头，曾经向刘备推荐过徐庶、诸葛亮和庞统。",
+		"armsType": "军师"
+	},
+	"910096DF-82CE-2572-41D9-AD84F0ECB0BE": {
+		"name": "黄月英",
+		"avatar": "static/asset/avatar/general_219.swf",
+		"head": "hero219",
+		"nation": 2,
+		"describe": "年轻时用计谋把诸葛亮骗的一愣一愣的，最终还是乖乖从了孔明哥。",
+		"armsType": "术士"
+	},
+	"9614F427-82CF-E4D2-41DE-3208E75D0003": {
+		"name": "张宝",
+		"avatar": "static/asset/avatar/general_10006.swf",
+		"head": "hero10006",
+		"nation": 4,
+		"describe": "黄巾军二当家，略通妖法又不专精，还经常出来招摇撞骗，结果被破了法术后灭了。",
+		"armsType": "术士"
+	},
+	"96148511-82CF-E4CE-41DA-548616738E92": {
+		"name": "张绣",
+		"avatar": "static/asset/avatar/general_24.swf",
+		"head": "hero24",
+		"nation": 1,
+		"describe": "赵云的师兄，以百鸟朝凤枪威震天下，谋害典韦后投奔曹操反而得到了很好的待遇。",
+		"armsType": "骑将"
+	},
+	"91012F51-82CE-234F-41D2-11CAFCFC7312": {
+		"name": "徐晃",
+		"avatar": "static/asset/avatar/general_103.swf",
+		"head": "hero103",
+		"nation": 1,
+		"describe": "又一个跳槽到曹老板公司并取得成功的例子，病前还在襄阳打败了诸葛瑾，好好恶心了诸葛瑾一把。",
+		"armsType": "骑将"
+	},
+	"9101B07D-82CE-3D37-418F-8A0E490BE893": {
+		"name": "曹纯",
+		"avatar": "static/asset/avatar/general_113.swf",
+		"head": "hero113",
+		"nation": 1,
+		"describe": "曹魏武将，曹仁弟弟，也是曹操精锐部队虎豹骑的统领，在多个攻坚战役中颇有功绩。",
+		"armsType": "骑将"
+	},
+	"910B4F2D-82CF-E4D7-41C4-83FD7C5DE279": {
+		"name": "周瑜",
+		"avatar": "static/asset/avatar/general_138.swf",
+		"head": "hero138",
+		"nation": 3,
+		"describe": "东吴都督，赤壁之战大败曹操，天生丽质美貌异常，引起孔明嫉妒并用尽各种办法气死了周瑜。",
+		"armsType": "术士"
+	},
+	"9107CBBC-82CE-2335-41CE-0B253942FCEE": {
+		"name": "曹仁",
+		"avatar": "static/asset/avatar/general_77.swf",
+		"head": "hero77",
+		"nation": 1,
+		"describe": "曹操亲戚加亲信，对曹老板言听计从，拒周瑜、败马超、占襄阳，战功赫赫。",
+		"armsType": "骑将"
+	},
+	"910436EA-82CE-255D-41B9-FBB0237579C0": {
+		"name": "许褚",
+		"avatar": "static/asset/avatar/general_5.swf",
+		"head": "hero5",
+		"nation": 1,
+		"describe": "曹操的警卫队队长，征战英勇，由于在和马超的战斗中脱衣展示自己的曲线而闻名于世。",
+		"armsType": "步将"
+	},
+	"9100352C-82CE-24D5-41C0-02D917151707": {
+		"name": "蒋琬",
+		"avatar": "static/asset/avatar/general_185.swf",
+		"head": "hero185",
+		"nation": 2,
+		"describe": "诸葛亮死后主持蜀汉朝政，闭关息民取得了很好效果，但后来准备北伐时得急病而亡。",
+		"armsType": "术士"
+	},
+	"910AC09F-82CE-1DF3-41B9-19226FF5989E": {
+		"name": "庞统",
+		"avatar": "static/asset/avatar/general_179.swf",
+		"head": "hero179",
+		"nation": 2,
+		"describe": "刘备谋士，号称凤雏，和诸葛亮其名，一次观看射箭表演，因眼神不好躲闪不及被飞箭射死。",
+		"armsType": "术士"
+	},
+	"9100D799-82CE-23FE-41D8-AA0998789C88": {
+		"name": "邓艾",
+		"avatar": "static/asset/avatar/general_237.swf",
+		"head": "hero237",
+		"nation": 1,
+		"describe": "魏国又一个被钟会污蔑的倒霉鬼，和儿子一起被司马昭杀害。",
+		"armsType": "骑将"
+	},
+	"91078B04-82CE-2CD5-41BF-48AD1933ABB2": {
+		"name": "夏侯惇",
+		"avatar": "static/asset/avatar/general_60.swf",
+		"head": "hero60",
+		"nation": 1,
+		"describe": "曹操帐下潮男之一，因对海盗崇拜至极而戴上了眼罩扮酷，曹操死后如有追随般病死。",
+		"armsType": "骑将"
+	},
+	"9614754B-82CF-E752-41D0-6E7588F25BC0": {
+		"name": "贾诩",
+		"avatar": "static/asset/avatar/general_25.swf",
+		"head": "hero25",
+		"nation": 1,
+		"describe": "三国时期著名谋士，因计谋狠辣而被世人称为毒士，传闻中，计谋成功率100%。",
+		"armsType": "术士"
+	},
+	"961B236B-82CF-E352-41D8-4938EF74B920": {
+		"name": "司马懿",
+		"avatar": "static/asset/avatar/general_6.swf",
+		"head": "hero6",
+		"nation": 1,
+		"describe": "魏国的军师，西晋的奠基者，曾试穿过诸葛亮赠送的女性服饰，是伪娘这一名词的开创者。",
+		"armsType": "术士"
+	},
+	"910B99CB-82CF-EF52-41B9-C77CA142237D": {
+		"name": "徐庶",
+		"avatar": "static/asset/avatar/general_80.swf",
+		"head": "hero80",
+		"nation": 2,
+		"describe": "原刘备军师爷，后由于想跳槽到曹操军只吃饭不干活而推荐了诸葛亮，因此成为三国时期有名的猎头。",
+		"armsType": "术士"
+	},
+	"91042679-82CE-253F-41BA-DEFA1DD73213": {
+		"name": "诸葛亮",
+		"avatar": "static/asset/avatar/general_3.swf",
+		"head": "hero3",
+		"nation": 2,
+		"describe": "刘备军头号师爷，擅长各种阴谋诡计，曾气死周瑜骂死王朗，后来由于经常熬夜而过劳死。",
+		"armsType": "军师"
+	},
+	"910B6C2C-82CF-E4D6-41D0-957DBC3EAB34": {
+		"name": "徐晃",
+		"avatar": "static/asset/avatar/general_103.swf",
+		"head": "hero103",
+		"nation": 1,
+		"describe": "又一个跳槽到曹老板公司并取得成功的例子，病前还在襄阳打败了诸葛瑾，好好恶心了诸葛瑾一把。",
+		"armsType": "骑将"
+	},
+	"91068DBB-82CE-2733-41D6-2C4FCCE0EE72": {
+		"name": "荀攸",
+		"avatar": "static/asset/avatar/general_88.swf",
+		"head": "hero88",
+		"nation": 1,
+		"describe": "曹老板智囊之一，因妙计百出、足智多谋而被称为“谋主”。",
+		"armsType": "军师"
+	},
+	"961465CF-82CF-E752-41D6-D2ABB67D7CD8": {
+		"name": "赵云",
+		"avatar": "static/asset/avatar/general_33.swf",
+		"head": "hero33",
+		"nation": 2,
+		"describe": "刘备帐下第一帅哥保镖，常胜将军，心理素质超好，因带着刘备儿子在长坂打群架而备受器重。",
+		"armsType": "骑将"
+	},
+	"9105F5B7-82CE-2733-41DC-984642EC128F": {
+		"name": "神武孙坚",
+		"avatar": "static/asset/avatar/general_630.swf",
+		"head": "hero130",
+		"nation": 3,
+		"describe": "东吴大当家，十五岁开始创业之路，因一次杀人越货而名震天下，喜欢较真，结果和人玩命玩死了。",
+		"armsType": "步将"
+	},
+	"9615E714-82CF-E4F6-41D2-059B6DFBAC26": {
+		"name": "颜良",
+		"avatar": "static/asset/avatar/general_48.swf",
+		"head": "hero48",
+		"nation": 4,
+		"describe": "袁绍手下猛将，高度近视，在战斗中掉落隐形眼镜后视力严重受损，被关羽偷袭而亡。",
+		"armsType": "骑将"
+	},
+	"910501BF-82CE-1F33-41CA-B693D4976D3D": {
+		"name": "郭淮",
+		"avatar": "static/asset/avatar/general_201.swf",
+		"head": "hero201",
+		"nation": 1,
+		"describe": "魏国大将，打败蜀汉追击时没想到被姜维那小人暗箭所伤，血流不止而死。",
+		"armsType": "骑将"
+	},
+	"96141691-82CF-E5CE-418C-8839447CB043": {
+		"name": "貂蝉",
+		"avatar": "static/asset/avatar/general_42.swf",
+		"head": "hero42",
+		"nation": 4,
+		"describe": "三国时期的大美女，因成功策反吕布谋害董卓而被世人称为三国时期第一女间谍。",
+		"armsType": "弓将"
+	},
+	"910B4F95-82CF-E3F7-41C8-14CCF84A2481": {
+		"name": "魏延",
+		"avatar": "static/asset/avatar/general_155.swf",
+		"head": "hero155",
+		"nation": 2,
+		"describe": "蜀汉名将，自恃甚高，诸葛亮死后想取而代之，没想到还被死后的诸葛亮算计，结果被斩杀。",
+		"armsType": "步将"
+	},
+	"910B9A8B-82CF-EDD2-41C2-03A5F13209B2": {
+		"name": "潘凤",
+		"avatar": "static/asset/avatar/general_86.swf",
+		"head": "hero86",
+		"nation": 4,
+		"describe": "三国时期有名的无双上将潘凤，传闻战华雄未死，后改名为司马懿投奔曹操。",
+		"armsType": "骑将"
+	},
+	"910B5D49-82CF-E75E-41D4-58B74A84E109": {
+		"name": "荀彧",
+		"avatar": "static/asset/avatar/general_119.swf",
+		"head": "hero119",
+		"nation": 1,
+		"describe": "曹老板手下顶级猎头，钟繇，司马懿，郭嘉等曹老板手下大量人才都是被他忽悠来的。",
+		"armsType": "术士"
+	},
+	"9101C300-82CE-3CCD-41D2-204C24A0B412": {
+		"name": "甘宁",
+		"avatar": "static/asset/avatar/general_135.swf",
+		"head": "hero135",
+		"nation": 3,
+		"describe": "东吴潮人，喜欢头插羽毛、佩戴铃铛，爱打家劫舍，夷陵之战，被沙摩柯一箭爆头而死。",
+		"armsType": "弓将"
+	},
+	"91016FE4-82CE-2355-41DF-0B70F14EF109": {
+		"name": "黄忠",
+		"avatar": "static/asset/avatar/general_106.swf",
+		"head": "hero106",
+		"nation": 2,
+		"describe": "蜀汉老将，刘表死后无依无靠，这时刘备对他伸出了有爱的双手，因此对刘备特别忠心。",
+		"armsType": "弓将"
+	},
+	"961B62EA-82CF-FD52-41D2-BA8250663088": {
+		"name": "吕布",
+		"avatar": "static/asset/avatar/general_4.swf",
+		"head": "hero4",
+		"nation": 4,
+		"describe": "三国时期第一打手，擅长谋害干爹争夺遗产，还是个顾家的好男人，即使被围城都在家陪老婆。",
+		"armsType": "骑将"
+	},
+	"9103797C-82CE-2F36-41E0-1B3EC691CEB2": {
+		"name": "神武赵云",
+		"avatar": "static/asset/avatar/general_533.swf",
+		"head": "hero533",
+		"nation": 2,
+		"describe": "刘备帐下第一帅哥保镖，常胜将军，心理素质超好，因带着刘备儿子在长坂打群架而倍受器重。",
+		"armsType": "骑将"
+	},
+	"9107CB6A-82CE-235D-41DE-CEF13ED26CFF": {
+		"name": "张郃",
+		"avatar": "static/asset/avatar/general_76.swf",
+		"head": "hero76",
+		"nation": 1,
+		"describe": "曹操麾下名将，多次击退击败诸葛亮，却因一次吃坏肚子拉稀脱肛而被诸葛亮射杀。",
+		"armsType": "骑将"
+	},
+	"961BA236-82CF-FD32-41C6-52042AE71833": {
+		"name": "关羽",
+		"avatar": "static/asset/avatar/general_1.swf",
+		"head": "hero1",
+		"nation": 2,
+		"describe": "刘备军二当家，有着非凡的武力，但由于人际关系处理不好反被小人出卖而英勇就义。",
+		"armsType": "步将"
+	},
+	"9614A4D4-82CF-E576-41C8-4331C5017939": {
+		"name": "李儒",
+		"avatar": "static/asset/avatar/general_20.swf",
+		"head": "hero20",
+		"nation": 4,
+		"describe": "董老板女婿，也是头号智囊，算无遗策，曾劝董卓把老婆让给吕布而被鄙视。",
+		"armsType": "术士"
+	},
+	"96156856-82CF-ED72-41CE-4F6274CEB47C": {
+		"name": "张郃",
+		"avatar": "static/asset/avatar/general_76.swf",
+		"head": "hero76",
+		"nation": 1,
+		"describe": "曹操麾下名将，多次击退击败诸葛亮，却因一次吃坏肚子拉稀脱肛而被诸葛亮射杀。",
+		"armsType": "骑将"
+	},
+	"910B4EFA-82CF-E532-41D2-F9AF57B9A2F0": {
+		"name": "甘宁",
+		"avatar": "static/asset/avatar/general_135.swf",
+		"head": "hero135",
+		"nation": 3,
+		"describe": "东吴潮人，喜欢头插羽毛、佩戴铃铛，爱打家劫舍，夷陵之战，被沙摩柯一箭爆头而死。",
+		"armsType": "弓将"
+	},
+	"910B5CE4-82CF-E556-41D1-FE33097BC1E4": {
+		"name": "司马徽",
+		"avatar": "static/asset/avatar/general_109.swf",
+		"head": "hero109",
+		"nation": 2,
+		"describe": "三国时期最好的猎头，曾经向刘备推荐过徐庶、诸葛亮和庞统。",
+		"armsType": "军师"
+	},
+	"96158815-82CF-ECF6-41B5-4F22311055FD": {
+		"name": "蒯越",
+		"avatar": "static/asset/avatar/general_64.swf",
+		"head": "hero64",
+		"nation": 1,
+		"describe": "带着刘表的次子投靠曹老板，虽然没当成什么高官但也平平安安的度过一生。",
+		"armsType": "术士"
+	},
+	"961B72A3-82CF-FDD2-41D3-2D8E4E491307": {
+		"name": "诸葛亮",
+		"avatar": "static/asset/avatar/general_3.swf",
+		"head": "hero3",
+		"nation": 2,
+		"describe": "刘备军头号师爷，擅长各种阴谋诡计，曾气死周瑜骂死王朗，后来由于经常熬夜而过劳死。",
+		"armsType": "军师"
+	},
+	"9105738B-82CE-23D3-41CB-2BE2D6AAFDE7": {
+		"name": "王元姬",
+		"avatar": "static/asset/avatar/general_261.swf",
+		"head": "hero261",
+		"nation": 1,
+		"describe": "反贼爱好者，丈夫儿子都是历史上著名的反贼。",
+		"armsType": "步将"
+	},
+	"91066D67-82CE-2753-41C6-0C18ADA2CFCD": {
+		"name": "王允",
+		"avatar": "static/asset/avatar/general_87.swf",
+		"head": "hero87",
+		"nation": 4,
+		"describe": "大汉时期有名的政客，为了挑拨董卓吕布父子关系，不惜把自己的义女也搭进去。",
+		"armsType": "军师"
+	},
+	"910719C5-82CE-2F57-41DF-F9BCCEB20C65": {
+		"name": "张辽",
+		"avatar": "static/asset/avatar/general_41.swf",
+		"head": "hero41",
+		"nation": 1,
+		"describe": "曹操手下五子良将之一，以八百兵马阻击孙权十万大军先锋而威震逍遥津。",
+		"armsType": "骑将"
+	},
+	"9101A290-82CE-3DCD-41BB-72D74A3D6534": {
+		"name": "大乔",
+		"avatar": "static/asset/avatar/general_133.swf",
+		"head": "hero133",
+		"nation": 3,
+		"describe": "孙策之妻，东吴著名美女，但是结婚没几年就守了寡，三国时多少青年才俊为之可惜感叹。",
+		"armsType": "军师"
+	},
+	"9106CEA9-82CE-25DF-41DF-AD15B8C690EF": {
+		"name": "太史慈",
+		"avatar": "static/asset/avatar/general_97.swf",
+		"head": "hero97",
+		"nation": 3,
+		"describe": "原是刘繇部下，和孙策单挑后一见如故，从而投奔东吴，帮助孙家扫荡江东。",
+		"armsType": "步将"
+	},
+	"9614758E-82CF-E7D2-41C9-22B602553B00": {
+		"name": "李傕",
+		"avatar": "static/asset/avatar/general_27.swf",
+		"head": "hero27",
+		"nation": 4,
+		"describe": "董卓军精锐飞熊军统领，在董卓遗产争夺战中击败过吕布，和郭汜内讧而被曹操击败。",
+		"armsType": "骑将"
+	},
+	"91014F95-82CE-23F7-41DE-4A8F0BAC7A64": {
+		"name": "郭嘉",
+		"avatar": "static/asset/avatar/general_105.swf",
+		"head": "hero105",
+		"nation": 1,
+		"describe": "曹老板的贴身跟班，智谋过人，但身体太差，后和曹老板去乌丸公干，水土不服病逝。",
+		"armsType": "术士"
+	},
+	"9101819C-82CE-3FF5-41DA-478AD38A5E97": {
+		"name": "孙尚香",
+		"avatar": "static/asset/avatar/general_126.swf",
+		"head": "hero126",
+		"nation": 3,
+		"describe": "孙权之妹兼刘备之妻，身份尊贵，所以骄纵蛮横，称为枭姬，听闻刘备彝陵战败后投江自杀。",
+		"armsType": "弓将"
+	},
+	"9100134E-82CE-2355-41B7-0FFEEABA8CE1": {
+		"name": "周瑜",
+		"avatar": "static/asset/avatar/general_138.swf",
+		"head": "hero138",
+		"nation": 3,
+		"describe": "东吴都督，赤壁之战大败曹操，天生丽质美貌异常，引起孔明嫉妒并用尽各种办法气死了周瑜。",
+		"armsType": "术士"
+	},
+	"9104B86A-82CE-2D5D-41D4-FBEF1D76F69F": {
+		"name": "李儒",
+		"avatar": "static/asset/avatar/general_20.swf",
+		"head": "hero20",
+		"nation": 4,
+		"describe": "董老板女婿，也是头号智囊，算无遗策，曾劝董卓把老婆让给吕布而被鄙视。",
+		"armsType": "术士"
+	},
+	"961B03ED-82CF-E356-41D1-2521A3E8FAA6": {
+		"name": "张梁",
+		"avatar": "static/asset/avatar/general_10008.swf",
+		"head": "hero10008",
+		"nation": 4,
+		"describe": "黄巾军三当家，由于有严重的夜盲症而被官军夜袭，到死都没看清楚被谁杀了。",
+		"armsType": "弓将"
+	},
+	"91008724-82CE-24D6-41C2-BD084D9A6E6B": {
+		"name": "小乔",
+		"avatar": "static/asset/avatar/general_220.swf",
+		"head": "hero220",
+		"nation": 3,
+		"describe": "江东美女，用一对双扇让周瑜对他言听计从。",
+		"armsType": "军师"
+	},
+	"9101D3DB-82CE-2373-41DB-F31C6C278234": {
+		"name": "魏延",
+		"avatar": "static/asset/avatar/general_155.swf",
+		"head": "hero155",
+		"nation": 2,
+		"describe": "蜀汉名将，自恃甚高，诸葛亮死后想取而代之，没想到还被死后的诸葛亮算计，结果被斩杀。",
+		"armsType": "步将"
+	},
+	"91045759-82CE-237F-41D3-CA0F9C57B371": {
+		"name": "周仓",
+		"avatar": "static/asset/avatar/general_7.swf",
+		"head": "hero7",
+		"nation": 2,
+		"describe": "原是黄巾农民军小头领，后因仰慕关二哥而成为其贴身保镖，忠心不二，二哥死后自刎身亡。",
+		"armsType": "步将"
+	},
+	"910328F6-82CE-2D32-41B0-292648407066": {
+		"name": "神武张飞",
+		"avatar": "static/asset/avatar/general_502.swf",
+		"head": "hero2",
+		"nation": 2,
+		"describe": "刘备军三当家，作战勇猛还能写一手好字，和关羽一样不善处理人际关系而被属下杀害。",
+		"armsType": "骑将"
+	},
+	"910B6CAC-82CF-E5D6-41C5-E986983F6F60": {
+		"name": "黄忠",
+		"avatar": "static/asset/avatar/general_106.swf",
+		"head": "hero106",
+		"nation": 2,
+		"describe": "蜀汉老将，刘表死后无依无靠，这时刘备对他伸出了有爱的双手，因此对刘备特别忠心。",
+		"armsType": "弓将"
+	},
+	"9101F10F-82CE-3CD3-41B1-61E76A181A02": {
+		"name": "夏侯霸",
+		"avatar": "static/asset/avatar/general_120.swf",
+		"head": "hero120",
+		"nation": 1,
+		"describe": "夏侯渊次子，身在汉营心在曹，为了曹氏一族而投降蜀汉讨伐司马懿。",
+		"armsType": "骑将"
+	},
+	"9101D42D-82CE-24D7-41C9-A544D55B1E30": {
+		"name": "马云騄",
+		"avatar": "static/asset/avatar/general_163.swf",
+		"head": "hero163",
+		"nation": 2,
+		"describe": "马腾的女儿，马超的妹妹，和赵云一见钟情，是中国古代自由恋爱的先行者。",
+		"armsType": "骑将"
+	},
+	"910055B7-82CE-2732-41C5-47DD84C6485F": {
+		"name": "花蔓",
+		"avatar": "static/asset/avatar/general_193.swf",
+		"head": "hero193",
+		"nation": 4,
+		"describe": "孟获之女，在孟获之乱时就和关索情投意合，白天两边在打仗，晚上他们谈情也算战争中的佳话。",
+		"armsType": "弓将"
+	},
+	"96143643-82CF-E552-41D9-0D875395F160": {
+		"name": "张辽",
+		"avatar": "static/asset/avatar/general_41.swf",
+		"head": "hero41",
+		"nation": 1,
+		"describe": "曹操手下五子良将之一，以八百兵马阻击孙权十万大军先锋而威震逍遥津。",
+		"armsType": "骑将"
+	},
+	"91055317-82CE-1CF3-41D3-40E048472598": {
+		"name": "邓艾",
+		"avatar": "static/asset/avatar/general_237.swf",
+		"head": "hero237",
+		"nation": 1,
+		"describe": "魏国又一个被钟会污蔑的倒霉鬼，和儿子一起被司马昭杀害。",
+		"armsType": "骑将"
+	},
+	"961B03AF-82CF-E3D2-41DA-D6F0615FB1D0": {
+		"name": "周仓",
+		"avatar": "static/asset/avatar/general_7.swf",
+		"head": "hero7",
+		"nation": 2,
+		"describe": "原是黄巾农民军小头领，后因仰慕关二哥而成为其贴身保镖，忠心不二，二哥死后自刎身亡。",
+		"armsType": "步将"
+	},
+	"910B5D80-82CF-E7CE-417C-871A7B5B3D10": {
+		"name": "夏侯霸",
+		"avatar": "static/asset/avatar/general_120.swf",
+		"head": "hero120",
+		"nation": 1,
+		"describe": "夏侯渊次子，身在汉营心在曹，为了曹氏一族而投降蜀汉讨伐司马懿。",
+		"armsType": "骑将"
+	},
+	"910B7B09-82CF-ECD1-41D1-C10F8735AC5E": {
+		"name": "荀攸",
+		"avatar": "static/asset/avatar/general_88.swf",
+		"head": "hero88",
+		"nation": 1,
+		"describe": "曹老板智囊之一，因妙计百出、足智多谋而被称为“谋主”。",
+		"armsType": "军师"
+	},
+	"910B4F61-82CF-E34F-41C7-7D4BE833AB4D": {
+		"name": "孙策",
+		"avatar": "static/asset/avatar/general_139.swf",
+		"head": "hero139",
+		"nation": 3,
+		"describe": "三国时期东吴著名悲剧人物，“小霸王”孙策天生只有打江山的命，被弟弟孙权坐享其成。",
+		"armsType": "步将"
+	},
+	"910AE141-82CE-1F4F-41D8-CABC389F402F": {
+		"name": "花蔓",
+		"avatar": "static/asset/avatar/general_193.swf",
+		"head": "hero193",
+		"nation": 4,
+		"describe": "孟获之女，在孟获之乱时就和关索情投意合，白天两边在打仗，晚上他们谈情也算战争中的佳话。",
+		"armsType": "弓将"
+	},
+	"910542D2-82CE-1D4D-41B1-81B06699DE33": {
+		"name": "孙权",
+		"avatar": "static/asset/avatar/general_229.swf",
+		"head": "hero229",
+		"nation": 3,
+		"describe": "江东孙家老二没老爸老哥会打架，但装傻绝对一流，因此天生就是一个当君主的命。",
+		"armsType": "步将"
+	},
+	"961B926D-82CF-FD56-41CE-17A27D65276E": {
+		"name": "张飞",
+		"avatar": "static/asset/avatar/general_2.swf",
+		"head": "hero2",
+		"nation": 2,
+		"describe": "刘备军三当家，作战勇猛还能写一手好字，和关羽一样不善处理人际关系而被属下杀害。",
+		"armsType": "骑将"
+	},
+	"910AC010-82CE-1CCD-41D8-643630842139": {
+		"name": "马超",
+		"avatar": "static/asset/avatar/general_164.swf",
+		"head": "hero164",
+		"nation": 2,
+		"describe": "蜀汉五虎上将之一，因外貌英俊号称锦马超，曾数次激战曹操，战败入蜀后投降刘备。",
+		"armsType": "骑将"
+	}
+}

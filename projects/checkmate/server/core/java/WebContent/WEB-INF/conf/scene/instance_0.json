@@ -1,27 +1,38 @@
 {
 	"items": [
+		{
+			"instanceId": "1",
+			"cartoon": "static/asset/avatar/house_1.swf",
+			"def": "General",
+			"layer": "over",
+			"left": 0,
+			"top": 0,
+			"width": 1,
+			"height": 1,
+			"hp": 40,
+			"force": "0",
+			"isHome": true
+		}
 	],
 	"expiredMinutes": 5,
-	"width": 1050,
+	"width": 2000,
 	"height": 1000,
 	"background": "static/asset/background/2.swf",
 	"left": 250,
 	"top": 150,
 	"cellPixel": 50,
-	"col": 11,
-	"row": 14,
-	"force": [
-		{
+	"col": 22,
+	"row": 12,
+	"force": {
+		"0": {
 			"maxPlayer": 1,
-			"born": [0, 0, 11, 1],
-			"forward": [0, 1],
-			"border": 7
+			"forward": 1,
+			"border": 10
 		},
-		{
+		"1": {
 			"maxPlayer": 1,
-			"born": [0, 13, 11, 14],
-			"forward": [0, -1],
-			"border": 8
+			"forward": -1,
+			"border": 10
 		}
-	]
+	}
 }

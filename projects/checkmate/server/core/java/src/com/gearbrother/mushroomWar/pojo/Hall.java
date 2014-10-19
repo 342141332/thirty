@@ -1,6 +1,6 @@
 package com.gearbrother.mushroomWar.pojo;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,12 +22,12 @@ public class Hall extends RpcBean {
 	final public SessionObserver observer;
 
 	@RpcBeanProperty(desc = "等候的房间")
-	final public Map<String, BattleRoom> rooms;
+	final public Map<String, Battle> preparingBattles;
 
 	public Hall() {
 		super();
 
 		observer = new SessionObserver();
-		rooms = new HashMap<String, BattleRoom>();
+		preparingBattles = new Hashtable<String, Battle>();
 	}
 }

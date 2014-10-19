@@ -12,8 +12,7 @@ package com.gearbrother.mushroomWar.model {
 			Protocol.protocols[Protocol.Application] = ApplicationModel;
 			Protocol.protocols[Protocol.Battle] = BattleModel;
 			Protocol.protocols[Protocol.PointBean] = PointBeanModel;
-			Protocol.protocols[Protocol.BattleRoom] = BattleRoomModel;
-			Protocol.protocols[Protocol.BattleRoomSeat] = BattleRoomSeatModel;
+			Protocol.protocols[Protocol.BattlePlayer] = BattlePlayerModel;
 			Protocol.protocols[Protocol.BattleItem] = BattleItemModel;
 			Protocol.protocols[Protocol.Hall] = HallModel;
 			Protocol.protocols[Protocol.Bounds] = BoundsModel;

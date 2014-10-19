@@ -34,7 +34,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		private var _cartoon:String;
 		private var _currentState:int;
 		private var _cartoonFile:GFile;
-		public function setCartoon(cartoon:String, state:int):void {
+		public function setCartoon(cartoon:String, state:int, def:String = "Soldier"):void {
 			if (cartoon) {
 				if (_cartoon != cartoon) {
 					_cartoonFile = new GAliasFile(cartoon);
@@ -42,61 +42,47 @@ package com.gearbrother.mushroomWar.view.common.ui {
 				if (_cartoon != cartoon || _currentState != state) {
 					_cartoon = cartoon;
 					_currentState = state;
-					var def:String;
 					var frame:int;
 					switch (_currentState) {
 						case STATE_MOVE_DOWN:
-							def = "Soldier";
 							frame = 3;
 							break;
 						case STATE_MOVE_LEFT:
-							def = "Soldier";
 							frame = 4;
 							break;
 						case STATE_MOVE_RIGHT:
-							def = "Soldier";
 							frame = 2;
 							break;
 						case STATE_MOVE_UP:
-							def = "Soldier";
 							frame = 1;
 							break;
 						case STATE_STOP_DOWN:
-							def = "Soldier";
 							frame = 3;
 							break;
 						case STATE_STOP_LEFT:
-							def = "Soldier";
 							frame = 4;
 							break;
 						case STATE_STOP_RIGHT:
-							def = "Soldier";
 							frame = 2;
 							break;
 						case STATE_STOP_UP:
-							def = "Soldier";
 							frame = 1;
 							break;
 						case STATE_SKILL_UP:
-							def = "Soldier";
 							frame = 5;
 							break;
 						case STATE_SKILL_RIGHT:
-							def = "Soldier";
 							frame = 6;
 							break;
 						case STATE_SKILL_DOWN:
-							def = "Soldier";
 							frame = 7;
 							break;
 						case STATE_SKILL_LEFT:
-							def = "Soldier";
 							frame = 8;
 							break;
 						default:
 							throw new Error();
 					}
-					def = "General";
 					definition = new AvatarFile(frame, new GDefinition(_cartoonFile, def));
 				}
 			} else {
@@ -113,7 +99,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		override public function handleModelChanged(events:Object = null):void {
 			var model:CharacterModel = bindData;
 			if (model) {
-				setCartoon(model.cartoon, STATE_STOP_DOWN);
+				setCartoon(model.cartoon, STATE_STOP_DOWN, model.nation == 0 ? "Soldier" : "General");
 			} else {
 				definition = null;
 			}

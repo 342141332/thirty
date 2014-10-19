@@ -10,9 +10,11 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.mushroomWar.GameMain;
 	import com.gearbrother.mushroomWar.model.BattleItemModel;
 	import com.gearbrother.mushroomWar.model.BattleModel;
+	import com.gearbrother.mushroomWar.model.BattlePlayerModel;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.rpc.event.RpcEvent;
+	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalEndProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalMethodDoProtocol;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleSignalSkillUseProtocol;
@@ -86,7 +88,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			camera.center = new Point(battle.left + ((battle.col * battle.cellPixel) >> 1), battle.top + ((battle.row * battle.cellPixel) >> 1));
 
 			addChild(layerTerrian = new BattleSceneLayerTerrian(battle, camera));
-//			addChild(layerDebug = new BattleSceneLayerDebug(battle, camera));
+			addChild(layerDebug = new BattleSceneLayerDebug(battle, camera));
 			layers = {};
 			layers["floor"] = addChild(new BattleSceneLayerOverland("floor", battle, camera)),
 			layers["over"] = addChild(new BattleSceneLayerOverland("over", battle, camera));
@@ -189,9 +191,19 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							throw new Error("unknown type");
 							break;
 					}
-				} else if (change.item is BattleModel) {
-					var battle:BattleModel= change.item as BattleModel;
-					model.merge(battle);
+				} else if (change.item is BattlePlayerModel) {
+					var sourcePlayerModel:BattlePlayerModel = change.item as BattlePlayerModel;
+					for each (var force:BattleForceProtocol in model.forces) {
+						for each (var playerModel:BattlePlayerModel in force.players) {
+							if (playerModel.instanceId == sourcePlayerModel.instanceId) {
+								playerModel.merge(sourcePlayerModel);
+								break;
+							}
+						}
+					}
+				} else if (change.item is BattleForceProtocol) {
+					var sourceForce:BattleForceProtocol = change.item as BattleForceProtocol;
+					(model.forces[sourceForce.id] as BattleForceProtocol).merge(sourceForce);
 				}
 			} else if (event.response is BattleSignalMethodDoProtocol) {
 				var doMethod:BattleSignalMethodDoProtocol = event.response as BattleSignalMethodDoProtocol;

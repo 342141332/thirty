@@ -1,12 +1,10 @@
 package com.gearbrother.mushroomWar.pojo;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
-import com.gearbrother.mushroomWar.util.GMathUtil;
-
 public class TaskDispatch extends Task {
-	public BattleRoomSeat seat;
+	public BattlePlayer player;
 	
 	public String confId;
 	
@@ -14,10 +12,10 @@ public class TaskDispatch extends Task {
 	
 	public int top;
 	
-	public TaskDispatch(BattleRoomSeat seat, long executeTime, String confId, int left, int top) {
-		super(seat.room.battle, executeTime);
+	public TaskDispatch(BattlePlayer player, long executeTime, String confId, int left, int top) {
+		super(player.battle, executeTime);
 
-		this.seat = seat;
+		this.player = player;
 		this.confId = confId;
 		this.left = left;
 		this.top = top;
@@ -25,123 +23,84 @@ public class TaskDispatch extends Task {
 
 	@Override
 	public void execute(long now) {
-		BattleRoomSeatCharacter seatCharacter = seat.choosedSoilders.get(confId);
+		BattleRoomSeatCharacter seatCharacter = player.choosedSoilders.get(confId);
 		if (seatCharacter.num == 0)
 			return;
 
-		BattleForce force = seat.force;
-		int[] forward = force.forward;
-		if (forward[0] == 0 && forward[1] == 0) {
-			throw new Error("forward can't be zero");
+		int forward = player.force.forward;
+		CharacterModel character = seatCharacter.character.clone();
+		Battle battle = player.battle;
+		int[] thredshold = null;
+		if (forward == 1) {
+			thredshold = new int[] {0, 0, player.force.border, battle.row};
+			left = 0;
+		} else if (forward == -1) {
+			thredshold = new int[] {battle.col - player.force.border, 0, battle.col, battle.row};
+			left = battle.col - character.width;
 		} else {
-			CharacterModel character = seatCharacter.character.clone();
-			int width = character.width;
-			int height = character.height;
-			Battle battle = seat.room.battle;
-			//slide to born rect
-			int fromRow = forward[1] == 1 ? 0 : battle.row - height;
-			int[] thredshold;
-			if (forward[1] == 1) {
-				thredshold = new int[] {0, force.border};
-			} else {
-				thredshold = new int[] {force.border, battle.height};
+			throw new Error("forward can't be zero");
+		}
+		int[] leftTop = null;
+		//first, close to border
+		boolean isBlock = false;
+		c:while (true) {
+			if (left < thredshold[0] || left + character.height > thredshold[2]) {
+				break;
 			}
-			int[] leftTop = null;
-			if (Battle.STATE_PREPARING == battle.state) {
-				while (true) {
-					if (left < 0 || left + width > battle.col || fromRow < thredshold[0] || fromRow + height > thredshold[1]) {
+			Collection<BattleItem> collisions = battle.getCollision(new int[] {left, top, left + character.width, top + character.height});
+			for (BattleItem collision : collisions) {
+				if (collision.isCollision(character)) {
+					isBlock = true;
+					break c;
+				}
+			}
+			leftTop = new int[] {left, top};
+			left += forward;
+		}
+		if (leftTop == null)
+			return;
+
+		//second, close to battle
+		int[] followPos = null;
+		if (Battle.STATE_PLAYING == battle.state && leftTop != null) {
+			if (!isBlock) {
+				c:while (true) {
+					if (left < 0 || left + character.width > battle.col) {
+						followPos = null;
 						break;
 					}
-					List<BattleItem> collisions = battle.getCollision(new int[] {left, fromRow, left + width, fromRow + height});
+					Collection<BattleItem> collisions = battle.getCollision(new int[] {left, top, left + character.width, top + character.height});
+					//if first collision.owner is enemy break;
 					if (collisions.size() > 0) {
-						break;
-					} else {
-						leftTop = new int[] {left, fromRow};
-					}
-					fromRow += forward[1];
-				}
-				if (leftTop != null) {
-					BattleItem item = new BattleItem(true, 1, 1);
-					item.instanceId = UUID.randomUUID().toString();
-					item.character = seatCharacter.character.clone();
-					item.forward = force.forward;
-					item.cartoon = item.character.cartoon;
-					item.left = leftTop[0];
-					item.top = leftTop[1];
-					item.hp = item.maxHp = 7;
-					item.attackDamage = GMathUtil.random(3, 1);
-					item.attackRects = item.character.attackRects;
-					item.layer = "over";
-					item.owner = seat;
-					item.setTask(new TaskForward(battle, now + 1000, 3000L, forward, item));
-					battle.addItem(item);
-					battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, item));
-				}
-			} else if (Battle.STATE_PLAYING == battle.state) {
-				boolean isBlock = false;
-				while (true) {
-					if (left < 0 || left + width > battle.col || fromRow < thredshold[0] || fromRow + height > thredshold[1]) {
-						break;
-					}
-					List<BattleItem> collisions = battle.getCollision(new int[] {left, fromRow, left + width, fromRow + height});
-					if (collisions.size() > 0) {
-						isBlock = true;
-						break;
-					} else {
-						leftTop = new int[] {left, fromRow};
-					}
-					fromRow += forward[1];
-				}
-				if (leftTop != null) {
-					int[] followPos = null;
-					if (!isBlock) {
-						thredshold = new int[] {0, battle.height};
-						c:while (true) {
-							if (fromRow < thredshold[0] || fromRow + height > thredshold[1]) {
-								followPos = null;
-								break;
-							}
-							List<BattleItem> collisions = battle.getCollision(new int[] {left, fromRow, left + width, fromRow + height});
-							//if first collision.owner is enemy break;
-							if (collisions.size() > 0) {
-								for (BattleItem collision : collisions) {
-									if (collision.owner == seat) {
-										break c;
-									} else {
-										followPos = null;
-										break c;
-									}
-								}
+						for (BattleItem collision : collisions) {
+							if (collision.player == player) {
+								break c;
 							} else {
-								followPos = new int[] {left, fromRow};
+								followPos = null;
+								break c;
 							}
-							fromRow += forward[1];
 						}
-					}
-					BattleItem item = new BattleItem(true, 1, 1);
-					item.instanceId = UUID.randomUUID().toString();
-					item.character = seatCharacter.character.clone();
-					item.forward = force.forward;
-					item.cartoon = item.character.cartoon;
-					if (followPos != null) {
-						item.left = followPos[0];
-						item.top = followPos[1];
 					} else {
-						item.left = leftTop[0];
-						item.top = leftTop[1];
+						followPos = new int[] {left, top};
 					}
-					item.hp = item.maxHp = 7;
-					item.attackDamage = GMathUtil.random(3, 1);
-					item.attackRects = item.character.attackRects;
-					item.layer = "over";
-					item.owner = seat;
-					item.setTask(new TaskForward(battle, now + 1000, 3000L, forward, item));
-					battle.addItem(item);
-					battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, item));
+					left += forward;
 				}
-			} else {
-				throw new Error();
 			}
 		}
+		BattleItem item = new BattleItem(seatCharacter.character);
+		item.instanceId = UUID.randomUUID().toString();
+		item.player = player;
+		if (followPos != null) {
+			item.left = followPos[0];
+			item.top = followPos[1];
+		} else {
+			item.left = leftTop[0];
+			item.top = leftTop[1];
+		}
+		item.setTask(new TaskDoAction(battle, now + item.interval, item.interval, item));
+		item.force = player.force;
+		item.player = player;
+		battle.addItem(item);
+		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, item));
 	}
 }

@@ -6,7 +6,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	import com.gearbrother.glash.display.control.text.GText;
 	import com.gearbrother.glash.util.display.GDisplayUtil;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
-	import com.gearbrother.mushroomWar.model.BattleRoomSeatModel;
+	import com.gearbrother.mushroomWar.model.BattlePlayerModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.EquipProtocol;
 	
@@ -19,7 +19,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 	 * @author lifeng
 	 * @create on 2014-1-6
 	 */
-	public class RoomSeatUiView extends GNoScale implements IGDndable {
+	public class RoomPlayerUiView extends GNoScale implements IGDndable {
 		public var headPortraint:GLoader;
 		
 		public var stars:Array;
@@ -54,7 +54,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 			_dndable = newValue;
 		}
 
-		public function RoomSeatUiView(skin:DisplayObjectContainer) {
+		public function RoomPlayerUiView(skin:DisplayObjectContainer) {
 			super(skin);
 
 			if (skin["headPortraint"]) {
@@ -104,7 +104,7 @@ package com.gearbrother.mushroomWar.view.common.ui {
 		}
 
 		override public function handleModelChanged(events:Object = null):void {
-			var model:BattleRoomSeatModel = bindData as BattleRoomSeatModel;
+			var model:BattlePlayerModel = bindData as BattlePlayerModel;
 			for (var i:int = 0; i < choosedHeroViews.length; i++) {
 				var choosedHeroUiView:AvatarUiView = choosedHeroViews[i];
 				choosedHeroUiView.bindData = model ? model.choosedHeroes[i] : null;

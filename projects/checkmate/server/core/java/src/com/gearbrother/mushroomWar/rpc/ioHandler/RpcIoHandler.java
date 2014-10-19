@@ -40,16 +40,6 @@ public class RpcIoHandler extends IoHandlerAdapter implements ApplicationContext
 	private ApplicationContext applicationContext;
 	
 	public Map<String, Method> servicePorts;
-	
-	private World world;
-
-	public World getWorld() {
-		return world;
-	}
-
-	public void setWorld(World world) {
-		this.world = world;
-	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext arg0) throws BeansException {
@@ -139,7 +129,7 @@ public class RpcIoHandler extends IoHandlerAdapter implements ApplicationContext
 		logger.info("***");
 		logger.info("	session is created from {}", session.getLocalAddress());
 		logger.info("***");
-		session.setAttribute(SESSION_KEY, new MinaSessionImpl(session, world));
+		session.setAttribute(SESSION_KEY, new MinaSessionImpl(session, World.instance));
 	}
 	
 	@Override

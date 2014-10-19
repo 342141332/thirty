@@ -1,7 +1,9 @@
 package com.gearbrother.mushroomWar.pojo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -9,17 +11,18 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanPartTransportable;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 
 @RpcBeanPartTransportable(isPartTransport = true)
-public class BattleRoomSeat extends RpcBean {
-	final public BattleRoom room;
+public class BattlePlayer extends RpcBean {
+	final public Battle battle;
 
 	@RpcBeanProperty(desc = "")
 	public String instanceId;
 
-	@RpcBeanProperty(desc = "座位索引")
-	public int index;
-
-	@RpcBeanProperty(desc = "势力")
 	public BattleForce force;
+	
+	@RpcBeanProperty(desc = "")
+	public String getForceId() {
+		return force.id;
+	}
 
 	@RpcBeanProperty(desc = "准备好了")
 	public boolean isReady;
@@ -31,7 +34,7 @@ public class BattleRoomSeat extends RpcBean {
 	public Map<String, BattleRoomSeatCharacter> choosedSoilders;
 
 	@RpcBeanProperty(desc = "选择的英雄")
-	public Map<String, CharacterModel> choosedHeroes;
+	public List<CharacterModel> choosedHeroes;
 
 	@RpcBeanProperty(desc = "是否是房主")
 	public boolean isHost;
@@ -51,26 +54,28 @@ public class BattleRoomSeat extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public int coin;
 
-	public BattleRoomSeat(BattleRoom room, int index) {
+	public User user;
+
+	public BattlePlayer(Battle battle) {
 		super();
 
 		this.instanceId = UUID.randomUUID().toString();
-		this.room = room;
-		this.index = index;
+		this.battle = battle;
 		this.choosedSoilders = new HashMap<String, BattleRoomSeatCharacter>();
 		for (Iterator<String> iterator = GameConf.instance.soilders.keySet().iterator(); iterator.hasNext();) {
 			String avatarId = (String) iterator.next();
 			this.choosedSoilders.put(avatarId, new BattleRoomSeatCharacter(GameConf.instance.soilders.get(avatarId).clone(), 10));
 		}
-		this.choosedHeroes = new HashMap<String, CharacterModel>();
+		this.choosedHeroes = new ArrayList<CharacterModel>();
 		maxHp = hp = 30;
 		level = 1;
 	}
 
-	public BattleRoomSeat(BattleRoom room, int index, User user) {
-		this(room, index);
+	public BattlePlayer(Battle room, User user) {
+		this(room);
 
 		this.instanceId = user.uuid;
 		this.name = user.name;
+		this.user = user;
 	}
 }

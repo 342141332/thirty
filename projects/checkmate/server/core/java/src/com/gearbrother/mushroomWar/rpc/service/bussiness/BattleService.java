@@ -1,15 +1,11 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
-import java.util.Iterator;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.gearbrother.mushroomWar.model.ISession;
 import com.gearbrother.mushroomWar.pojo.Battle;
-import com.gearbrother.mushroomWar.pojo.BattleRoom;
 import com.gearbrother.mushroomWar.pojo.TaskDispatch;
 import com.gearbrother.mushroomWar.pojo.World;
 import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethod;
@@ -23,19 +19,19 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcServiceMethodParameter;
 public class BattleService {
 	static Logger logger = LoggerFactory.getLogger(BattleService.class);
 
-	private Map<String, BattleRoom> _runningBattles;
-
 	public BattleService() {
-		_runningBattles = World.instance.runningBattles;
 		new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				while (true) {
 					long now = System.currentTimeMillis();
-					for (Iterator<String> iterator = _runningBattles.keySet().iterator(); iterator.hasNext();) {
-						String id = (String) iterator.next();
-						_runningBattles.get(id).battle.execute(now);
+					String[] keys = World.instance.runningBattles.keySet().toArray(new String[] {});
+					for (String key : keys) {
+						Battle battle = World.instance.runningBattles.get(key);
+						if (battle != null) {
+							battle.execute(now);
+						}
 					}
 				}
 			}
@@ -63,7 +59,7 @@ public class BattleService {
 			, @RpcServiceMethodParameter(name = "confId") String confId
 			, @RpcServiceMethodParameter(name = "left") int left
 			, @RpcServiceMethodParameter(name = "top") int top) {
-		new TaskDispatch(session.getSeat(), System.currentTimeMillis(), confId,  left, top);
+		new TaskDispatch(session.getPlayer(), System.currentTimeMillis(), confId,  left, top);
 	}
 
 	@RpcServiceMethod(desc = "")

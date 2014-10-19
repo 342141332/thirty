@@ -4,7 +4,7 @@ package com.gearbrother.mushroomWar.view.tip {
 	import com.gearbrother.glash.display.GNoScale;
 	import com.gearbrother.glash.display.container.GBackgroundContainer;
 	import com.gearbrother.glash.display.control.text.GText;
-	
+
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.filters.GlowFilter;
@@ -27,10 +27,10 @@ package com.gearbrother.mushroomWar.view.tip {
 			innerRectangle = new Rectangle(content.x, content.y, content.width, content.height);
 			outerRectangle = new Rectangle(0, 0, skin.width, skin.height);*/
 		}
-		
+
 		override protected function _handleLibsSuccess(res:*):void {
 			var file:GFile = libsHandler.cachedOper[libs[0]];
-			skin = file.getInstance("StringTipSkin");
+			skin = file.getInstance("TipSkin");
 			if (skin["background"]) {
 				outerRectangle = skin["background"].getRect(skin);
 				backgroundSkin = skin["background"];
@@ -45,8 +45,8 @@ package com.gearbrother.mushroomWar.view.tip {
 			}
 			revalidateBindData();
 		}
-		
-		override public function handleModelChanged(events:Object=null):void {
+
+		override public function handleModelChanged(events:Object = null):void {
 			if (skin) {
 				(content as GText).htmlText = bindData;
 			}

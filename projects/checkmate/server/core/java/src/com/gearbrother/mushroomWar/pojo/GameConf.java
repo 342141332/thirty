@@ -118,5 +118,7 @@ public class GameConf implements ApplicationContextAware {
 			// logger.error(e.)
 			e.printStackTrace();
 		}
+		
+		World.instance.hall.mapIds = GameConf.instance.battles.keySet();
 	}
 }

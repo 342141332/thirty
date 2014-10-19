@@ -1,5 +1,7 @@
 package com.gearbrother.mushroomWar.pojo;
 
+import java.util.Iterator;
+
 import org.apache.mina.core.session.IoSession;
 
 import com.gearbrother.mushroomWar.model.ISession;
@@ -35,15 +37,14 @@ public class MinaSessionImpl implements ISession {
 		this.enteredHall = value;
 	}
 
-	private BattleRoomSeat seat;
+	private BattlePlayer player;
 
-	public BattleRoomSeat getSeat() {
-		return seat;
+	public BattlePlayer getPlayer() {
+		return player;
 	}
 
-
-	public void setSeat(BattleRoomSeat value) {
-		this.seat = value;
+	public void setPlayer(BattlePlayer value) {
+		this.player = value;
 	}
 
 	public MinaSessionImpl(IoSession session, World world) {
@@ -65,15 +66,22 @@ public class MinaSessionImpl implements ISession {
 			this.world.loginedSessions.remove(this.logined.uuid);
 			if (this.enteredHall != null)
 				this.enteredHall.observer.deleteObserver(this);
-			if (this.seat != null) {
-				int at = this.seat.room.leftPlayers.indexOf(this.seat);
-				if (at > -1) {
-					this.seat.room.leftPlayers.set(at, null);
-					this.seat.room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat.room));
-				} else {
-					at = this.seat.room.rightPlayers.indexOf(this.seat);
-					this.seat.room.rightPlayers.set(at, null);
-					this.seat.room.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.seat.room));
+			if (this.player != null) {
+				this.player.force.players.remove(this.player);
+				this.player.battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.player));
+				int roomPlayers = 0;
+				for (Iterator<String> iterator = this.player.battle.forces.keySet().iterator(); iterator.hasNext();) {
+					String id = (String) iterator.next();
+					BattleForce force = this.player.battle.forces.get(id);
+					for (BattlePlayer roomPlayer : force.players) {
+						roomPlayers += roomPlayer.user == null ? 0 : 1;
+					}
+				}
+				if (roomPlayers == 0) {
+					if (this.world.hall.preparingBattles.remove(this.player.battle.instanceUuid, this.player.battle))
+						this.world.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, this.player.battle));
+					if (this.world.runningBattles.remove(this.player.battle.instanceUuid, this.player.battle)) {
+					}
 				}
 			}
 		}

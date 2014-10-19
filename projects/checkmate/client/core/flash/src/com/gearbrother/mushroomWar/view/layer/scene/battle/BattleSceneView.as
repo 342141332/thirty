@@ -15,8 +15,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	public class BattleSceneView extends GContainer implements IScene {
 		public var battleSceneViewInner:BattleSceneViewCanvas;
 
-		public var bottomUi:BattleSceneViewUi;
-
 		public function BattleSceneView(battle:BattleModel) {
 			super();
 
