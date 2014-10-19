@@ -18,6 +18,7 @@ package com.gearbrother.mushroomWar.view.layer.scene {
 	import org.as3commons.lang.ObjectUtils;
 
 
+
 	/**
 	 * @author lifeng
 	 * @create on 2013-12-6
