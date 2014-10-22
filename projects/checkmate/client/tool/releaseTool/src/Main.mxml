@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx"
+					   initialize="_handleAppEvent(event);"
+					   applicationComplete="_handleAppEvent(event)"
+					   close="_handleAppEvent(event)">
+	<fx:Script>
+		<![CDATA[
+			import com.adobe.images.JPGEncoder;
+			import com.gearbrother.glash.common.oper.GQueue;
+			import com.gearbrother.glash.common.oper.ext.GAliasFile;
+			import com.gearbrother.glash.common.oper.ext.GHandleOper;
+			import com.gearbrother.glash.common.utils.GHandler;
+			import com.gearbrother.glash.display.flixel.GPaper;
+			import com.gearbrother.glash.display.manager.GPaintManager;
+			import com.gearbrother.glash.display.mouseMode.GMouseMode;
+			import com.gearbrother.glash.manager.LocalStorage;
+			import com.gearbrother.glash.manager.RootManager;
+			import com.gearbrother.glash.util.lang.GStringUtils;
+			import com.gearbrother.glash.util.lang.UUID;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.events.ListEvent;
+			
+			import org.as3commons.lang.ObjectUtils;
+			import org.as3commons.logging.api.LOGGER_FACTORY;
+			import org.as3commons.logging.setup.LevelTargetSetup;
+			import org.as3commons.logging.setup.LogSetupLevel;
+			import org.as3commons.logging.setup.target.GTraceTarget;
+			import org.as3commons.logging.setup.target.mergeTargets;
+			
+			import spark.layouts.VerticalLayout;
+			
+			private var _projectCache:LocalStorage;
+			
+			private var cache:Workspace;
+
+			private function _handleAppEvent(event:Event):void {
+				if (event.type == FlexEvent.APPLICATION_COMPLETE) {
+					LOGGER_FACTORY.setup = new LevelTargetSetup(
+						mergeTargets([new GTraceTarget("{date} {time} [{logLevel}] [{name}] {message}")])
+						, LogSetupLevel.DEBUG);
+					RootManager.register(this);
+					GPaintManager.instance.stage = stage;
+					_projectCache = new LocalStorage("templateDir");
+					cache = new Workspace(_projectCache.getValue());
+					if (cache.sourcePath) {
+						var sourceFile:File = new File(cache.sourcePath);
+						sourceTree.openPaths = [sourceFile.parent.nativePath];
+						sourceTree.selectedPath = sourceFile.nativePath;
+						sourceTree.validateNow();
+						var index:int = sourceTree.getItemIndex(sourceTree.selectedPath);
+						sourceTree.scrollToIndex(index);
+					}
+					if (cache.outputPath) {
+						var outputFile:File = new File(cache.outputPath);
+						outputTree.openPaths = [outputFile.parent.nativePath];
+						outputTree.selectedPath = outputFile.nativePath;
+						outputTree.validateNow();
+						outputTree.scrollToIndex(outputTree.getItemIndex(outputTree.selectedPath));
+					}
+				} else if (event.type == Event.CLOSE) {
+					_projectCache.setValue(cache);
+				}
+			}
+			
+			private function _handleMouseEvent(event:MouseEvent):void {
+				cache.process();
+			}
+			
+			protected function _handleTreeEvent(event:ListEvent):void {
+				switch (event.type) {
+					case ListEvent.CHANGE:
+						if (event.target == sourceTree) {
+							if (sourceTree.selectedItem) {
+								var file:File = sourceTree.selectedItem as File;
+								if (file.isDirectory || file.isPackage)
+									cache.sourcePath = file.url;
+							}
+						} else if (event.target == outputTree) {
+							if (outputTree.selectedItem) {
+								var file2:File = outputTree.selectedItem as File;
+								if (file2.isDirectory || file2.isPackage)
+									cache.outputPath = file2.url;
+							}
+						}
+						break;
+				}
+			}
+			
+			public function acceptFile(file:File):Boolean {
+				return file.isDirectory;
+			}
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- 将非可视元素（例如服务、值对象）放在此处 -->
+	</fx:Declarations>
+	<s:layout>
+		<s:HorizontalLayout/>
+	</s:layout>
+	<mx:HDividedBox width="100%"
+					height="100%">
+		<mx:VBox width="300"
+				 height="100%">
+			<mx:FileSystemTree width="100%"
+							   height="100%"
+							   id="sourceTree"
+							   change="_handleTreeEvent(event)"
+							   filterFunction="acceptFile"/>
+		</mx:VBox>
+		<mx:VBox width="300"
+				 height="100%">
+			<mx:FileSystemTree width="100%"
+							   height="100%"
+							   id="outputTree"
+							   change="_handleTreeEvent(event)"
+							   filterFunction="acceptFile"/>
+		</mx:VBox>
+		<mx:VBox width="100%"
+				 height="100%">
+			<s:Button label="process" click="_handleMouseEvent(event)" width="100%"/>
+		</mx:VBox>
+	</mx:HDividedBox>
+</s:WindowedApplication>
