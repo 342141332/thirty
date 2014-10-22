@@ -6,6 +6,7 @@ package com.gearbrother.glash.display.container {
 	import com.gearbrother.glash.util.display.DepthManager;
 	
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -42,7 +43,7 @@ package com.gearbrother.glash.display.container {
 		private var _dragDownStagePt:Point;
 		public var dragable:Boolean;
 		
-		private var _container:GWindowLayer;
+		private var _container:DisplayObjectContainer;
 		
 		override public function set skin(newValue:DisplayObject):void {
 			super.skin = newValue;
@@ -58,7 +59,7 @@ package com.gearbrother.glash.display.container {
 			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 		}
 		
-		public function GWindow(container:GWindowLayer, skin:DisplayObject = null) {
+		public function GWindow(container:DisplayObjectContainer, skin:DisplayObject = null) {
 			super(skin);
 
 			_container = container;

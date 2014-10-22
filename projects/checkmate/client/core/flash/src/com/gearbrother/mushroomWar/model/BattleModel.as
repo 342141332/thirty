@@ -21,6 +21,17 @@ package com.gearbrother.mushroomWar.model {
 			this._collisions[row][col] = newValue;
 		}
 		
+		public function get loginedPlayer():BattlePlayerModel {
+			for each (var force:BattleForceProtocol in forces) {
+				for each (var player:BattlePlayerModel in force.players) {
+					if (player.instanceId == GameModel.instance.loginedUser.uuid)
+						return player;
+				}
+			}
+			return null;
+		}
+		
+		
 		public function BattleModel(prototype:Object = null) {
 			super(prototype);
 			

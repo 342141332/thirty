@@ -31,7 +31,7 @@ public class BattlePlayer extends RpcBean {
 	public String name;
 
 	@RpcBeanProperty(desc = "选择的英雄")
-	public Map<String, BattleRoomSeatCharacter> choosedSoilders;
+	public Map<String, CharacterModel> choosedSoilders;
 
 	@RpcBeanProperty(desc = "选择的英雄")
 	public List<CharacterModel> choosedHeroes;
@@ -42,10 +42,8 @@ public class BattlePlayer extends RpcBean {
 	@RpcBeanProperty(desc = "联盟颜色")
 	public int color;
 
-	@RpcBeanProperty(desc = "血量")
 	public int hp;
 
-	@RpcBeanProperty(desc = "血量")
 	public int maxHp;
 
 	@RpcBeanProperty(desc = "等级")
@@ -61,18 +59,19 @@ public class BattlePlayer extends RpcBean {
 
 		this.instanceId = UUID.randomUUID().toString();
 		this.battle = battle;
-		this.choosedSoilders = new HashMap<String, BattleRoomSeatCharacter>();
+		this.choosedSoilders = new HashMap<String, CharacterModel>();
 		for (Iterator<String> iterator = GameConf.instance.soilders.keySet().iterator(); iterator.hasNext();) {
 			String avatarId = (String) iterator.next();
-			this.choosedSoilders.put(avatarId, new BattleRoomSeatCharacter(GameConf.instance.soilders.get(avatarId).clone(), 10));
+			this.choosedSoilders.put(avatarId, GameConf.instance.soilders.get(avatarId).clone());
 		}
 		this.choosedHeroes = new ArrayList<CharacterModel>();
 		maxHp = hp = 30;
 		level = 1;
+		coin = 30;
 	}
 
-	public BattlePlayer(Battle room, User user) {
-		this(room);
+	public BattlePlayer(Battle battle, User user) {
+		this(battle);
 
 		this.instanceId = user.uuid;
 		this.name = user.name;

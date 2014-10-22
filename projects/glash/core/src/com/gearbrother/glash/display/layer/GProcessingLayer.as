@@ -38,19 +38,13 @@ package com.gearbrother.glash.display.layer {
 			if (newValue.state == GOper.STATE_END) {
 				//do nothing
 			} else {
-				_refresh();
+				refresh(0);
 			}
 		}
 		
 		public function removeOper(newValue:GOper):void {
 			var at:int = _opers.indexOf(newValue);
 			_opers.splice(at, 1);
-		}
-		
-		protected function _refresh():void {
-			if (numChildren == 0) {
-				//show loading
-			}
 		}
 	}
 }

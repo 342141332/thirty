@@ -56,10 +56,8 @@ public class BattleService {
 	
 	@RpcServiceMethod(desc = "派遣")
 	public void dispatch(ISession session
-			, @RpcServiceMethodParameter(name = "confId") String confId
-			, @RpcServiceMethodParameter(name = "left") int left
-			, @RpcServiceMethodParameter(name = "top") int top) {
-		new TaskDispatch(session.getPlayer(), System.currentTimeMillis(), confId,  left, top);
+			, @RpcServiceMethodParameter(name = "confId") String confId) {
+		new TaskDispatch(session.getPlayer(), System.currentTimeMillis(), confId,  0, 0);
 	}
 
 	@RpcServiceMethod(desc = "")

@@ -184,9 +184,10 @@ public class RoomService {
 			}
 		}
 		player.battle.state = Battle.STATE_PLAYING;
+		player.battle.startTime = System.currentTimeMillis();
 		player.battle.observer.notifySessions(new BattleSignalBegin(player.battle));
 		World.instance.runningBattles.put(player.battle.instanceUuid, player.battle);
-		World.instance.hall.preparingBattles.remove(player.battle);
+		World.instance.hall.preparingBattles.remove(player.battle.instanceUuid);
 		World.instance.hall.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_REMOVE, player.battle));
 	}
 

@@ -63,15 +63,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 		public function get model():BattleModel {
 			return data as BattleModel;
 		}
-		
-		private var _dispatchAvatar:CharacterModel;
-		public function set dispatchAvatar(newValue:CharacterModel):void {
-			_dispatchAvatar = newValue;
-			if (_dispatchAvatar) {
-			} else {
-				layerDispatch.removeAllChildren();
-			}
-		}
 
 		/**
 		 * 
@@ -97,7 +88,6 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			keyboard = new Keyboard2();
 			_quadTree = new GQuadtree(new Rectangle(0, 0, model.col, model.row));
-			dispatchAvatar = null;
 		}
 		
 		override protected function doInit():void {
@@ -117,7 +107,7 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 			var r:int = (camera.screenRect.y + mouseY - model.top) / model.cellPixel;
 			switch (event.type) {
 				case MouseEvent.MOUSE_MOVE:
-					if (_dispatchAvatar) {
+					/*if (_dispatchAvatar) {
 						if (c < 0 || c >= model.col) {
 							if (lineShape.parent)
 								lineShape.parent.removeChild(lineShape);
@@ -126,11 +116,9 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							lineShape.y = model.top;
 							layerDispatch.addChild(lineShape);
 						}
-					}
+					}*/
 					break;
 				case MouseEvent.MOUSE_DOWN:
-					if (_dispatchAvatar && c >= 0 && c < model.col)
-						GameMain.instance.battleService.dispatch(_dispatchAvatar.confId, c, r);
 					break;
 			}
 		}

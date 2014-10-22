@@ -11,7 +11,7 @@ import com.gearbrother.mushroomWar.rpc.annotation.RpcBeanProperty;
 public class BattleForce extends RpcBean {
 	@RpcBeanProperty(desc = "")
 	public String id;
-	
+
 	@RpcBeanProperty(desc = "支持玩家数量")
 	public int maxPlayer;
 
@@ -20,13 +20,13 @@ public class BattleForce extends RpcBean {
 
 	@RpcBeanProperty(desc = "边界")
 	public int border;
-	
+
 	@RpcBeanProperty(desc = "")
 	final public List<BattlePlayer> players;
 
 	@RpcBeanProperty(desc = "城防")
 	public int hp;
-	
+
 	@RpcBeanProperty(desc = "")
 	public int maxHp;
 

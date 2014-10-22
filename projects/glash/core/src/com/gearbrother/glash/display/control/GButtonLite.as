@@ -226,10 +226,6 @@ package com.gearbrother.glash.display.control {
 
 		override protected function doDispose():void {
 			stage.removeEventListener(MouseEvent.MOUSE_UP, _handleMouseEvent);
-			removeEventListener(MouseEvent.MOUSE_DOWN, _handleMouseEvent);
-			removeEventListener(MouseEvent.ROLL_OVER, _handleMouseEvent);
-			removeEventListener(MouseEvent.ROLL_OUT, _handleMouseEvent);
-			removeEventListener(MouseEvent.CLICK, _handleMouseEvent);
 
 			super.doDispose();
 		}

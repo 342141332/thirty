@@ -27,6 +27,9 @@ public class CharacterModel extends RpcBean {
 	
 	@RpcBeanProperty(desc = "国家")
 	public int nation;
+	
+	@RpcBeanProperty(desc = "职业")
+	public String job;
 
 	@RpcBeanProperty(desc = "")
 	public String cartoon;
@@ -124,6 +127,7 @@ public class CharacterModel extends RpcBean {
 		}
 		if (json.has("nation"))
 			nation = json.get("nation").asInt();
+		job = json.get("armsType").asText();
 		this.describe = json.get("describe").asText();
 	}
 

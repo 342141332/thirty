@@ -1,4 +1,5 @@
 package com.gearbrother.mushroomWar.view.layer.scene.battle {
+	import com.gearbrother.glash.common.algorithm.astar.Grid;
 	import com.gearbrother.glash.common.oper.ext.GAliasFile;
 	import com.gearbrother.glash.common.oper.ext.GFile;
 	import com.gearbrother.glash.display.GNoScale;
@@ -7,20 +8,23 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	import com.gearbrother.glash.display.container.GVBox;
 	import com.gearbrother.glash.display.control.GProgress;
 	import com.gearbrother.glash.display.control.text.GText;
+	import com.gearbrother.glash.display.layout.impl.GridLayout;
 	import com.gearbrother.glash.display.propertyHandler.GPropertyBindDataHandler;
 	import com.gearbrother.glash.util.lang.GDateUtil;
+	import com.gearbrother.mushroomWar.GameMain;
 	import com.gearbrother.mushroomWar.model.BattleModel;
 	import com.gearbrother.mushroomWar.model.BattlePlayerModel;
 	import com.gearbrother.mushroomWar.model.CharacterModel;
 	import com.gearbrother.mushroomWar.model.GameModel;
 	import com.gearbrother.mushroomWar.model.SkillModel;
 	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
-	import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
 	import com.gearbrother.mushroomWar.rpc.service.bussiness.BattleService;
 	import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 	import com.gearbrother.mushroomWar.view.common.ui.ProgressView;
 	import com.gearbrother.mushroomWar.view.common.ui.SkillUiView;
 	
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.events.MouseEvent;
 	
 	import org.as3commons.lang.ObjectUtils;
@@ -31,11 +35,15 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 	 * @create on 2014-2-27
 	 */
 	public class BattleSceneViewUi extends GContainer {
-		public var clockText:GText;
-
-		public var topPlayerUi:GHBox;
+		public var titleUi:TitleUi;
 		
-		public var bottomPlayerUi:GHBox;
+		public var force0HeroList:GContainer;
+		
+		public var force1HeroList:GContainer;
+		
+		public var heroList:GContainer;
+		
+		public var soldierList:GContainer;
 
 		public var battle:BattleModel;
 		
@@ -55,88 +63,111 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 
 			this.battle = battle;
 			_canvas = canvas;
-			addChild(topPlayerUi = new GHBox());
-			addChild(bottomPlayerUi = new GHBox());
 			libs = [new GAliasFile("static/asset/skin/battle.swf")];
-			addEventListener(MouseEvent.CLICK, _handleMouseEvent);
 		}
 
 		override protected function _handleLibsSuccess(res:*):void {
 			var skinFile:GFile  = libsHandler.cachedOper[libs[0]] as GFile;
-			var hbox:GHBox = new GHBox();
-//			hbox.addChild(new GNoScale(skinFile.getInstance("PRODUCE_TIME_ICON")));
-//			hbox.addChild(clockText = new GText());
-//			clockText.fontColor = 0xffffff;
-//			clockText.fontSize = 14;
-//			clockText.fontBold = true;
-//			clockText.text = "00:00:00";
-			var forces:Array = ObjectUtils.getKeys(battle.forces);
-			for (var i:int = 0; i < forces.length; i++) {
-				var force:BattleForceProtocol = battle.forces[i];
-				for each (var player:BattlePlayerModel in force.players) {
-					var playerUi:PlayerUi;
-					if (i == 0) {
-						playerUi = topPlayerUi.addChild(new PlayerUi(skinFile.getInstance("PlayerTopSkin"))) as PlayerUi;
-						playerUi.bindData = player;
-					} else if (i == 1) {
-						playerUi = bottomPlayerUi.addChild(new PlayerUi(skinFile.getInstance("PlayerBottomSkin"))) as PlayerUi;
-						playerUi.bindData = player;
-					}
+			addChild(titleUi = new TitleUi(skinFile.getInstance("TitleSkin")));
+			titleUi.bindData = battle;
+			addChild(force0HeroList = new GHBox());
+			for each (var player:BattlePlayerModel in (battle.forces[0] as BattleForceProtocol).players) {
+				var group:GHBox = new GHBox();
+				for each (var hero:CharacterModel in player.choosedHeroes) {
+					var characterUiSkin:DisplayObjectContainer = skinFile.getInstance("CharacterUiSkin");
+					characterUiSkin.scaleX = characterUiSkin.scaleY = .5
+					var characterUi:AvatarUiView = new AvatarUiView(characterUiSkin);
+					characterUi.bindData = hero;
+					group.addChild(characterUi);
 				}
-				if (i == 0) {
-					var forceUi:ForceUi = topPlayerUi.addChild(new ForceUi(skinFile.getInstance("ForceTopSkin"))) as ForceUi;
-					forceUi.bindData = force;
-				} else {
-					forceUi = bottomPlayerUi.addChild(new ForceUi(skinFile.getInstance("ForceTopSkin"))) as ForceUi;
-					forceUi.hpProgress.policy = GProgress.POLICY_RIGHT_TO_LEFT;
-					forceUi.bindData = force;
-				}
+				force0HeroList.addChild(group);
 			}
-			enableTick = true;
+			addChild(force1HeroList = new GHBox());
+			for each (player in (battle.forces[1] as BattleForceProtocol).players) {
+				group = new GHBox();
+				for each (hero in player.choosedHeroes) {
+					characterUiSkin = skinFile.getInstance("CharacterUiSkin");
+					characterUiSkin.scaleX = characterUiSkin.scaleY = .5
+					characterUi = new AvatarUiView(characterUiSkin);
+					characterUi.bindData = hero;
+					group.addChild(characterUi);
+				}
+				force1HeroList.addChild(group);
+			}
+			addChild(heroList = new GHBox);
+			for each (hero in battle.loginedPlayer.choosedHeroes) {
+				characterUi = new AvatarUiView(skinFile.getInstance("CharacterUiSkin"));
+				characterUi.bindData = hero;
+				heroList.addChild(characterUi);
+			}
+			addChild(soldierList = new GContainer());
+			soldierList.layout = new GridLayout(0, 2);
+			for each (hero in battle.loginedPlayer.choosedSoilders) {
+				characterUi = new AvatarUiView(skinFile.getInstance("CharacterUiSkin"));
+				characterUi.bindData = hero;
+				soldierList.addChild(characterUi);
+			}
+			soldierList.addEventListener(MouseEvent.CLICK, _handleSoldierMouseEvent);
 		}
 
-		override public function tick(interval:int):void {
-//			clockText.text = GDateUtil.formatSeconds(Math.max(0, GameModel.instance.application.serverTime - battle.startTime) / 1000);
-		}
-		
-		private function _handleMouseEvent(event:MouseEvent):void {
+		private function _handleSoldierMouseEvent(event:MouseEvent):void {
 			if (event.target is AvatarUiView) {
 				var avatarUiView:AvatarUiView = event.target as AvatarUiView;
-				_canvas.dispatchAvatar = avatarUiView.bindData as CharacterModel;
+				GameMain.instance.battleService.dispatch((avatarUiView.bindData as CharacterModel).confId);
 			}
+		}
+		
+		override public function handleModelChanged(events:Object=null):void {
+			var skinFile:GFile  = libsHandler.cachedOper[libs[0]] as GFile;
 		}
 
 		override protected function doValidateLayout():void {
-			super.doValidateLayout();
-
-			if (topPlayerUi && bottomPlayerUi) {
-				topPlayerUi.width = topPlayerUi.preferredSize.width;
-				topPlayerUi.height = topPlayerUi.preferredSize.height;
-				topPlayerUi.validateLayoutNow();
-				bottomPlayerUi.width = bottomPlayerUi.preferredSize.width;
-				bottomPlayerUi.height = bottomPlayerUi.preferredSize.height;
-				bottomPlayerUi.validateLayoutNow();
-				var offset:Number = Math.min((width - Math.max(topPlayerUi.width, bottomPlayerUi.width)) >> 1, 70); 
-				if (topPlayerUi) {
-					topPlayerUi.x = ((width - topPlayerUi.width) >> 1) + offset;
-					topPlayerUi.y = 10;
-				}
-				if (bottomPlayerUi) {
-					bottomPlayerUi.x = ((width - topPlayerUi.width) >> 1) - offset;
-					bottomPlayerUi.y = height - bottomPlayerUi.height - 10;
-				}
+			if (titleUi) {
+				titleUi.x = (width - titleUi.width) >> 1;
+				titleUi.y = 10;
+			}
+			if (force0HeroList) {
+				force0HeroList.width = force0HeroList.preferredSize.width;
+				force0HeroList.height = force0HeroList.preferredSize.height;
+				force0HeroList.validateLayoutNow();
+				force0HeroList.x = (width >> 1) - force0HeroList.width - 30;
+				force0HeroList.y = titleUi.y + titleUi.height - 10;
+			}
+			if (force1HeroList) {
+				force1HeroList.width = force1HeroList.preferredSize.width;
+				force1HeroList.height = force1HeroList.preferredSize.height;
+				force1HeroList.validateLayoutNow();
+				force1HeroList.x = (width >> 1) + 30;
+				force1HeroList.y = titleUi.y + titleUi.height - 10;
+			}
+			if (heroList) {
+				heroList.width = heroList.preferredSize.width;
+				heroList.height = heroList.preferredSize.height;
+				heroList.validateLayoutNow();
+				heroList.x = (width - heroList.width) >> 1;
+				heroList.y = (height - heroList.height) - 10;
+			}
+			if (soldierList) {
+				soldierList.width = soldierList.preferredSize.width;
+				soldierList.height = soldierList.preferredSize.height;
+				soldierList.validateLayoutNow();
+				soldierList.x = 0;
+				soldierList.y = height - soldierList.height;
 			}
 		}
 	}
 }
 import com.gearbrother.glash.display.GNoScale;
 import com.gearbrother.glash.display.GSkinSprite;
+import com.gearbrother.glash.display.container.GHBox;
 import com.gearbrother.glash.display.control.GProgress;
 import com.gearbrother.glash.display.control.text.GText;
+import com.gearbrother.glash.util.lang.GDateUtil;
+import com.gearbrother.mushroomWar.model.BattleModel;
 import com.gearbrother.mushroomWar.model.BattlePlayerModel;
+import com.gearbrother.mushroomWar.model.GameModel;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleForceProtocol;
 import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattlePlayerProtocol;
-import com.gearbrother.mushroomWar.rpc.protocol.bussiness.BattleRoomSeatCharacterProtocol;
 import com.gearbrother.mushroomWar.view.common.ui.AvatarUiView;
 import com.greensock.TweenLite;
 import com.greensock.easing.Linear;
@@ -146,10 +177,55 @@ import flash.display.DisplayObjectContainer;
 
 import org.as3commons.lang.ObjectUtils;
 
+class TitleUi extends GNoScale {
+	public var timeLabel:GText;
+	
+	public var force0Progress:GProgress;
+	
+	public var force0Label:GText;
+	
+	public var force1Progress:GProgress;
+	
+	public var force1Label:GText;
+	
+	public function TitleUi(skin:DisplayObjectContainer) {
+		super(skin);
+		
+		timeLabel = new GText(skin["timeLabel"]);
+		timeLabel.useHtml = true;
+		force0Progress = new GProgress(skin["force0Progress"]);
+		force0Progress.policy = GProgress.POLICY_LEFT_TO_RIGHT;
+		force0Label = new GText(skin["force0Label"]);
+		force1Progress = new GProgress(skin["force1Progress"]);
+		force1Progress.policy = GProgress.POLICY_RIGHT_TO_LEFT;
+		force1Label = new GText(skin["force1Label"]);
+	}
+	
+	override public function handleModelChanged(events:Object=null):void {
+		if (bindData is BattleForceProtocol) {
+			var model:BattleForceProtocol = bindData;
+			if (!events) {
+				timeLabel.valueFormater = function(value:*):String {
+					return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
+				};
+				timeLabel.text = 0;
+			}
+			if (!events
+				|| events.hasOwnProperty(BattleForceProtocol.HP)) {
+				TweenLite.to(timeLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
+			}
+		}
+		enableTick = true;
+	}
+	
+	override public function tick(interval:int):void {
+		var battle:BattleModel = bindData;
+		timeLabel.text = GDateUtil.formatSeconds(Math.max(0, GameModel.instance.application.serverTime - battle.startTime) / 1000);
+	}
+}
+
 class PlayerUi extends GNoScale {
 	public var nameLabel:GText;
-
-	public var characterUiViews:Array;
 
 	public var coinLabel:GText;
 
@@ -157,14 +233,6 @@ class PlayerUi extends GNoScale {
 		super(skin);
 
 		nameLabel = new GText(skin["nameLabel"]);
-		characterUiViews = [];
-		for (var i:int = 0; ; i++) {
-			var child:DisplayObject = skin["soldier" + i];
-			if (child)
-				characterUiViews.push(new AvatarUiView(child as DisplayObjectContainer));
-			else
-				break;
-		}
 		coinLabel = new GText(skin["coinLabel"]);
 	}
 	
@@ -174,52 +242,32 @@ class PlayerUi extends GNoScale {
 			if (!events || events.hasOwnProperty(BattlePlayerProtocol.COIN)) {
 				coinLabel.text = model.coin;
 			}
-			if (!events || events.hasOwnProperty(BattlePlayerProtocol.CHOOSED_SOILDERS)) {
-				var choosedSoilders:Array = ObjectUtils.getProperties(model.choosedSoilders);
+			/*if (!events || events.hasOwnProperty(BattlePlayerProtocol.CHOOSED_HEROES)) {
+				var choosedHeroes:Array = ObjectUtils.getProperties(model.choosedHeroes);
 				for (var i:int = 0; i < characterUiViews.length; i++) {
 					var avatarUiView:AvatarUiView = characterUiViews[i];
-					if (choosedSoilders.hasOwnProperty(i)) {
-						avatarUiView.bindData = (choosedSoilders[i] as BattleRoomSeatCharacterProtocol).character;
-					}
+					if (choosedHeroes.hasOwnProperty(i))
+						avatarUiView.bindData = (choosedHeroes[i] as BattleRoomSeatCharacterProtocol).character;
 				}
-			}
-			if (!events || events.hasOwnProperty(BattlePlayerProtocol.CHOOSED_HEROES)) {
-				
-			}
+			}*/
 		}
+	}
+	
+}
+
+class CharacterDetailUi extends GHBox {
+	public function CharacterDetailUi() {
+		super();
 	}
 }
 
-class ForceUi extends GNoScale {
-	public var hpLabel:GText;
-	
-	public var hpProgress:GProgress;
-
-	public function ForceUi(skin:DisplayObjectContainer) {
+class SkinUi extends GNoScale {
+	public function SkinUi(skin:DisplayObjectContainer) {
 		super(skin);
 		
-		hpLabel = new GText(skin["hpLabel"]);
-		hpLabel.useHtml = true;
-		hpProgress = new GProgress(skin["hpProgress"]);
+		
 	}
 	
 	override public function handleModelChanged(events:Object=null):void {
-		if (bindData is BattleForceProtocol) {
-			var model:BattleForceProtocol = bindData;
-			if (!events) {
-				hpLabel.valueFormater = function(value:*):String {
-					return "<font size=\"22\">" + int(value) + "</font>" + "/" + model.maxHp;
-				};
-				hpLabel.text = 0;
-				hpProgress.minValue = 0;
-				hpProgress.value = model.hp;
-				hpProgress.maxValue = model.maxHp;
-			}
-			if (!events
-				|| events.hasOwnProperty(BattlePlayerProtocol.HP)) {
-				TweenLite.to(hpLabel, 1.7, {"text": model.hp, "ease": Linear.easeNone});
-				TweenLite.to(hpProgress, 1.7, {"value": model.hp, "ease": Linear.easeNone});
-			}
-		}
 	}
 }

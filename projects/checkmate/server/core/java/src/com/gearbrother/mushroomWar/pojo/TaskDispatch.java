@@ -23,12 +23,13 @@ public class TaskDispatch extends Task {
 
 	@Override
 	public void execute(long now) {
-		BattleRoomSeatCharacter seatCharacter = player.choosedSoilders.get(confId);
-		if (seatCharacter.num == 0)
+		CharacterModel character = player.choosedSoilders.get(confId);
+		if (character.coin > player.coin)
 			return;
 
+		player.coin -= character.coin;
 		int forward = player.force.forward;
-		CharacterModel character = seatCharacter.character.clone();
+		character = character.clone();
 		Battle battle = player.battle;
 		int[] thredshold = null;
 		if (forward == 1) {
@@ -40,6 +41,12 @@ public class TaskDispatch extends Task {
 		} else {
 			throw new Error("forward can't be zero");
 		}
+		for (int r = 0; r < battle.row; r++) {
+			_newCharacter(now, character, forward, battle, thredshold, left, r);
+		}
+	}
+
+	private void _newCharacter(long now, CharacterModel character, int forward, Battle battle, int[] thredshold, int left, int top) {
 		int[] leftTop = null;
 		//first, close to border
 		boolean isBlock = false;
@@ -87,7 +94,7 @@ public class TaskDispatch extends Task {
 				}
 			}
 		}
-		BattleItem item = new BattleItem(seatCharacter.character);
+		BattleItem item = new BattleItem(character);
 		item.instanceId = UUID.randomUUID().toString();
 		item.player = player;
 		if (followPos != null) {

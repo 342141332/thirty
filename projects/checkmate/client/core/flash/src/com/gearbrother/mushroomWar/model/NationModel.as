@@ -7,12 +7,32 @@ package com.gearbrother.mushroomWar.model {
 	 *
 	 */
 	public class NationModel {
-		static public const WEI:int = 1;
+		static public const WEI:NationModel = new NationModel("1", "魏", 0x33ffff);
 
-		static public const SHU:int = 2;
+		static public const SHU:NationModel = new NationModel("2", "蜀", 0xcc0000);
 
-		static public const WU:int = 3;
-		
-		static public const QUN:int = 4;
+		static public const WU:NationModel = new NationModel("3", "吴", 0x00cc00);
+
+		static public const QUN:NationModel = new NationModel("4", "群", 0xcccc00);
+
+		static public const instances:Object = {};
+		{
+			instances[WEI.id] = WEI;
+			instances[SHU.id] = SHU;
+			instances[WU.id] = WU;
+			instances[QUN.id] = QUN;
+		}
+
+		public var id:String;
+
+		public var name:String;
+
+		public var color:uint;
+
+		public function NationModel(id:String, name:String, color:uint) {
+			this.id = id;
+			this.name = name;
+			this.color = color;
+		}
 	}
 }
