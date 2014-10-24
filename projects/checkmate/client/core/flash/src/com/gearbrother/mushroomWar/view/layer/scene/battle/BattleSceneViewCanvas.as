@@ -143,11 +143,10 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 					var battleItem:BattleItemModel = change.item as BattleItemModel;
 					switch (change.type) {
 						case 1:
-							if (change.item is BattleItemModel) {
-								battleItem.battle = model;
-								for each (var layer:BattleSceneLayerOverland in layers) {
-									layer.addItem(change.item as BattleItemModel);
-								}
+							model.items[battleItem.instanceId] = battleItem;
+							battleItem.battle = model;
+							for each (var layer:BattleSceneLayerOverland in layers) {
+								layer.addItem(battleItem);
 							}
 							break;
 						case 2:
@@ -155,25 +154,13 @@ package com.gearbrother.mushroomWar.view.layer.scene.battle {
 							break;
 						case 3:
 							battleItem = model.items[battleItem.instanceId];
-							battleItem.battle = null;
 							for each (layer in layers) {
 								layer.removeItem(battleItem, .7);
 							}
+							delete model.items[battleItem.instanceId];
 							break;
 						case 4:
 							battleItem = model.items[battleItem.instanceId];
-							break;
-						case 5:
-							battleItem = model.items[battleItem.instanceId];
-							battleItem.battle = null;
-							var view:*;
-							for each (layer in layers) {
-								view ||= layer.removeItem(battleItem, .7);
-							}
-							var skillView:SkillSceneView = new SkillSceneView(null);
-							skillView.x = view.x;
-							skillView.y = view.y;
-							(layers["over"] as BattleSceneLayerOverland).addChild(skillView);
 							break;
 						default:
 							throw new Error("unknown type");

@@ -104,7 +104,7 @@ public class RpcIoHandler extends IoHandlerAdapter implements ApplicationContext
 			else if (type == ArrayNode.class)
 				paramValues[i + defaultArgusSize] = argus.get(i);
 			else
-				throw new Error("unsupport type " + type);
+				throw new Exception("unsupport type " + type);
 		}
 		Object serviceBean = applicationContext.getBean(methods[0]);
 		RpcCallResponse response = new RpcCallResponse();

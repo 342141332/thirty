@@ -13,21 +13,7 @@ package com.gearbrother.mushroomWar.model {
 	 *
 	 */
 	public class BattleItemModel extends BattleItemProtocol {
-		private var _battle:BattleModel;
-
-		public function get battle():BattleModel {
-			return _battle;
-		}
-
-		public function set battle(newValue:BattleModel):void {
-			if (_battle) {
-				delete _battle.items[instanceId];
-			}
-			this._battle = newValue;
-			if (_battle) {
-				_battle.items[instanceId] = this;
-			}
-		}
+		public var battle:BattleModel;
 
 		public function BattleItemModel(prototype:Object = null) {
 			super(prototype);

@@ -100,7 +100,7 @@ public class BattleItem extends RpcBean {
 
 	public boolean isCollision(BattleItem b) {
 		if (isHomeBuilding) {
-			return b.player != player;
+			return false;//b.player != player;
 		} else {
 			return true;
 		}

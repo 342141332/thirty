@@ -1,5 +1,8 @@
 package com.gearbrother.mushroomWar.rpc.service.bussiness;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,33 +23,36 @@ public class BattleService {
 	static Logger logger = LoggerFactory.getLogger(BattleService.class);
 
 	public BattleService() {
-		new Thread(new Runnable() {
-
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				while (true) {
+//					long now = System.currentTimeMillis();
+//					String[] keys = World.instance.runningBattles.keySet().toArray(new String[] {});
+//					for (String key : keys) {
+//						Battle battle = World.instance.runningBattles.get(key);
+//						if (battle != null) {
+//							battle.execute(now);
+//						}
+//					}
+//				}
+//			}
+//		}).start();
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				while (true) {
-					long now = System.currentTimeMillis();
-					String[] keys = World.instance.runningBattles.keySet().toArray(new String[] {});
-					for (String key : keys) {
-						Battle battle = World.instance.runningBattles.get(key);
-						if (battle != null) {
-							battle.execute(now);
-						}
+				long now = System.currentTimeMillis();
+				String[] keys = World.instance.runningBattles.keySet().toArray(new String[] {});
+				for (String key : keys) {
+					Battle battle = World.instance.runningBattles.get(key);
+					if (battle != null) {
+						battle.execute(now);
 					}
 				}
 			}
-		}).start();
-//		Timer timer = new Timer();
-//		timer.schedule(new TimerTask() {
-//			@Override
-//			public void run() {
-//				long now = System.currentTimeMillis();
-//				for (Iterator<String> iterator = _runningBattles.keySet().iterator(); iterator.hasNext();) {
-//					String id = (String) iterator.next();
-//					_runningBattles.get(id).battle.execute(now);
-//				}
-//			}
-//		}, 0, 100);
+		}, 0, 100);
 	}
 
 	@RpcServiceMethod(desc = "重新连接战场")

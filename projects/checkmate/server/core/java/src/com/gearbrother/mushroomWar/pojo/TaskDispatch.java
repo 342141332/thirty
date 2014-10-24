@@ -104,10 +104,10 @@ public class TaskDispatch extends Task {
 			item.left = leftTop[0];
 			item.top = leftTop[1];
 		}
-		item.setTask(new TaskDoAction(battle, now + item.interval, item.interval, item));
 		item.force = player.force;
 		item.player = player;
 		battle.addItem(item);
 		battle.observer.notifySessions(new PropertyEvent(PropertyEvent.TYPE_ADD, item));
+		item.setTask(new TaskDoAction(battle, now + item.interval, item.interval, item));
 	}
 }

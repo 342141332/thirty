@@ -110,14 +110,14 @@ public class Battle extends RpcBean {
 				Cell grid = cells[left + top * col];
 				if (grid != null) {
 					for (BattleItem b : grid.items) {
-						if (item.isCollision(b))
+						if (b.isCollision(item))
 							throw new Error("collision is already used");
 					}
 					grid.items.add(item);
 				} else {
 					grid = cells[left + top * col] = new Cell();
 					for (BattleItem b : grid.items) {
-						if (item.isCollision(b))
+						if (b.isCollision(item))
 							throw new Error("collision is already used");
 					}
 					grid.items.add(item);
@@ -127,12 +127,13 @@ public class Battle extends RpcBean {
 	}
 
 	public void removeItem(BattleItem item) {
-		items.remove(item.instanceId);
+		if (false == items.remove(item.instanceId, item))
+			throw new Error();
 		sortItems.get(item.getClass()).remove(item.instanceId);
 		for (int left = 0; left < item.width; left++) {
 			for (int top = 0; top < item.height; top++) {
 				Cell grid = cells[item.left + item.top * col];
-				if (!grid.items.remove(item))
+				if (false == grid.items.remove(item))
 					throw new Error();
 			}
 		}
@@ -242,7 +243,11 @@ public class Battle extends RpcBean {
 				if (polledFirst != task)
 					throw new Error("polledFirst != task");
 				task.setIsInQueue(false);
-				task.execute(now);
+				try {
+					task.execute(now);
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+				}
 			} else {
 				break;
 			}
