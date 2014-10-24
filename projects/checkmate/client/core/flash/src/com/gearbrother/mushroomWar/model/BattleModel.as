@@ -32,6 +32,7 @@ package com.gearbrother.mushroomWar.model {
 		}
 		
 		
+		
 		public function BattleModel(prototype:Object = null) {
 			super(prototype);
 			
