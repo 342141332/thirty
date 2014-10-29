@@ -26,6 +26,7 @@ public class TaskDispatch extends Task {
 		CharacterModel character = player.choosedSoilders.get(confId);
 		if (character.coin > player.coin)
 			return;
+		
 
 		player.coin -= character.coin;
 		int forward = player.force.forward;
